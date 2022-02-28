@@ -9,4 +9,8 @@ public class Amour extends AdventureCard {
     this.battlePoints = battlePoints;
     this.bids = bids;
   }
+
+  public int getBattlePoints(){
+    return battlePoints;
+  }
 }

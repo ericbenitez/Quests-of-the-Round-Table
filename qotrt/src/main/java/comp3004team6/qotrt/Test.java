@@ -1,6 +1,6 @@
 public class Test extends AdventureCard {
   int minBid;
-  Main game;
+  Game game;
 
   //three constructors, one without the min Bid which will set it to a default value of 0
   public Test(String name){
@@ -21,5 +21,9 @@ public class Test extends AdventureCard {
       return 4;
     }
     return this.minBid;
+  }
+
+  public int getBattlePoints(){
+    return 0;
   }
 }

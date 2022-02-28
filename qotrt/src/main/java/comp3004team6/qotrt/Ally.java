@@ -1,10 +1,10 @@
 public class Ally extends AdventureCard {
   int battlePoints;
   int bids;
-  Main game;
+  Game game;
   
   // -1 is passed into battlePts and bids when no value exists for it
-  public Ally(String name, int battlePts, int bids, Main game) {
+  public Ally(String name, int battlePts, int bids, Game game) {
     this.name = name;
     this.description = "";
     this.battlePoints = battlePts;
