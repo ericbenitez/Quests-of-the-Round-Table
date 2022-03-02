@@ -1,4 +1,6 @@
-package Models.AdventureCards;
+package Models.General;
+
+import Models.AdventureCards.AdventureCard;
 
 public interface Mediator {
   Player registerPlayer(Player player);

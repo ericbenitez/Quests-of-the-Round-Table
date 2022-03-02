@@ -1,13 +1,16 @@
 package Models.AdventureCards;
 
+import Models.General.*;
+
 public abstract class AdventureCard extends Card {
   Player owner;
-  
+
   @Override
-  void draw(Player player) {
+  protected void draw(Player player) {
     this.owner = player;
-  	owner.cards.add(this);
+    owner.cards.add(this);
   }
-  
-  public abstract int getBattlePoints(); //not all classes have it but need it for getPersonalBattleScore function in player.
+
+  public abstract int getBattlePoints(); // not all classes have it but need it for getPersonalBattleScore function in
+                                         // player.
 }
