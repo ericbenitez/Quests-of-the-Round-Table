@@ -1,5 +1,7 @@
 package Models.AdventureCards;
+
 import java.util.ArrayList;
+
 public class Player {
   String name;
   int id;
@@ -23,20 +25,27 @@ public class Player {
   }
 
   // selects a card to remove from the cards list
-  // public AdventureCard selectToDiscard(String name) {
-  //   for(AdventureCard card : this.cards) {
-  //     if (card.name == name) {
-  //       this.cards.remove
-  //       return card;
-  //     }
-  //   }
-  //   return null;
-  // }
+  public AdventureCard discardCard(String cardName) {
+    int index = 0;
+    for(AdventureCard card : this.cards) {
+      if (card.name == cardName) {
+        this.cards.remove(index);
+
+        Turn currentTurn = game.getCurrentTurn();
+        if (currentTurn != null) {
+          currentTurn.discardedCards.add(card);
+        }
+        return card;
+      }
+      index++;
+    }
+    return null;
+  }
 
   // set the mediator for players to communicate
-  // public void setMediator(Game game) {
-  //   this.game = mediator;
-  // }
+  public void setMediator(Game game) {
+    this.game = game;
+  }
 
   // draws the given amount of cards to add to the player's cards
   // returns false if there are not enough cards to draw, or if the player will have more than 12 cards total
