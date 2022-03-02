@@ -8,4 +8,11 @@ public class Turn {
   boolean isEvent = false;
 
   ArrayList<Player> participants;
+  ArrayList<AdventureCard> discardedCards;
+
+
+  public Turn(){
+    this.participants = new ArrayList<Player>();
+    this.discardedCards = new ArrayList<AdventureCard>();
+  }
 }
