@@ -1,3 +1,4 @@
+package Models.AdventureCards;
 public interface Mediator {
   Player registerPlayer(Player player);
   Player removePlayer(Player player);

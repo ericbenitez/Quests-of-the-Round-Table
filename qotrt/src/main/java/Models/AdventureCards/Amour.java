@@ -1,3 +1,4 @@
+package Models.AdventureCards;
 public class Amour extends AdventureCard {
   
   int battlePoints;

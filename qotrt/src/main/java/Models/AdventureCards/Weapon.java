@@ -1,3 +1,4 @@
+package Models.AdventureCards;
 public class Weapon extends AdventureCard {
   int battlePoints;
  

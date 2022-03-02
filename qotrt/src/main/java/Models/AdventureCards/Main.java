@@ -1,3 +1,4 @@
+package Models.AdventureCards;
 import java.util.ArrayList;
 import java.util.Collections;
 

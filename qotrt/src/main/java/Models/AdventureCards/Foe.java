@@ -1,3 +1,4 @@
+package Models.AdventureCards;
 public class Foe extends AdventureCard {
   // if Card is the factory
   //Card card;

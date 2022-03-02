@@ -1,3 +1,4 @@
+package Models.AdventureCards;
 public class Ally extends AdventureCard {
   int battlePoints;
   int bids;

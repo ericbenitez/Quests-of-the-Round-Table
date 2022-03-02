@@ -1,3 +1,4 @@
+package Models.AdventureCards;
 public class Test extends AdventureCard {
   int minBid;
   Game game;

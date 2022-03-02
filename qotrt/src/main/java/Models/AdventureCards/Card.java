@@ -1,3 +1,4 @@
+package Models.AdventureCards;
 public abstract class Card {
   String name;
   String description;
