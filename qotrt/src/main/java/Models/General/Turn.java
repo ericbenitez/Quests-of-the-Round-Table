@@ -15,19 +15,59 @@ public class Turn {
   ArrayList<AdventureCard> discardedCards;
 
 
-  public Turn(Game g){
+  public Turn(){
     this.participants = new ArrayList<Player>();
     this.discardedCards = new ArrayList<AdventureCard>();
-    this.game = g;
+    
   }
 
 
+   public Turn(Game g){
+    this.participants = new ArrayList<Player>();
+    this.discardedCards = new ArrayList<AdventureCard>();
+    this.game = g;
+    
+  }
 
+
+  /*
   public drawStoryCard(){
     
 
 
   }
+  1) draw random card from the deck
+
+  2) if card is Quest -> Generate quest
+          ask everyone in row to sponsor
+          if sponsor says yes
+               generate stages 
+               ask everyone else to participate in sposored Quest ( build participant list)
+               players place cards: No armours of the same kind, one amour card per Quest
+               reveal the results
+               determine winners and award the shields based on number of stages
+               players draw addditional cards
+
+     if card is Turnament  -> Generate turnament
+           ask everyone in row to participate: (build participant list) 
+           players place cards
+           reveal the results
+           determine winner/winners and award shields = bonus shields + # of participants
+           players draw additional cards
+
+
+              
+
+     if card is Event  -> playEvent
+
+  3) Place story card in discarded storyCards
+
+
+
+
+
+
+  */
 
 
 
