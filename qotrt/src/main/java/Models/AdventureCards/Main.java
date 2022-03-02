@@ -2,11 +2,17 @@ package Models.AdventureCards;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Main {  
-
-  
+public class Main {
   public static void main(String[] args) {
-    Mediator game = new Game();
+    Game game = new Game();
     game.start();
+    //Select cards for discarding
+    game.players.get(0).discardCard("Amour");
+    game.players.get(1).discardCard("Thieves");
+
+
+    System.out.println("Printing Discarded Cards...");
+
+    game.displayDiscardedCards();
   }
 }
