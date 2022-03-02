@@ -190,7 +190,7 @@ public class Game implements Mediator { // Main = Game
   public String getCurrentTurnName() {
     if (this.turns.isEmpty())
       return null;
-    return this.turns.get(this.turns.size() - 1).name;
+    return this.turns.get(this.turns.size() - 1).getName();
   }
 
   public Turn getCurrentTurn() {

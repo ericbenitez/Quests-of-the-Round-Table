@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import Models.AdventureCards.AdventureCard;
 
 public class Turn {
-
+  String name = "";
+  
   Game game;
 
   boolean isQuest = false;
@@ -28,7 +29,10 @@ public class Turn {
     this.game = g;
     
   }
-
+  
+  public String getName() {
+    return this.name;
+  }
 
   /*
   public drawStoryCard(){
