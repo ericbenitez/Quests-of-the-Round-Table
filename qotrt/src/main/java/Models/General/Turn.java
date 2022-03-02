@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import Models.AdventureCards.AdventureCard;
 
 public class Turn {
-  String name;
+
+  Game game;
+
   boolean isQuest = false;
   boolean isTournament = false;
   boolean isEvent = false;
@@ -13,12 +15,22 @@ public class Turn {
   ArrayList<AdventureCard> discardedCards;
 
 
-  public Turn(){
+  public Turn(Game g){
     this.participants = new ArrayList<Player>();
     this.discardedCards = new ArrayList<AdventureCard>();
+    this.game = g;
   }
+
+
+
+  public drawStoryCard(){
+    
+
+
+  }
+
+
+
   
-  public String getName() {
-    return this.name;
-  }
+
 }
