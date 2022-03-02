@@ -2,15 +2,18 @@ package Models.AdventureCards;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class Game implements Mediator { //Main = Game 
   Player currentActivePlayer;
   ArrayList<AdventureCard> adventureCardsDeck;
   ArrayList<StoryCard> storyCardsDeck;
-  ArrayList<AdventureCard> discardedCards;
+
   ArrayList<Player> players; //the observers...
   int uniquePlayerId; // increments every time a player is registered
 
-  ArrayList<Turn> turns;
+  ArrayList<Turn> turns; //size is 0
   
   Game() {
     this.adventureCardsDeck = new ArrayList<AdventureCard>();
@@ -19,13 +22,12 @@ public class Game implements Mediator { //Main = Game
     this.players = new ArrayList<Player>();
 
     this.uniquePlayerId = 0;
-    // this.initializeCards();
-    //this.initializePlayers();
   }
   
   // observes a player
   public Player registerPlayer(Player player) {
     if (players.size() >= 4){return null;}
+    player.setMediator(this);
     this.players.add(player);
     this.uniquePlayerId += 1;
     return player;
@@ -108,8 +110,6 @@ public class Game implements Mediator { //Main = Game
       
     Collections.shuffle(this.adventureCardsDeck);
     Collections.shuffle(this.storyCardsDeck);
-
-    
   }
 
   public void initializePlayers() {
@@ -134,6 +134,7 @@ public class Game implements Mediator { //Main = Game
   
   public void start() {
     //Initialize Players, Give 12 adventure cards to each player
+    this.turns.add(new Turn());
     this.initializeCards();
     this.initializePlayers();
   }
@@ -152,10 +153,15 @@ public class Game implements Mediator { //Main = Game
     return this.turns.get(this.turns.size() - 1).name;
   }
 
+  public Turn getCurrentTurn() {
+    if (this.turns.isEmpty()) return null;
+    return this.turns.get(this.turns.size() - 1);
+  }
 
   // displays all the discarded cards
   public void displayDiscardedCards(){
-    for(AdventureCard card : discardedCards) {
+    if (turns.size() == 0){return;}
+    for(AdventureCard card : turns.get(turns.size()-1).discardedCards) {
       System.out.println(card.name);
     }
   }
