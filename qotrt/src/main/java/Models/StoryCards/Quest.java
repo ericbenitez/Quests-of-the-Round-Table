@@ -7,12 +7,13 @@ public class Quest extends StoryCard{
     private Player sponsor;
 
 
-    public Quest(String name, String description, int stages, Foe foe = null, Player sponsor = null ){
+    public Quest(String name, String description, int stages, Foe foe, Player sponsor){
         this.name = name;
         this.description = description;
         this.stages = stages;
         this.foeCard = foe;
         this.sponsor = sponsor;
+   
     }
 
     public Quest(String name, String description, int stages ){
