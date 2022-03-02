@@ -15,6 +15,15 @@ public class Quest extends StoryCard{
         this.sponsor = sponsor;
     }
 
+    public Quest(String name, String description, int stages ){
+        this.name = name;
+        this.description = description;
+        this.stages = stages;
+        this.foeCard = null;
+        this.sponsor = null;
+    }
+
+
     public setSponsor(Player player){
         this.sponsor = player;
 
