@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import Models.General.Player;
 
 public class EventCard extends StoryCard {
-  protected EventBehaviour eventBehaviour;
+  public EventBehaviour eventBehaviour;
   
   public EventCard(EventBehaviour eventBehaviour, String name, String description) {
     this.eventBehaviour = eventBehaviour;
@@ -27,6 +27,4 @@ public class EventCard extends StoryCard {
   public void performEvent(ArrayList<Player> players, Player drawer) {
 		eventBehaviour.playEvent(players, drawer);
 	}
-
-  
 }
