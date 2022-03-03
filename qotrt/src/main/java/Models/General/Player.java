@@ -6,29 +6,30 @@ import Models.AdventureCards.*;
 import Models.Enums.Rank;
 
 public class Player {
-  private String name;
+  public String name;
+  private static int uniqueId = 0;
   private int id;
   private int numShields;
 
   private Game game; // the mediator of players
 
   // list of cards
+  public Card pickedCard; //from the story deck
   public ArrayList<AdventureCard> cards; // 12 cards
   public ArrayList<AdventureCard> hand;
 
-  public Player(int id, String name) {
-    this.id = id;
+  public Player(String name) {
     this.name = name;
-
+    this.id = uniqueId;
     this.numShields = 0;
-
+    uniqueId++;
     this.cards = new ArrayList<AdventureCard>();
     this.hand = new ArrayList<AdventureCard>();
   }
 
   /**
    * Returns the name of the player
-   * 
+   *
    * @return String
    */
   public String getName() {
@@ -38,10 +39,10 @@ public class Player {
   public Game getGame() {
     return this.game;
   }
-  
+
   /**
    * Returns the id of the player
-   * 
+   *
    * @return int
    */
   public int getId() {
@@ -139,6 +140,13 @@ public class Player {
       }
     }
     return null;
+  }
+
+  /**
+   * Prints the picked card of the player
+   */
+  public void printPickedCard() {
+    System.out.println(this.pickedCard.name);
   }
 
   //

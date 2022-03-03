@@ -7,24 +7,29 @@ import Models.AdventureCards.*;
 import Models.StoryCards.*;
 
 public class Game implements Mediator { // Main = Game
+  private static int uniqueId = 0;
+  private int id;
+
   Player currentActivePlayer;
   ArrayList<AdventureCard> adventureCardsDeck;
   ArrayList<StoryCard> storyCardsDeck;
 
   ArrayList<Player> players; // the observers...
-  int uniquePlayerId; // increments every time a player is registered
 
   ArrayList<Turn> turns; // size is 0
 
   public ArrayList<String> requests;
 
-  Game() {
+  public Game() {
     this.adventureCardsDeck = new ArrayList<AdventureCard>();
     this.storyCardsDeck = new ArrayList<StoryCard>();
     this.turns = new ArrayList<Turn>();
     this.players = new ArrayList<Player>();
+    this.id = uniqueId;
+    uniqueId++;
 
-    this.uniquePlayerId = 0;
+    this.turns.add(new Turn()); // creates the first turn
+    this.initializeCards();
   }
 
   // observes a player
@@ -34,7 +39,6 @@ public class Game implements Mediator { // Main = Game
     }
     player.setMediator(this);
     this.players.add(player);
-    this.uniquePlayerId += 1;
     return player;
   }
 
@@ -46,6 +50,22 @@ public class Game implements Mediator { // Main = Game
     }
 
     return player;
+  }
+
+  /**
+   * Gets the id of the game
+   * @return
+   */
+  public int getId() {
+    return this.id;
+  }
+
+  /**
+   * Gets the story cards deck
+   * @return ArrayList<StoryCard>
+   */
+  public ArrayList<StoryCard> getStoryCardsDeck() {
+    return this.storyCardsDeck;
   }
 
   /**
@@ -119,64 +139,38 @@ public class Game implements Mediator { // Main = Game
     }
 
     this.storyCardsDeck.add(new EventCard(new KingsRecognition(), "King's Recognition",
-        "The next player(s) to complete a Quest will receive 2 extra shields."));
+            "The next player(s) to complete a Quest will receive 2 extra shields."));
     for (int i = 0; i < 2; i++) {
       this.storyCardsDeck.add(new EventCard(new QueensFavor(), "Queens Favour",
-          "The lowest ranked player(s) immediately receives 2 Adventure Cards."));
+              "The lowest ranked player(s) immediately receives 2 Adventure Cards."));
       this.storyCardsDeck.add(new EventCard(new CourtCalledToCamelot(), "Court Called To Camelot",
-          "All Allies in play must be discarded."));
+              "All Allies in play must be discarded."));
     }
 
     this.storyCardsDeck
-        .add(new EventCard(new Pox(), "Pox", "All players except the player drawing this card lose 1 shield."));
+            .add(new EventCard(new Pox(), "Pox", "All players except the player drawing this card lose 1 shield."));
 
     this.storyCardsDeck.add(new EventCard(new Plague(), "Plague",
-        "Drawer loses 2 shields if possible."));
+            "Drawer loses 2 shields if possible."));
 
     this.storyCardsDeck.add(new EventCard(new ChivalrousDeed(), "Chivalrous Deed",
-        "Player(s) with both lowest rank and least amount of shields, receives 3 shields"));
+            "Player(s) with both lowest rank and least amount of shields, receives 3 shields"));
 
     this.storyCardsDeck.add(new EventCard(new ProsperityThroughoutTheRealm(), "Prosperity Throughout the Realm",
-        "All players may immediately draw 2 Adventure Cards."));
+            "All players may immediately draw 2 Adventure Cards."));
     this.storyCardsDeck.add(new EventCard(new KingsCallToArms(), "King's Call To Arms",
-        "The highest ranked player(s) must place 1 weapon in the discard pile. If unable to do so, 2 Foe Cards must be discarded."));
+            "The highest ranked player(s) must place 1 weapon in the discard pile. If unable to do so, 2 Foe Cards must be discarded."));
 
     Collections.shuffle(this.adventureCardsDeck);
     Collections.shuffle(this.storyCardsDeck);
   }
 
-  public void initializePlayers() {
-    Player player1 = this.registerPlayer(new Player(this.uniquePlayerId, "player 1 name"));
-    Player player2 = this.registerPlayer(new Player(this.uniquePlayerId, "player 2 name"));
-    Player player3 = this.registerPlayer(new Player(this.uniquePlayerId, "player 3 name"));
-    Player player4 = this.registerPlayer(new Player(this.uniquePlayerId, "player 4 name"));
-
-    player1.updateShields(3);
-    player2.updateShields(6);
-    player3.updateShields(4);
-    player4.updateShields(5);
-
-    for (int i = 0; i < 12; i++) {
-      AdventureCard card = adventureCardsDeck.remove(adventureCardsDeck.size() - 1);
-      player1.cards.add(card);
-    }
-
-    for (int i = 0; i < 12; i++) {
-      AdventureCard card = adventureCardsDeck.remove(adventureCardsDeck.size() - 1);
-      player2.cards.add(card);
-    }
-
-    player1.printCards();
-
-    System.out.println("-----------------");
-    player2.printCards();
-  }
-
-  public void start() {
-    // Initialize Players, Give 12 adventure cards to each player
-    this.turns.add(new Turn());
-    this.initializeCards();
-    this.initializePlayers();
+  /**
+   * Returns a list of connected players
+   * @return ArrayList<Player>
+   */
+  public ArrayList<Player> getPlayers() {
+    return this.players;
   }
 
   // removes the last card from the adventure card deck
@@ -187,6 +181,17 @@ public class Game implements Mediator { // Main = Game
     return adventureCardsDeck.remove(adventureCardsDeck.size() - 1);
   }
 
+  // removes the last card from the story card deck
+  public StoryCard getLastStoryCard() {
+    if (storyCardsDeck.size() == 0) {
+      return null;
+    }
+    return storyCardsDeck.remove(storyCardsDeck.size() - 1);
+  }
+
+  /**
+   * Gets the current turn name
+   */
   public String getCurrentTurnName() {
     if (this.turns.isEmpty())
       return null;
@@ -211,7 +216,7 @@ public class Game implements Mediator { // Main = Game
 
   /**
    * Returns the size of the adventure cards deck
-   * 
+   *
    * @return int
    */
   public int getAdventureDeckSize() {
