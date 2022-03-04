@@ -1,5 +1,7 @@
 package Models.StoryCards;
 
+import java.util.ArrayList;
+
 import Models.General.*;
 
 public abstract class StoryCard extends Card {
@@ -10,5 +12,8 @@ public abstract class StoryCard extends Card {
 
         this.drawer = player;
 
+    }
+
+    public void playEvent(ArrayList<Player> players) {
     }
 }

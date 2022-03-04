@@ -141,7 +141,7 @@ public class Player {
     }
     return null;
   }
-
+  
   /**
    * Prints the picked card of the player
    */
@@ -176,6 +176,10 @@ public class Player {
     else {
       return "Knight of the Round Table";
     }
+  }
+
+  public ArrayList<AdventureCard> getCards(){
+    return this.cards;
   }
 
   // gets a int value of the player's rank

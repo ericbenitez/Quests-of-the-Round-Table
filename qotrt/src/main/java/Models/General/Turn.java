@@ -2,15 +2,15 @@ package Models.General;
 import java.util.ArrayList;
 
 import Models.AdventureCards.AdventureCard;
+import Models.StoryCards.*;
+
 
 public class Turn {
   String name = "";
   
   Game game;
 
-  boolean isQuest = false;
-  boolean isTournament = false;
-  boolean isEvent = false;
+  StoryCard storyCard;
 
   ArrayList<Player> participants;
   ArrayList<AdventureCard> discardedCards;
@@ -23,16 +23,38 @@ public class Turn {
   }
 
 
-   public Turn(Game g){
+   public Turn(Game g, StoryCard s){
     this.participants = new ArrayList<Player>();
     this.discardedCards = new ArrayList<AdventureCard>();
     this.game = g;
+    this.storyCard = s;
     
   }
   
   public String getName() {
     return this.name;
   }
+
+
+  /*
+  public void decideTurn(){
+     if (this.storyCard instanceof Quest ){
+       //
+
+     }else if (this.storyCard instanceof Tournament){
+
+
+     }else {
+       this.storyCard.playEvent(game.getPlayers(), game.getCurrentActivePlayer())
+     }
+
+
+
+
+
+
+  }
+  */
 
   /*
   public drawStoryCard(){
