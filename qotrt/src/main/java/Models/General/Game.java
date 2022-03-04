@@ -161,6 +161,23 @@ public class Game implements Mediator { // Main = Game
     this.storyCardsDeck.add(new EventCard(new KingsCallToArms(), "King's Call To Arms",
             "The highest ranked player(s) must place 1 weapon in the discard pile. If unable to do so, 2 Foe Cards must be discarded."));
 
+    // initialize quest cards
+    /*
+     * this.storyCardsDeck.add(new Quest("Journey through the Enchanted Forest", 3,
+     * "Evil Knight", this));
+     * this.storyCardsDeck.add(new Quest("Vanquish King Arthur's Enemies", 3));
+     * this.storyCardsDeck.add(new Quest("Repel the Saxon Raiders", 2, "All"));
+     * this.storyCardsDeck.add(new Quest("Boar Hunt", 2, "Boar"));
+     * this.storyCardsDeck.add(new Quest("Search for the Questing Beast", 4));
+     * this.storyCardsDeck.add(new Quest("Defend the Queen's Honor", 4, "All"));
+     * this.storyCardsDeck.add(new Quest("Slay the Dragon", 3, "Dragon"));
+     * this.storyCardsDeck.add(new Quest("Rescue the Fair Maiden", 3,
+     * "Black Knight"));
+     * this.storyCardsDeck.add(new Quest("Search for the Holy Grail", 5, "All"));
+     * this.storyCardsDeck.add(new Quest("Test of the Green Knight", 4,
+     * "Green Knight"));
+     */
+
     Collections.shuffle(this.adventureCardsDeck);
     Collections.shuffle(this.storyCardsDeck);
   }

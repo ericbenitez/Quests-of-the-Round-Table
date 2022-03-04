@@ -1,40 +1,52 @@
 package Models.StoryCards;
+
+import java.util.ArrayList;
+
 import Models.AdventureCards.*;
 import Models.General.Player;
+import Models.General.Game;
 
 public class Quest extends StoryCard {
-
+    
+    private String name;
     private int totalStages;
-    private Foe foeCard;
+    private String foeName;
     private Player sponsor;
+    private ArrayList<ArrayList<AdventureCard>> stages;
+    private Game game;
 
-
-    public Quest(String name, String description, int stages, Foe foe, Player sponsor){
+    // if all the foes pass 'all' to foeName
+    public Quest(Game game, String name, int stages, String foe) {
+        this.game = game;
         this.name = name;
-        this.description = description;
         this.totalStages = stages;
-        this.foeCard = foe;
-        this.sponsor = sponsor;
-   
+        this.foeName = foe;
+        this.stages = new ArrayList<>();
     }
 
-    public Quest(String name, String description, int stages ){
+    public Quest(Game game, String name, int stages) {
+        this.game = game;
         this.name = name;
-        this.description = description;
         this.totalStages = stages;
-        this.foeCard = null;
-        this.sponsor = null;
+        this.foeName = null; //when the quest doesnt have a foe
     }
 
-
-    public void setSponsor(Player player){
+    public void setSponsor(Player player) {
         this.sponsor = player;
     }
+
+    public String getFoe(){
+        return foeName;
+    }
+    public boolean canPlayerSponsor(Player player){
+        
+        return false;
+    }
+
 
     @Override
     protected void draw(Player player) {
         // TODO Auto-generated method stub
-        
+        // while something ask player input to find sponsor
     }
-  
 }
