@@ -53,7 +53,7 @@ public class Server {
         System.out.println("[SERVER]: Player " + name + " has joined!");
 
         player.drawCards(3);
-        
+
         // 3. after creating player object, send to client the player id + game object
         this.sockets.put(player.getId(), socket);
         this.inputStreams.put(player.getId(), inputStream);
@@ -76,6 +76,7 @@ public class Server {
           maxAmountPlayers = inputStream.readInt();
         }
       }
+
     } catch (IOException ioException) {
       System.out.println(ioException.getMessage());
     }
@@ -107,7 +108,6 @@ public class Server {
     System.out.println("[SERVER]: Game started");
 
     try {
-
       int currentPlayer = 0;
 
       while (true) {
@@ -121,94 +121,85 @@ public class Server {
         outputStream.flush();
         outputStream.reset();
 
-        // For getting the Display choice
-        String choiceStr = (inputStream.readUTF()); // has the choice + playerID
-
-        // if (choiceStr)
-        String[] list = choiceStr.split(" ");
-        int choice = Integer.parseInt(list[0]);
-        // int playerID = Integer.parseInt(list[1]);
-        String amtOrName = ""; // will be parsed in the actionForChoice()
-        if (list.length == 3) {
-          amtOrName = list[2];
-        }
-
-        System.out.println("[SERVER]: Player's choice is " + choice + "!");
-        // calling a function that takes in the choice
-        actionForChoice(choice, player, amtOrName, inputStream, outputStream);
-
-        currentPlayer++;
-        if (currentPlayer == game.getPlayers().size()) {
-          currentPlayer = 0;
-        }
-      }
-    } catch (IOException ioException) {
-      System.out.println(ioException.getMessage());
-    }
-  }
-
-  public void actionForChoice(int choice, Player player, String input, ObjectInputStream inputStream, ObjectOutputStream outputStream) {
-    try {
-      if (choice == 1) {
+        // sending the card to the client every turn
         ArrayList<AdventureCard> cards = player.getCards();
         String cardString = "";
-        for (int i =0; i< cards.size(); i++){
+        for (int i = 0; i < cards.size(); i++) {
           cardString += cards.get(i).toString();
         }
         outputStream.writeUTF(cardString);
         outputStream.flush();
         outputStream.reset();
+
+        // Object object = inputStream.readObject();
+        String[] clientMsg = (String[]) inputStream.readObject(); // has the choice
+
+        String choice = clientMsg[0];
+        String value = clientMsg[1]; // will be parsed in the actionForChoice()
+
+        System.out.println("[SERVER]: Player's choice is " + choice + "!");
+        // calling a function that takes in the choice
+        actionForChoice(choice, player, value, inputStream, outputStream);
+
+        currentPlayer++;
+        if (currentPlayer == game.getPlayers().size()) {
+          currentPlayer = 0;
+        }
+
       }
-      
-      if (choice == 2) {
+    } catch (Exception exception) {
+      System.out.println("An exception");
+      System.out.println(exception.getMessage());
+    }
+  }
+
+  public void actionForChoice(String choice, Player player, String input, ObjectInputStream inputStream,
+      ObjectOutputStream outputStream) {
+    try {
+      if (choice.equals("1")) {
         // select to discard
-        Card card = player.discardCard(input);
-  
+
+        AdventureCard card = player.discardCard(input);
+
+        System.out.println("Helloo");
         try {
-        
-          outputStream.writeObject(card);
+          outputStream.writeUTF("Card was deleted " + card.getName());
           outputStream.flush();
           outputStream.reset();
-  
-          if (card == null) {
-            System.out.println("[SERVER]: Card to be discarded is not found.");
-          } else {
-            System.out.println("[SERVER]: The card: " + input + " has been discarded.");
-          }
-  
+
+
         } catch (IOException ioException) {
-          System.out.println(ioException.getMessage());
+          System.out.println("Choice 1 execption:" + ioException.getMessage());
         }
       }
-      if (choice == 3) {
+      if (choice.equals("2")) {
         // Draw new cards
         Boolean amount = player.drawCards(Integer.parseInt(input));
-  
-        try {
-        
-  
-          outputStream.writeBoolean(amount);
-          outputStream.flush();
-          outputStream.reset();
-          System.out.println("[SERVER: Player " + player.getId() + " has successfully drawn " + input + " cards.");
-        } catch (IOException ioException) {
-          System.out.println(ioException.getMessage());
-        }
-  
+
+        // try {
+
+        outputStream.writeBoolean(amount);
+        outputStream.flush();
+        outputStream.reset();
+        System.out.println("[SERVER: Player " + player.getId() + " has successfully drawn " + input + " cards.");
+        // } catch (IOException ioException) {
+        // System.out.println(ioException.getMessage());
+        // }
+
       }
-      if (choice == 4) {
+      if (choice.equals("3")) {
         // See discarded cards
         ArrayList<String> discardedCards = game.getDiscardedCards();
         try {
-          
-          outputStream.writeObject(discardedCards);
+
+          outputStream.writeUTF(discardedCards.toString());
           outputStream.flush();
           outputStream.reset();
           System.out.println("[SERVER: Sending the discarded cards.");
         } catch (IOException ioException) {
-          System.out.println(ioException.getMessage());
+          System.out.println("Choice 3 execption:" + ioException.getMessage());
         }
-  
+
       }
     } catch (IOException ioException) {
       System.out.println(ioException.getMessage());

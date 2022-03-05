@@ -18,7 +18,6 @@ public class Client {
     private ObjectInputStream inputStream;
     private Scanner scanner;
     int playerId = -1;
-    
 
     private static boolean gameStarted = false;
     // Game game;
@@ -51,12 +50,11 @@ public class Client {
             while (true) {
                 String serverMessage = this.inputStream.readUTF();
 
-                if(serverMessage.equals("game-started")) {
+                if (serverMessage.equals("game-started")) {
                     System.out.println("[GAME]: Sorry the game has started, try again later...");
                     gameStarted = true;
                     break;
                 }
-                
 
                 if (serverMessage.equals("determine-amount-players")) {
                     System.out.println("[GAME]: How many players do you want in this game? (2-4)");
@@ -75,46 +73,46 @@ public class Client {
                 }
 
                 if (serverMessage.equals("start-turn")) {
-                    System.out.println("Your turn has started");
+                    System.out.println("[CLIENT]: Your turn has started");
+
+                    // Display cards before the choices
+                    String cards = this.inputStream.readUTF();
+                    System.out.println(cards);
 
                     // let player choose to see their current cards
                     displayChoices(); // the prompts
+
                     // Scanner
                     String choice = scanner.nextLine();
                     String cardNameToDiscard;
 
-                    if (Integer.parseInt(choice) == 1) {
-                        this.outputStream.writeUTF(choice);// passing in the player ID so we know
-                                                                                 // which
-                        outputStream.flush();
-                        outputStream.reset();
-                        // Sending to the server
-                        System.out.println("[CLIENT]: sending choice " + choice + " to the server");
-                        
-                        String cards = this.inputStream.readUTF();
-                        System.out.println("Your cards: \n" + cards);
-                    }
-
-                    if (Integer.parseInt(choice) == 2){
+                    if (choice.equals("1")) {
                         System.out.println("Enter the Name of Card to Discard");
+
+                        // Display the cards they have
+                        // this.outputStream.writeObject(new Request("delete-card", 3));
+
                         cardNameToDiscard = scanner.nextLine();
-                        this.outputStream.writeUTF(choice +  " " + cardNameToDiscard);// passing in
-                                                                                                           // the
-                        // player ID so we
-                        // know which
+                        String[] request = { choice, cardNameToDiscard };
+
+                        this.outputStream.writeObject(request);
                         outputStream.flush();
                         outputStream.reset();
-                        // Sending to the server
+                        
                         System.out.println("[CLIENT]: sending choice " + choice + " to the server");
-
+                        System.out.println(this.inputStream.readUTF());
                     }
 
-                    if (Integer.parseInt(choice) == 3) {
+                    if (choice.equals("2")) {
                         System.out.println("Enter the number of cards you wish to draw: ");
                         String amountCards = scanner.nextLine();
 
-                        this.outputStream.writeUTF(choice + " " + amountCards);// passing in the
-                                                                                                     // player
+                        String[] request = { choice, amountCards};
+
+                        this.outputStream.writeObject(request);
+                        // this.outputStream.writeObject(new Request(choice, amountCards));
+                        // this.outputStream.writeUTF(choice + " " + amountCards);// passing in the
+                        // player
                         // ID so we know which
                         outputStream.flush();
                         outputStream.reset();
@@ -131,22 +129,19 @@ public class Client {
 
                     }
 
-                    if (Integer.parseInt(choice) == 4) {
-                        this.outputStream.writeUTF(choice);// passing in the player ID so we know
-                                                                                 // which
+                    if (choice.equals("3")) {
+                        String[] request = {choice, ""};
+                        this.outputStream.writeObject(request);
                         outputStream.flush();
                         outputStream.reset();
-                        // Sending to the server
                         System.out.println("[CLIENT]: sending choice " + choice + " to the server");
+                        
+                        
+                        System.out.println(this.inputStream.readUTF());
+                        // Sending to the server
+                        
 
                     }
-                    
-                    if (Integer.parseInt(choice) == 5) {
-                        this.outputStream.writeUTF("the choice is 5");
-                        this.outputStream.flush();
-                        this.outputStream.reset();
-                    }
-
                 }
 
             }
@@ -181,10 +176,10 @@ public class Client {
 
     public void displayChoices() {
         System.out.println("Choose which you would like to do: ");
-        System.out.println("1. See your current cards");
-        System.out.println("2. Select to discard");
-        System.out.println("3. Draw new cards");
-        System.out.println("4. See discarded cards");
+        // System.out.println("1. See your current cards");
+        System.out.println("1. Select to discard");
+        System.out.println("2. Draw new cards");
+        System.out.println("3. See discarded cards");
 
     }
 

@@ -14,7 +14,7 @@ public class Player {
   private Game game; // the mediator of players
 
   // list of cards
-  public Card pickedCard; //from the story deck
+  public Card pickedCard; // from the story deck
   public ArrayList<AdventureCard> cards; // 12 cards
   public ArrayList<AdventureCard> hand;
 
@@ -57,7 +57,7 @@ public class Player {
   public AdventureCard discardCard(String cardName) {
     int index = 0;
     for (AdventureCard card : this.cards) {
-      if (card.name == cardName) {
+      if ((card.name).equals(cardName)) {
         this.cards.remove(index);
 
         Turn currentTurn = game.getCurrentTurn();
@@ -141,7 +141,7 @@ public class Player {
     }
     return null;
   }
-  
+
   /**
    * Prints the picked card of the player
    */
@@ -178,7 +178,7 @@ public class Player {
     }
   }
 
-  public ArrayList<AdventureCard> getCards(){
+  public ArrayList<AdventureCard> getCards() {
     return this.cards;
   }
 
