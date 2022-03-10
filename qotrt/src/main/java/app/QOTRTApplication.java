@@ -1,5 +1,6 @@
 package app;
 
+import app.Models.TestClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,7 +19,7 @@ public class QOTRTApplication {
     QOTRTApplication application = new QOTRTApplication();
 
     SpringApplication.run(QOTRTApplication.class, args);
-    SpringApplication.run(Models.TestClass.class, args);
+    SpringApplication.run(TestClass.class, args);
 
     System.out.println("running");
     String x = "";
