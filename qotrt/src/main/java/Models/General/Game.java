@@ -14,20 +14,27 @@ public class Game implements Mediator { // Main = Game
   Player currentActivePlayer;
   ArrayList<AdventureCard> adventureCardsDeck;
   ArrayList<StoryCard> storyCardsDeck;
-
   ArrayList<Player> players; // the observers...
   int uniquePlayerId; // increments every time a player is registered
-
   ArrayList<Turn> turns; // size is 0
-
   public ArrayList<String> requests;
+  String gameID;
+
+  // Variable which asks the initial/starting player how many players should join
+  int numOfPlayers;
+
+  //Status of Game : NEW, IN-Progress, Finished..a set status function below..
+  private GameStatus status;
+
+  //we dont have instances of games, it's just the currentGame, if it's not null, it is NEW/In-progress
+  Game currentGame=null; //setGame(Game g) below
 
   @Autowired
   public Game() {
     this.adventureCardsDeck = new ArrayList<AdventureCard>();
     this.storyCardsDeck = new ArrayList<StoryCard>();
     this.turns = new ArrayList<Turn>();
-    this.players = new ArrayList<Player>();
+    // this.players = new ArrayList<Player>(); // moved to setNumOfPlayers(int x) 
     this.uniquePlayerId = 0;
     initializeCards();
     this.turns.add(new Turn());
@@ -35,7 +42,7 @@ public class Game implements Mediator { // Main = Game
 
   // observes a player
   public Player registerPlayer(Player player) {
-    if (players.size() >= 4) {
+    if (players.size() >= numOfPlayers) {
       return null;
     }
     player.setMediator(this);
@@ -274,5 +281,24 @@ public class Game implements Mediator { // Main = Game
 
   public Player getCurrentActivePlayer() {
     return currentActivePlayer;
+  }
+
+  // From TTT
+  public void setGameID(String x) {
+    gameID = x;
+  }
+
+  // Sets the num of players and initializes the arraylist with that capacity so no
+  // more players can join
+  public void setNumOfPlayers(int x) {
+    numOfPlayers = x;
+    this.players = new ArrayList<Player>(x);
+  }
+
+  public void setGameStatus(GameStatus x){
+    status = x;
+  }
+  public void setGame(Game g){
+    currentGame=g;
   }
 }
