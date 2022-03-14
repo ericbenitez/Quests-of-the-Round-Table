@@ -1,38 +1,37 @@
 package app.Models.AdventureCards;
 
-import Models.General.*;
-import app.Models.General.Game;
-import app.Models.General.Player;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import app.Models.General.*;
+import app.Service.GameService;
 
 public class Ally extends AdventureCard {
   int battlePoints;
   int bids;
-  Game game;
 
   // -1 is passed into battlePts and bids when no value exists for it
-  public Ally(String name, int battlePts, int bids, Game game) {
+  public Ally(String name, int battlePts, int bids) {
     this.name = name;
     this.description = "";
     this.battlePoints = battlePts;
     this.bids = bids;
-    this.game = game;
   }
 
   public int getBattlePoints() {
     // if (this.name == "Lancelot" && ) return 25;
-    if (this.name == "Sir Gawain" && this.game.getCurrentTurnName() == "Test of the Green Knight Quest") {
+    if (this.name == "Sir Gawain" && this.gameService.getCurrentGame().getCurrentTurnName() == "Test of the Green Knight Quest") {
       return this.battlePoints + 20;
     }
 
-    if (this.name == "Sir Gawain" && this.game.getCurrentTurnName() == "Test of the Green Knight Quest") {
+    if (this.name == "Sir Gawain" && this.gameService.getCurrentGame().getCurrentTurnName() == "Test of the Green Knight Quest") {
       return this.battlePoints + 20;
     }
 
-    if (this.name == "Sir Percival" && this.game.getCurrentTurnName() == "Search for the Holy Grail Quest") {
+    if (this.name == "Sir Percival" && this.gameService.getCurrentGame().getCurrentTurnName() == "Search for the Holy Grail Quest") {
       return this.battlePoints + 20;
     }
 
-    if (this.name == "Sir Lancelot" && this.game.getCurrentTurnName() == "Quest to Defend the Queen's Honor") {
+    if (this.name == "Sir Lancelot" && this.gameService.getCurrentGame().getCurrentTurnName() == "Quest to Defend the Queen's Honor") {
       return this.battlePoints + 25;
     }
 

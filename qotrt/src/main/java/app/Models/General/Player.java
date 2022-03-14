@@ -2,19 +2,14 @@ package app.Models.General;
 
 import java.util.ArrayList;
 
-import Models.AdventureCards.*;
+import app.Models.AdventureCards.*;
 import app.Models.Enums.Rank;
-import app.Models.AdventureCards.AdventureCard;
-import app.Models.AdventureCards.Ally;
-import app.Models.AdventureCards.Amour;
-import app.Models.AdventureCards.Weapon;
 
 public class Player {
   public String name;
   private static int uniqueId = 0;
   private int id;
   private int numShields;
-
   private Game game; // the mediator of players
 
   // list of cards

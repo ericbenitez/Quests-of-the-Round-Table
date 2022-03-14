@@ -3,8 +3,7 @@ package app.Models.StoryCards;
 import java.util.ArrayList;
 import app.Models.Enums.Rank;
 
-import Models.General.*;
-import app.Models.General.Player;
+import app.Models.General.*;
 
 public class ChivalrousDeed implements EventBehaviour {
 

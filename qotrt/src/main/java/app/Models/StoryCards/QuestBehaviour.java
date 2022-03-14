@@ -1,9 +1,7 @@
 package app.Models.StoryCards;
 import java.util.ArrayList;
 
-import Models.General.*;
-import app.Models.General.Player;
-
+import app.Models.General.*;
 
 public interface QuestBehaviour {
 

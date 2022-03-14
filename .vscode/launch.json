@@ -2,6 +2,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Launch QOTRTApplication",
+      "request": "launch",
+      "mainClass": "app.QOTRTApplication",
+      "projectName": "qotrt"
+    },
+    {
+      "type": "java",
       "name": "Spring Boot-QOTRTApplication<qotrt>",
       "request": "launch",
       "cwd": "${workspaceFolder}",

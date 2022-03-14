@@ -1,9 +1,8 @@
 package app.Models.General;
 import java.util.ArrayList;
 
-import app.Models.AdventureCards.AdventureCard;
-import Models.StoryCards.*;
-import app.Models.StoryCards.StoryCard;
+import app.Models.AdventureCards.*;
+import app.Models.StoryCards.*;
 
 
 public class Turn {

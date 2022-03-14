@@ -1,7 +1,6 @@
 package app.Models.AdventureCards;
 
-import Models.General.*;
-import app.Models.General.Game;
+import app.Models.General.*;
 
 public class Test extends AdventureCard {
   int minBid;

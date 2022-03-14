@@ -1,8 +1,8 @@
 package app.Models;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class TestClass {
   public String value;
   

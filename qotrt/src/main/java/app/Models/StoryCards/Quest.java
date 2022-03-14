@@ -2,10 +2,11 @@ package app.Models.StoryCards;
 
 import java.util.ArrayList;
 
-import Models.AdventureCards.*;
-import app.Models.General.Player;
-import app.Models.General.Game;
-import app.Models.AdventureCards.AdventureCard;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import app.Models.AdventureCards.*;
+import app.Models.General.*;
+import app.Service.GameService;
 
 public class Quest extends StoryCard {
 
@@ -14,13 +15,13 @@ public class Quest extends StoryCard {
     protected String foeName;
     protected Player sponsor;
     protected ArrayList<ArrayList<AdventureCard>> stages;
-    protected Game game;
-    // public QuestBehaviour QuestBehaviour; //??
+    
+    @Autowired
+    protected GameService gameService;
 
     // if all the foes pass 'all' to foeName
 
-    public Quest(String name, int stages, String foe, Game game) {
-        this.game = game;
+    public Quest(String name, int stages, String foe) {
         this.name = name;
         this.totalStages = stages;
         this.foeName = foe;
@@ -49,67 +50,67 @@ public class Quest extends StoryCard {
 }
 
 class JourneyThruForest extends Quest {
-    public JourneyThruForest(Game game) {
-        super("Journey Through the Forest", 3, "Evil Knight", game);
+    public JourneyThruForest() {
+        super("Journey Through the Forest", 3, "Evil Knight");
     };
 
 }
 
 class SlayTheDragon extends Quest {
-    public SlayTheDragon(String name, int stages, String foe, Game game) {
-        super("Slay the Dragon", 3, "Dragon", game);
+    public SlayTheDragon(String name, int stages, String foe) {
+        super("Slay the Dragon", 3, "Dragon");
     };
 
 }
 
 class VanquishKingArthursEnemies extends Quest {
-    public VanquishKingArthursEnemies(Game game) {
-        super("Vanquish King Arthur's Enemies", 3, null, game);
+    public VanquishKingArthursEnemies() {
+        super("Vanquish King Arthur's Enemies", 3, null);
     }
 }
 
 class RepelTheSaxonRaiders extends Quest {
-    public RepelTheSaxonRaiders(Game game) {
-        super("Repel the Saxon Raiders", 2, "All", game);
+    public RepelTheSaxonRaiders() {
+        super("Repel the Saxon Raiders", 2, "All");
     };
 }
 
 class BoarHunt extends Quest {
 
-    public BoarHunt(Game game) {
-        super("Boar Hunt", 2, "All Sacons", game);
+    public BoarHunt() {
+        super("Boar Hunt", 2, "All Sacons");
     }
 }
 
 class SearchForTheQuestingBeast extends Quest {
 
-    public SearchForTheQuestingBeast(Game game) {
-        super("Search for the Questing Beast", 4, null, game);
+    public SearchForTheQuestingBeast() {
+        super("Search for the Questing Beast", 4, null);
     }
 }
 
 class DefendTheQueensHonor extends Quest {
 
-    public DefendTheQueensHonor(Game game) {
-        super("Defend the Queen's Honor", 4, "All", game);
+    public DefendTheQueensHonor() {
+        super("Defend the Queen's Honor", 4, "All");
     }
 }
 
 class RescueTheFairMaiden extends Quest {
 
-    public RescueTheFairMaiden(Game game) {
-        super("Rescue the Fair Maiden", 3, "Black Knight", game);
+    public RescueTheFairMaiden() {
+        super("Rescue the Fair Maiden", 3, "Black Knight");
     }
 }
 
 class SearchForTheHolyGrail extends Quest {
-    public SearchForTheHolyGrail(Game game) {
-        super("Search for the Holy Grail", 5, "All", game);
+    public SearchForTheHolyGrail() {
+        super("Search for the Holy Grail", 5, "All");
     }
 }
 
 class TestOfTheGreenKnight extends Quest {
-    public TestOfTheGreenKnight(Game game) {
-        super("Test of the Green Knight", 4, "Green Knight", game);
+    public TestOfTheGreenKnight() {
+        super("Test of the Green Knight", 4, "Green Knight");
     }
 }

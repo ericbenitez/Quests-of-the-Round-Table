@@ -1,0 +1,77 @@
+html {
+    font-size: 10px;
+    color: #212560; /*font color*/
+}
+
+/*https://dev.to/ayushmanbthakur/how-to-make-tic-tac-toe-in-browser-with-html-css-and-js-28ed */
+#gameArea {
+    min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #eee;
+}
+button {
+    outline: none;
+    border: 4px solid green;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    background-color: aquamarine;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  button:hover {
+    cursor: pointer;
+    background: green;
+    color: white;
+  }
+
+
+
+#gameBoard {
+    background: linear-gradient(70deg, #012649,#38005e );
+    display: flex; /* allows to position all of our text into the center */
+    flex-direction: column; /* vertical content*/
+    justify-content: center;
+    padding: 3rem; /*all around*/
+    margin: auto;
+    
+    height: 400px; /*30% of the browser visible viewport, makes the sections a little taller*/
+    width: 500px;
+}
+
+#cardContainer{
+    display: flex;
+    flex-direction: vertical;
+}
+#storyCards{
+    height: 100px;
+    width: 50px;
+    background-color: yellowgreen;
+    margin: 5rem;
+}
+
+#adventureCards{
+    height: 100px;
+    width:50px;
+    background-color: blueviolet;
+    margin: 5rem;
+
+}
+
+#everythingQuest{
+    height: 25%;
+    background-color: royalblue;
+}
+#stages{
+    display: hidden;
+}
+
+
+
+#decisionButtons {
+    align-self: center;
+    margin-top: auto;
+}

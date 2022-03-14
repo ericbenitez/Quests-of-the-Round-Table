@@ -1,8 +1,6 @@
 package app.Models.AdventureCards;
 
-import Models.General.*;
-import app.Models.General.Card;
-import app.Models.General.Player;
+import app.Models.General.*;
 
 public abstract class AdventureCard extends Card {
   Player owner;
