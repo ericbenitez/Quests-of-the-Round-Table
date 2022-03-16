@@ -3,6 +3,7 @@ package app.Controllers;
 import app.Controllers.dto.CreateGameRequest;
 import app.Models.General.Game;
 import app.Models.General.Player;
+import app.Models.StoryCards.StoryCard;
 import app.Service.GameService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -76,4 +77,11 @@ public class GameController {
   // Game game =
   // return entity;
   // }
+
+  @MessageMapping("/pickCard")
+  @SendTo("/topic/pickCard")
+  public ResponseEntity<String> pickCard() throws Exception {
+    StoryCard storyCard = this.gameService.getCurrentGame().pickCard();
+    return ResponseEntity.ok(storyCard.name);
+  }
 }

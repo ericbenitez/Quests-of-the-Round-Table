@@ -61,6 +61,14 @@ button {
 
 }
 
+#activeStoryCard {
+    height: 100px;
+    width: 50px;
+    background-color: blue;
+    margin: 5rem;
+    display: none;
+}
+
 #everythingQuest{
     height: 25%;
     background-color: royalblue;

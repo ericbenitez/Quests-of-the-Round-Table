@@ -21,6 +21,12 @@ public class GameService {
         this.currentGame.registerPlayer(player); // register the player
         this.currentGame.setGameStatus(GameStatus.NEW);
         this.currentGame.setGame(this.currentGame); // storing the game
+        
+        // initialize cards
+        CardObjects cards = new CardObjects();
+        this.currentGame.setAdventureCards(cards.getAdventureCards());
+        this.currentGame.setStoryCards(cards.getStoryCards());
+        
         return this.currentGame.getGameID();
     }
 
@@ -33,10 +39,6 @@ public class GameService {
         if (this.currentGame.registerPlayer(anotherOne) != null) { // it means there was some room in the game to join
             if (this.currentGame.getPlayers().size() == this.currentGame.getNumOfPlayers()) { // last player to join
                 this.currentGame.setGameStatus(GameStatus.IN_PROGRESS); // game start, status = in progress
-                // initialize the cards here?
-                CardObjects cards = new CardObjects();
-                this.currentGame.setAdventureCards(cards.getAdventureCards());
-                this.currentGame.setStoryCards(cards.getStoryCards());
                 return this.currentGame.getGameID();
             }
             

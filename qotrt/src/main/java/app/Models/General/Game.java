@@ -89,6 +89,20 @@ public class Game implements Mediator { // Main = Game
     return adventureCardsDeck.remove(adventureCardsDeck.size() - 1);
   }
 
+  /**
+   * Picks a story card from the deck and returns it
+   * @return StoryCard
+   */
+  public StoryCard pickCard() {
+    if (this.storyCardsDeck.isEmpty()) {
+      return null;
+    }
+    
+    this.getCurrentTurn().storyCard = this.storyCardsDeck.remove(0);
+    
+    return this.getCurrentTurn().storyCard;
+  }
+  
   public String getCurrentTurnName() {
     if (this.turns.isEmpty())
       return null;

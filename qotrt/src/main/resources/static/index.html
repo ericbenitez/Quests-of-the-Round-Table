@@ -7,6 +7,9 @@
     content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Quest Game</title>
+  <link rel='stylesheet' type='text/css' media='screen' href='styles.css'>
+  <link rel="stylesheet" href="./css/styles.css">
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -36,10 +39,43 @@
 
 
   <br>
-
-
   <div id="game-message">
   </div>
+
+  <!-- Combined board.html with index.html-->
+  <main id="gameArea">
+    <!--gameArea includes other players space-->
+    <div id="gameBoard">
+      <div id="cardContainer">
+        <div id="storyCards">Story Cards Placeholder</div>
+        <div id="adventureCards">Adventure Card Placeholder</div>
+        <div id="activeStoryCard"></div> <!-- div to contain the current active story card -->
+      </div>
+      <div id="everythingQuest">
+        <p>Placeholder for stages and quest foe cards..</p>
+        <div id="quest">Placeholder for sponser</div>
+        <div id="stages">Stages </div> <!-- we will have to use js to display/hide whenever needed-->
+      </div>
+      <!--current player-->
+      <div id="playerView"> <!--imageArea (purple box)-->
+        <div id="shields"> You have 0 shields.</div>
+        <div id="decisionButtons">
+          <button id="hand">Show Hand</button>
+          <button id="joinQuest">Join Quest</button> <!--only available to click when they're not sponsporing a quest-->
+          <button id="sponsorQuest">Sponsor Quest</button>
+          <button id="transferQuest">Transfer Quest</button> <!--goes to the player on the left-->
+          <button id="readCard">Read Card</button> <!--Broadcasts the message to other players-->
+          <button onclick="pickCard()" id="pickCard">Pick Card</button> <!--Broadcasts the message to other players-->
+          <button id="dealAdventureCard">Deal </button> <!--Sponsor deals one adventure card to participating player-->
+        </div>
+      </div>
+    </div>
+  </main>
+
+
+
+
+
 </body>
 
 </html>

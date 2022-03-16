@@ -1,6 +1,7 @@
 // Global variable game
 let game = null;
 const url = "http://localhost:8080";
+var stompClient;
 
 
 window.addEventListener("load", function () {
@@ -37,6 +38,11 @@ function connect() {
       // this should show whether the player successfully joined or not
       showResponse(data, playerName);
     });
+    
+    stompClient.subscribe("/topic/pickCard", function(response) {
+      const data = JSON.parse(response.body).body
+      displayStoryCard(data)
+    })
   });
 }
 
@@ -109,6 +115,12 @@ function attemptCreate(player, numPlayers){
                     "player": player,
                     "numOfPlayers": numPlayers *1
                 }));
+                
+  stompClient.subscribe("/topic/pickCard", function(response) {
+    const data = JSON.parse(response.body).body
+    displayStoryCard(data)
+  })
+  
     //stompClient.send("/app/game/start",{}, JSON.stringify({"info": player + " " + numPlayers.toString()}));
    /* $.ajax({
                 url: url + "/game/start",
@@ -162,6 +174,31 @@ function displayCreateGameResponse(data, playerName, numPlayers) {
 }
 
 
+
+/**
+ * Send request to pick a story card
+ */
+function pickCard() {
+  stompClient.send("/app/pickCard", {}, "");
+}
+
+/**
+ * Displays a story card onto the UI
+ * @param {StoryCard} storyCard 
+ */
+function displayStoryCard(storyCardName) {
+  const storyCardDiv = document.getElementById("activeStoryCard")
+  storyCardDiv.style.display = "block";
+  const message = storyCardName
+  storyCardDiv.appendChild(document.createTextNode(message))
+}
+
+/**
+ * Will deal a card
+ */
+function deal() {
+  
+}
 
 
 

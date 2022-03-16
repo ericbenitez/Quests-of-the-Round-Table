@@ -27,13 +27,25 @@
             <div id="playerView"> <!--imageArea (purple box)-->
                 <div id="shields"> You have 0 shields.</div>
                 <div id="decisionButtons">
-                    <button id="hand">Show Hand</button>
+                    <button onclick="showHand()" id="hand">Show Hand</button>
                     <button id="joinQuest">Join Quest</button> <!--only available to click when they're not sponsporing a quest-->
                     <button id="sponsorQuest">Sponsor Quest</button>
                     <button id="transferQuest">Transfer Quest</button> <!--goes to the player on the left-->
                     <button id="readCard">Read Card</button> <!--Broadcasts the message to other players-->
+                    <button onclick="pickCard()" id="pickCard">Pick Card</button> <!--Picks a story card-->
                     <button id="dealAdventureCard">Deal </button> <!--Sponsor deals one adventure card to participating player-->
                 </div>
+            </div>
+        </div>
+        
+        <div id="cards-container">
+            <div id="player-cards">
+                <p>Your Cards: </p>
+            </div>
+            
+            <div id="place-card-buttons">
+                <button id="face-up-but">Place Card Face Up</button>
+                <button id="face-down-but">Place Card Face Down</button>
             </div>
         </div>
     </main>
