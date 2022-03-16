@@ -61,6 +61,11 @@ public class GameController {
     int playerNum = gameService.getCurrPlayerNum();
     return ResponseEntity.ok(playerNum);
   }
+  @MessageMapping("/getAdvCard")
+  @SendTo("/topic/getAdvCard")
+  public AdventureCard getAdvCard() {
+    return gameService.getAdventureCard();
+  }
 
   @MessageMapping("/playerGetCards")
   public void getCards(@RequestBody Message playerNum){

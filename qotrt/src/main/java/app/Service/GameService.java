@@ -119,5 +119,8 @@ public class GameService {
         }
         return cardNames;
     }
+    public AdventureCard getAdventureCard(){
+        return currentGame.getLastCard();
+    }
 
 }

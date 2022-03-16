@@ -138,6 +138,27 @@ function joinGame(){
     let playerName = document.getElementById("player-name").value;
     connect();
 }
+/it would be better if we had player ids..
+function getAdventureCards(){
+    stompClient.send("/app/getAdvCard");
+    //stompClient.subscribe("/topic/getAdvCard", callback);
+    stompClient.subscribe('/topic/getAdvCard', function (response) {
+      let data = JSON.parse(response.body);
+      //console.log(data);
+      let hand = document.getElementById("playerHand");
+      /*all for creating a label :))*/
+      let newLabel = document.createElement("label");
+      newLabel.setAttribute("for", 'checkbox');
+      newLabel.innerHTML = data.name; //name of the card
+
+      let newCheckbox = document.createElement("input");
+      newCheckbox.setAttribute("type", 'checkbox');
+      newCheckbox.setAttribute("id", 'checkbox');
+      hand.appendChild(newCheckbox);
+      hand.appendChild(newLabel);
+      });
+      stompClient.unsubscribe('/topic/getAdvCard');
+}
 
 
 
