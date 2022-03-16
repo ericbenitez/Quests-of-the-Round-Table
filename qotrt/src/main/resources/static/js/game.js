@@ -5,7 +5,8 @@ function showResponse(data, playerName) {
 
   let message = "The game is full or there was an issue."
   if (data.body != null) {
-    message = playerName + " has sucessfully joined the game";
+    message = playerName + " has successfully joined the game. They are player number "  + data.body;
+
   }
 
   let joinMessage = document.getElementById("game-message");

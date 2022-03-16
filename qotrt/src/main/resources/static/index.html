@@ -2,22 +2,21 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Quest Game</title>
-  <link rel='stylesheet' type='text/css' media='screen' href='styles.css'>
-  <link rel="stylesheet" href="./css/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Quest Game</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link rel='stylesheet' type='text/css' media='screen' href="./css/styles.css">
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  
+
 </head>
 
 <body>
-  <div id="new-game-container">
+<div id="new-game-container">
     <h1>Want to create a new game?</h1>
     <p>Enter your name</p>
     <input type="text" id="creator-name" placeholder="Name">
@@ -25,18 +24,61 @@
     <br>
     <p>Enter the number of players you wish to have</p>
     <input type="number" id="num-players" placeholder="2-4" min="2" max="4">
-    <button id="create-game-button">Create Game</button>
-  </div>
+    <button id="create-game-button" onclick="createGame()">Create Game</button>
+</div>
 
-  <br>
-  <br>
+<br>
+<br>
 
-  <div>
+<div>
     <p>Hello there! Please enter your name to join: </p>
     <input type="text" id="player-name">
-    <button id="join-button">Join Game</button>
-  </div>
+    <button id="join-button" onlick="joinGame()">Join Game</button>
+</div>
 
+
+<br>
+
+
+<div id="game-message">
+</div>
+
+<!-- Combined board.html with index.html-->
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~BOARD GAME~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<div id="gameArea">
+    <!--gameArea includes other players space-->
+    <div id="gameBoard">
+        <div id="cardContainer">
+            <div id="storyCards" onclick="getStoryCards()">Story Cards Placeholder</div>
+            <div id="adventureCards" onclick="getAdventureCards()">Adventure Card Placeholder</div>
+        </div>
+        <div id="everythingQuest">
+            <p>Placeholder for stages and quest foe cards..</p>
+            <div id="quest">Placeholder for sponser</div>
+            <div id="stages">Stages </div> <!-- we will have to use js to display/hide whenever needed-->
+        </div>
+        <!--current player-->
+        <div id="playerView"> <!--imageArea (purple box)-->
+            <div id="shields"> You have 0 shields.</div>
+            <div id="decisionButtons">
+                <button id="hand">Show Hand</button>
+                <button id="joinQuest">Join Quest</button> <!--only available to click when they're not sponsporing a quest-->
+                <button id="sponsorQuest">Sponsor Quest</button>
+                <button id="transferQuest">Transfer Quest</button> <!--goes to the player on the left-->
+                <button id="readCard">Read Card</button> <!--Broadcasts the message to other players-->
+                <button id="dealAdventureCard">Deal </button> <!--Sponsor deals one adventure card to participating player-->
+            </div>
+            <!--Player's Hand Area-->
+            <div id="handContainer">
+                <div id="playerHand"><p>Your Cards:</p></div>
+                <div id="placeCardButtons">
+                    <button id="faceUpButton">Place Selected Cards Face Up</button>
+                    <button id="faceDownButton">Place Selected Cards Face Down</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
   <br>
   <div id="game-message">

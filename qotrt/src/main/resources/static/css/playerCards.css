@@ -1,0 +1,100 @@
+#cardsContainer {
+    width: 560px;
+    display: flex;
+    flex-direction: row;
+}
+
+#placeCardButtons {
+    display:flex;
+    flex-direction: column;
+    flex: 1
+
+}
+
+
+
+
+#placeCardButtons > button {
+    border: none;
+    margin: 0.6em 0.5em;
+    /* W3Schools.com */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transition: none
+    pointer-events: none;
+}
+
+
+
+.disabledButton {
+    background-color: #cccccc;
+    color: #666666;
+}
+
+.disabledButton:hover {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: default;
+}
+
+.enabledButton {
+    background-color: white;
+    color: black;
+}
+
+.enabledButton:hover {
+    cursor: pointer;
+    background: #e6e6ff;
+    color: black;
+}
+
+
+
+
+#playerCards {
+    flex: 3;
+    display: flex;
+    flex-wrap: wrap;
+
+}
+
+#playerCards > div {
+    width: 15%;
+    height: 90px;
+    border: 1px black solid;
+    background: black;
+    color: white;
+    padding: 0.2em;
+    margin: 0.5em;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#playerCards > div > input{
+    width: 18px;
+    height: 18px;
+    margin-bottom: 0.5em;
+}
+#playerCards > div > input:hover {
+    cursor: pointer;
+}
+
+
+#playerCardAtPlay{
+    color: white;
+}
+
+#cardsDown {
+    border: 2px red solid;
+    min-height: 40px;
+    width: 40px;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    margin: 1px;
+    cursor: pointer;
+}
+
+#cardsTitle {
+    font-size: large;
+}

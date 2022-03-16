@@ -1,11 +1,13 @@
 package app.Service;
 
+import app.Models.AdventureCards.AdventureCard;
 import app.Models.General.Game;
 import app.Models.General.Player;
 import app.Objects.CardObjects;
 //import Models.General.GamePlay;
 import app.Models.General.GameStatus;
 
+import java.util.ArrayList;
 import java.util.UUID; //for game ID
 
 import org.springframework.stereotype.Service;
@@ -32,8 +34,7 @@ public class GameService {
 
     // Connect other players to the current Game
     public String joinGame(Player anotherOne, String gameID) { // passes in the current game( a global variable in js)
-        // why aren't we using current game?
-        if (this.currentGame.getCurrentGame() == null) {
+        if (this.currentGame != null && this.currentGame.getCurrentGame() == null) {
             return null; // when game doesnt exist
         }
         if (this.currentGame.registerPlayer(anotherOne) != null) { // it means there was some room in the game to join
@@ -41,8 +42,6 @@ public class GameService {
                 this.currentGame.setGameStatus(GameStatus.IN_PROGRESS); // game start, status = in progress
                 return this.currentGame.getGameID();
             }
-            
-            // added by Donna
             return this.currentGame.getGameID();
         }
         return null; // there wasnt any room for the new player to join...
@@ -86,6 +85,43 @@ public class GameService {
             }
         }
         return null;
+    }
+
+
+
+    // get the current player id (the last one to join)
+    // basically the player number
+    public int getCurrPlayerNum(){
+        return this.currentGame.getUniquePlayerId();
+    }
+
+
+    // gets the player's cards given the player num (unique id)
+    public ArrayList<String> getPlayerCards(String playerNum){
+        if (this.currentGame == null){return null;}
+
+        int playerN = Integer.parseInt(playerNum);
+
+        if (this.currentGame.getPlayers().size() <= 0){
+            System.out.println("no players in this game so cant get the cards");
+            return null;
+        }
+        if (playerN > this.currentGame.getPlayers().size()){
+            System.out.println("invalid player num so cant get cards");
+            return null;
+        }
+        System.out.println(this.currentGame.getPlayers().get(playerN - 1).getCards());
+        ArrayList<AdventureCard> currCards = this.currentGame.getPlayers().get(playerN - 1).getCards();
+
+        // trying to send only the name of the cards since I keep getting randomly occurring errors
+        ArrayList<String> cardNames = new ArrayList<String>();
+        for (AdventureCard c: currCards){
+            cardNames.add(c.getName());
+        }
+        return cardNames;
+    }
+    public AdventureCard getAdventureCard(){
+        return currentGame.getLastCard();
     }
 
 }
