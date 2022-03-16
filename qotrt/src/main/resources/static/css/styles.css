@@ -1,19 +1,16 @@
 html {
     font-size: 10px;
-    color: black;
-
-     /*font color*/
+    color: #212560; /*font color*/
 }
 
 /*https://dev.to/ayushmanbthakur/how-to-make-tic-tac-toe-in-browser-with-html-css-and-js-28ed */
 #gameArea {
-  min-height: 100vh;
+    min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   background: #eee;
-  color: yellowgreen;
 }
 button {
     outline: none;
@@ -24,7 +21,7 @@ button {
     background-color: aquamarine;
     transition: all 0.2s ease-in-out;
   }
-
+  
   button:hover {
     cursor: pointer;
     background: green;
@@ -40,7 +37,7 @@ button {
     justify-content: center;
     padding: 3rem; /*all around*/
     margin: auto;
-
+    
     height: 400px; /*30% of the browser visible viewport, makes the sections a little taller*/
     width: 500px;
 }

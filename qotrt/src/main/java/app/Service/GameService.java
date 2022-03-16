@@ -1,10 +1,6 @@
 package app.Service;
 
 import app.Models.AdventureCards.AdventureCard;
-<<<<<<< Updated upstream
-=======
-import app.Models.General.Card;
->>>>>>> Stashed changes
 import app.Models.General.Game;
 import app.Models.General.Player;
 import app.Objects.CardObjects;
@@ -45,11 +41,6 @@ public class GameService {
                 this.currentGame.setStoryCards(cards.getStoryCards());
                 return this.currentGame.getGameID();
             }
-<<<<<<< Updated upstream
-=======
-
-            // added by Donna
->>>>>>> Stashed changes
             return this.currentGame.getGameID();
         }
         return null; // there wasnt any room for the new player to join...
@@ -95,7 +86,6 @@ public class GameService {
         return null;
     }
 
-<<<<<<< Updated upstream
 
 
     // get the current player id (the last one to join)
@@ -128,10 +118,6 @@ public class GameService {
             cardNames.add(c.getName());
         }
         return cardNames;
-=======
-    public AdventureCard getAdventureCard(){
-        return currentGame.getLastCard();
->>>>>>> Stashed changes
     }
 
 }

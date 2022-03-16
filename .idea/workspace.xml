@@ -23,7 +23,6 @@
       <change afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Controllers/RedirectController.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/redirect.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Controllers/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Controllers/GameController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Game.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Player.java" afterDir="false" />
@@ -32,9 +31,6 @@
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/game-socket.js" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/game-socket.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/game.js" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/game.js" afterDir="false" />
-=======
-      <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/script.js" beforeDir="false" />
->>>>>>> Stashed changes
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

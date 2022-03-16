@@ -1,14 +1,8 @@
 package app.Controllers;
 
 import app.Controllers.dto.CreateGameRequest;
-<<<<<<< Updated upstream
 import app.Controllers.dto.Message;
 import app.Models.AdventureCards.AdventureCard;
-=======
-import app.Models.AdventureCards.AdventureCard;
-import app.Models.General.Card;
-import app.Models.General.Game;
->>>>>>> Stashed changes
 import app.Models.General.Player;
 import app.Service.GameService;
 
@@ -59,7 +53,6 @@ public class GameController {
   // trying
   @MessageMapping("/playerJoining")
   @SendTo("/topic/joinGame")
-<<<<<<< Updated upstream
   public ResponseEntity<Integer> joinGame(@RequestBody String anotherPlayer, String game) throws Exception {
     // when a player joins the game, send them their unique id (player number)
 
@@ -75,17 +68,7 @@ public class GameController {
     ArrayList<String> playersCards = gameService.getPlayerCards(playerNum.getMessage());
 
     simpMessagingTemplate.convertAndSend("/topic/current-cards/" + playerNum.getMessage(), playersCards);
-=======
-  public ResponseEntity<String> joinGame(@RequestBody String anotherPlayer, String game) throws Exception {
-    return ResponseEntity.ok(gameService.joinGame(new Player(anotherPlayer), game));
->>>>>>> Stashed changes
   }
-  @MessageMapping("/getAdvCard")
-  @SendTo("/topic/getAdvCard")
-  public AdventureCard getAdvCard() {
-    return gameService.getAdventureCard();
-  }
-
 
   // Game Play from T.T.T
   // @PostMapping(value="/gameplay")
@@ -101,5 +84,11 @@ public class GameController {
     System.out.println("test worked");
   }
 
-
+  // Game Play from T.T.T
+  // @PostMapping(value="/gameplay")
+  // public ResponseEntity<Game> gamePlay(@RequestBody GamePlay request) {
+  // //TODO: process POST request
+  // Game game =
+  // return entity;
+  // }
 }
