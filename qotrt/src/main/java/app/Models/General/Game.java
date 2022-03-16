@@ -46,6 +46,9 @@ public class Game implements Mediator { // Main = Game
       return null; //we should throw an exception instead...
     }
     player.setMediator(this);
+    // added by Donna: so I can see the cards for making the front end
+    player.drawCards(12);
+
     this.players.add(player);
     this.uniquePlayerId += 1;
     return player;
@@ -176,4 +179,6 @@ public class Game implements Mediator { // Main = Game
   public Game getCurrentGame(){
     return currentGame;
   }
+  public int getUniquePlayerId() {return uniquePlayerId;}
+  public ArrayList<AdventureCard> getAdventureCardsDeck(){return adventureCardsDeck;}
 }

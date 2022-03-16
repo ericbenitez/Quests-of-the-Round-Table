@@ -1,18 +1,7 @@
 // Global variable game
 let game = null;
 const url = "http://localhost:8080";
-
-
-window.addEventListener("load", function () {
-  document.getElementById("create-game-button").addEventListener("click", createGame);
-});
-
-
-window.addEventListener("load", function () {
-  document.getElementById("join-button").addEventListener("click", joinGame);
-});
-
-
+let stompClient = null;
 
 
 // Tries to connect a player to the game
@@ -31,14 +20,26 @@ function connect() {
     console.log('Connected: ' + frame);
     attemptJoin();
 
+    let currPlayersNum = 0;
+
     stompClient.subscribe('/topic/joinGame', function (response) {
       let data = JSON.parse(response.body);
+      currPlayersNum = data.body;
 
       // this should show whether the player successfully joined or not
       showResponse(data, playerName);
+
+        // subscribe to get cards if player joined successfully
+        if (data.body != null){
+            subscribeToCards(currPlayersNum);
+        }
     });
+
+
   });
 }
+
+
 
 
 
@@ -47,6 +48,28 @@ function connect() {
 function attemptJoin() {
   stompClient.send("/app/playerJoining", {}, JSON.stringify({ 'player': $("#player-name").val(), 'game': game }));
 }
+
+function gettingCards(playerNum){
+    stompClient.send("/app/playerGetCards", {}, JSON.stringify({
+        'message': playerNum + ""
+    }));
+}
+
+
+function subscribeToCards(currPlayersNum){
+    var socket = new SockJS('/gameplay');
+      stompClient = Stomp.over(socket);
+      stompClient.connect({}, function (frame) {
+
+
+        stompClient.subscribe('/topic/current-cards/' + currPlayersNum, function (response){
+            let data = JSON.parse(response.body);
+            displayAllCards(data);
+            stompClient.disconnect();
+            });
+            gettingCards(currPlayersNum);
+
+    });}
 
 
 
@@ -74,7 +97,6 @@ function createGame() {
     alert("Please enter a valid number of players.");
     return;
   }
-  alert("type: " + typeof(numPlayers) + " numPlayers: " + numPlayers);
 
 
   var socket = new SockJS('/gameplay');
@@ -84,12 +106,9 @@ function createGame() {
     console.log('Connected: ' + frame);
     attemptCreate(playerName, numPlayers);
 
-    alert("here I am after attemp join buddy");
     stompClient.subscribe('/topic/game/started', function (response) {
-        alert("in subscribe")
       let data = JSON.parse(response.body);
-      alert("response full: " + response)
-      alert("data repsonse.body parse: " + data)
+
 
       if (response != null){
       game = response;}
@@ -109,79 +128,16 @@ function attemptCreate(player, numPlayers){
                     "player": player,
                     "numOfPlayers": numPlayers *1
                 }));
-    //stompClient.send("/app/game/start",{}, JSON.stringify({"info": player + " " + numPlayers.toString()}));
-   /* $.ajax({
-                url: url + "/game/start",
-                type: 'POST',
-                dataType: "json",
-                contentType: "application/json",
-                data: JSON.stringify({
-                    "player":  player
-                    ,
-                    "numOfPlayers": numPlayers
-                }),
-                success: function (data) {
-                    //game = data.gameId;
-                    //playerType = 'O';
-                    //reset();
-                    //connectToSocket(gameId);
-                   // alert("Congrats you're playing with: " + data.player1.login);
-                   alert(data);
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            })
-*/
-}
-
-// displays if the game is successfully created
-function displayCreateGameResponse(data, playerName, numPlayers) {
-    alert("here in displaycreategame thing");
-
-  let message = "The game cannot be created."
-  if (data != null) {
-  alert(typeof(data));
-  alert("data: " + data);
-  for (i in data){
-    alert(i);
-    }
-    alert("try: " + JSON.parse(data.body).body);
-    gameID = JSON.parse(data.body).body
-
-    message = "The game " + gameID + " has successfully been created! Welcome to the game " + playerName + ". " +
-      "This game will have " + numPlayers + " players."
-  }
-  alert(message)
-
-  let newGameMessage = document.getElementById("game-message");
-  clearMessage();
-  newGameMessage.appendChild(document.createTextNode(message));
-  newGameMessage.appendChild(document.createElement("br"));
 
 }
-
-
-
-
-
-// clears the game message box
-function clearMessage() {
-  let joinMessage = document.getElementById("game-message");
-  while (joinMessage.firstChild) {
-    joinMessage.removeChild(joinMessage.firstChild);
-  }
-}
-
-
 
 
 
 
 function joinGame(){
     let playerName = document.getElementById("player-name").value;
-    alert("joiningthe game: " + playerName);
     connect();
-    alert("after connecting");
-    //attemptJoin();
 }
+
+
+

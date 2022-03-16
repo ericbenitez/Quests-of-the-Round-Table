@@ -226,4 +226,9 @@ public class Player {
     return personalBattleScore;
   }
 
+
+  public int getUniqueId(){
+    return uniqueId;
+  }
+
 }
