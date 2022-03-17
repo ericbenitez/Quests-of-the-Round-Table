@@ -1,4 +1,4 @@
-#cardsContainer {
+#handContainer {
     width: 560px;
     display: flex;
     flex-direction: row;
@@ -10,8 +10,6 @@
     flex: 1
 
 }
-
-
 
 
 #placeCardButtons > button {
@@ -48,16 +46,14 @@
 }
 
 
-
-
-#playerCards {
+#playerHand {
     flex: 3;
     display: flex;
     flex-wrap: wrap;
-
+    color: white;
 }
 
-#playerCards > div {
+#playerHand > div {
     width: 15%;
     height: 90px;
     border: 1px black solid;
@@ -70,19 +66,15 @@
     align-items: center;
     justify-content: center;
 }
-#playerCards > div > input{
+#playerHand > div > input{
     width: 18px;
     height: 18px;
     margin-bottom: 0.5em;
 }
-#playerCards > div > input:hover {
+#playerHand > div > input:hover {
     cursor: pointer;
 }
 
-
-#playerCardAtPlay{
-    color: white;
-}
 
 #cardsDown {
     border: 2px red solid;

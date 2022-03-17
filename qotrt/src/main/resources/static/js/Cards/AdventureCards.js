@@ -10,11 +10,10 @@ window.addEventListener("load", function () {
 });
 
 // automatically display cards to test the functionality
-//window.addEventListener("load", displayAllCards(theCards));
+// window.addEventListener("load", displayAllCards(theCards));
 
 
 function addFaceUp() {
-    console.log("face up");
     checked = getAllChecked();
     removeAllCheckedCards(checked);
     placeCards(checked);
@@ -22,7 +21,6 @@ function addFaceUp() {
 }
 
 function addFaceDown() {
-    console.log("face down");
     checked = getAllChecked();
     removeAllCheckedCards(checked);
     currCardsFacedDown = checked;
@@ -31,7 +29,7 @@ function addFaceDown() {
         return;
     }
 
-    let cardAtPlay = document.getElementById("playerCardAtPlay");
+    let cardAtPlay = document.getElementById("stages");
     let div = document.createElement("div");
     //div.id = "cardsDown";
     div.setAttribute('id', 'cardsDown');
@@ -101,18 +99,18 @@ function updateButtonDisplay() {
 
 
 function enableCardButtons() {
-    document.getElementById("faceUpBut").disabled = false;
-    document.getElementById("faceUpBut").className = "enabledButton";
-    document.getElementById("faceDownBut").disabled = false;
-    document.getElementById("faceDownBut").className = "enabledButton";
+    document.getElementById("faceUpButton").disabled = false;
+    document.getElementById("faceUpButton").className = "enabledButton";
+    document.getElementById("faceDownButton").disabled = false;
+    document.getElementById("faceDownButton").className = "enabledButton";
 }
 
 
 function disableCardButtons() {
-    document.getElementById("faceUpBut").disabled = true;
-    document.getElementById("faceUpBut").className = "disabledButton";
-    document.getElementById("faceDownBut").disabled = true;
-    document.getElementById("faceDownBut").className = "disabledButton";
+    document.getElementById("faceUpButton").disabled = true;
+    document.getElementById("faceUpButton").className = "disabledButton";
+    document.getElementById("faceDownButton").disabled = true;
+    document.getElementById("faceDownButton").className = "disabledButton";
 }
 
 
@@ -136,7 +134,7 @@ function getAllChecked() {
 
 
 function removeAllCheckedCards(checked) {
-    for (let i = 1; i < checked.length; i++) {
+    for (let i = 0; i < checked.length; i++) {
         removeCardFromDisplay(checked[i]);
     }
 }
@@ -146,7 +144,7 @@ function removeCardFromDisplay(cardName) {
 
     let cards = document.getElementById("playerHand").children;
 
-    for (let i = 1; i < cards.length; i++) {
+    for (let i = 0; i < cards.length; i++) {
         if (cards[i].firstChild.name === cardName) {
             cards[i].remove();
             return;
@@ -159,8 +157,8 @@ function removeCardFromDisplay(cardName) {
 
 function placeCards(cardsPlaced) {
     // this is in the blue area where the chosen cards are placed
-    for (let i = 1; i < cardsPlaced.length; i++) {
-        addACardDisplay(cardsPlaced[i], "playerHand");
+    for (let i = 0; i < cardsPlaced.length; i++) {
+        addACardDisplay(cardsPlaced[i], "stages");
     }
 
 }
@@ -169,7 +167,7 @@ function placeCards(cardsPlaced) {
 
 // when click on the face down cards, it reveals the cards
 function turnCardsOver() {
-    let currCards = document.getElementById("playerHand");
+    let currCards = document.getElementById("stages");
 
     // remove the square for the player cards (what's currently in that div)
 

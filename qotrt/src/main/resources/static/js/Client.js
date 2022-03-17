@@ -84,9 +84,7 @@ function createGame() {
       connect(playerName);
     }
 
-    alert("here");
     displayCreateGameResponse(response, playerName, parseInt(numPlayers));
-    alert("after displaying");
   });
 }
 
