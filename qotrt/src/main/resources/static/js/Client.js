@@ -19,8 +19,8 @@ setupWindow()
  * Tries to connect a player to the game
  * @returns void
  */
-function connect() {
-  const playerName = document.getElementById("player-name").value.trim();
+function connect(playerName) {
+  //const playerName = document.getElementById("player-name").value.trim();
   if (!validInputString(playerName)) {
     alert("Please enter a name.");
     return;
@@ -81,12 +81,10 @@ function createGame() {
     if (response != null) {
       game = response;
       // game is initialized, creator can now join the game
-      // connect(playerName);
+      connect(playerName);
     }
 
-    alert("here");
     displayCreateGameResponse(response, playerName, parseInt(numPlayers));
-    alert("after displaying");
   });
 }
 
@@ -118,7 +116,7 @@ function pickCard() {
 function joinGame() {
 
   let playerName = document.getElementById("player-name").value.trim;
-  connect();
+  connect(playerName);
 }
 
 
