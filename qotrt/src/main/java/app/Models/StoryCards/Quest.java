@@ -10,7 +10,6 @@ import app.Service.GameService;
 
 public class Quest extends StoryCard {
 
-    protected String name;
     protected int totalStages;
     protected String foeName;
     protected Player sponsor;
