@@ -3,17 +3,17 @@ let tempPlayerNum = 1;
 let currCardsFacedDown = []
 
 window.addEventListener("load", function () {
-  document.getElementById("faceUpBut").addEventListener("click", addFaceUp);
+    document.getElementById("faceUpButton").addEventListener("click", addFaceUp);
 });
 window.addEventListener("load", function () {
-  document.getElementById("faceDownBut").addEventListener("click", addFaceDown);
+    document.getElementById("faceDownButton").addEventListener("click", addFaceDown);
 });
 
 // automatically display cards to test the functionality
 //window.addEventListener("load", displayAllCards(theCards));
 
 
-function addFaceUp(){
+function addFaceUp() {
     console.log("face up");
     checked = getAllChecked();
     removeAllCheckedCards(checked);
@@ -21,12 +21,12 @@ function addFaceUp(){
     disableCardButtons();
 }
 
-function addFaceDown(){
+function addFaceDown() {
     console.log("face down");
     checked = getAllChecked();
     removeAllCheckedCards(checked);
     currCardsFacedDown = checked;
-    if (checked == []){
+    if (checked == []) {
         disableCardButtons();
         return;
     }
@@ -44,13 +44,13 @@ function addFaceDown(){
 
 
 // Display the cards
-function displayAllCards(cards){
+function displayAllCards(cards) {
     // loop through the cards and call the
     // function addACardDisplay()
-   // alert("cards to display: " + theCards);
+    // alert("cards to display: " + theCards);
     //alert("cards total: " + theCards.length);
-    for (let i = 0; i < cards.length; i++){
-        addACardDisplay(cards[i], "playerCards");
+    for (let i = 0; i < cards.length; i++) {
+        addACardDisplay(cards[i], "playerHand");
     }
 }
 
@@ -58,7 +58,7 @@ function displayAllCards(cards){
 
 // create and add a checkbox "card"
 // should take in a card name or something
-function addACardDisplay(cardName, divName){
+function addACardDisplay(cardName, divName) {
     let cards = document.getElementById(divName);
 
     // create div to contain checkbox and label
@@ -86,21 +86,21 @@ function addACardDisplay(cardName, divName){
 
 
 // enables or disables buttons based on whether any checkboxes are checked
-function updateButtonDisplay(){
+function updateButtonDisplay() {
 
-       let checkBoxDiv = document.getElementById("playerCards").children;
-       // loop through all checkboxes and check if any are checked
-       for (let i = 0; i < checkBoxDiv.length; i++){
-           if (checkBoxDiv[i].firstChild.checked){
-                enableCardButtons();
-                return;
-           }
-       }
-       disableCardButtons();
+    let checkBoxDiv = document.getElementById("playerHand").children;
+    // loop through all checkboxes and check if any are checked
+    for (let i = 0; i < checkBoxDiv.length; i++) {
+        if (checkBoxDiv[i].firstChild.checked) {
+            enableCardButtons();
+            return;
+        }
+    }
+    disableCardButtons();
 }
 
 
-function enableCardButtons(){
+function enableCardButtons() {
     document.getElementById("faceUpBut").disabled = false;
     document.getElementById("faceUpBut").className = "enabledButton";
     document.getElementById("faceDownBut").disabled = false;
@@ -108,7 +108,7 @@ function enableCardButtons(){
 }
 
 
-function disableCardButtons(){
+function disableCardButtons() {
     document.getElementById("faceUpBut").disabled = true;
     document.getElementById("faceUpBut").className = "disabledButton";
     document.getElementById("faceDownBut").disabled = true;
@@ -118,14 +118,14 @@ function disableCardButtons(){
 
 
 // loop through all the cards in the DOM, and get the cards that are checked
-function getAllChecked(){
+function getAllChecked() {
     let checked = [];
     // loop through each child and look at the checkBox to see if it's checked
-    let cards = document.getElementById("playerCards").children;
+    let cards = document.getElementById("playerHand").children;
 
     // start at 1 since the first child is just text "Your Cards" (nvm for now)
-    for (let i = 0; i < cards.length; i++){
-        if (cards[i].firstChild.checked){
+    for (let i = 0; i < cards.length; i++) {
+        if (cards[i].firstChild.checked) {
             checked.push(cards[i].firstChild.name);
         }
     }
@@ -135,19 +135,19 @@ function getAllChecked(){
 
 
 
-function removeAllCheckedCards(checked){
-    for (let i = 0; i < checked.length; i++){
+function removeAllCheckedCards(checked) {
+    for (let i = 1; i < checked.length; i++) {
         removeCardFromDisplay(checked[i]);
     }
 }
 
 
-function removeCardFromDisplay(cardName){
+function removeCardFromDisplay(cardName) {
 
-    let cards = document.getElementById("playerCards").children;
+    let cards = document.getElementById("playerHand").children;
 
-    for (let i = 0; i < cards.length; i++){
-        if (cards[i].firstChild.name === cardName){
+    for (let i = 1; i < cards.length; i++) {
+        if (cards[i].firstChild.name === cardName) {
             cards[i].remove();
             return;
         }
@@ -157,11 +157,10 @@ function removeCardFromDisplay(cardName){
 
 
 
-function placeCards(cardsPlaced){
+function placeCards(cardsPlaced) {
     // this is in the blue area where the chosen cards are placed
-    // let cardAtPlay = document.getElementById("player-card-atPlay");
-    for (let i = 0; i < cardsPlaced.length; i++){
-        addACardDisplay(cardsPlaced[i], "playerCardAtPlay");
+    for (let i = 1; i < cardsPlaced.length; i++) {
+        addACardDisplay(cardsPlaced[i], "playerHand");
     }
 
 }
@@ -169,8 +168,8 @@ function placeCards(cardsPlaced){
 
 
 // when click on the face down cards, it reveals the cards
-function turnCardsOver(){
-    let currCards = document.getElementById("playerCardAtPlay");
+function turnCardsOver() {
+    let currCards = document.getElementById("playerHand");
 
     // remove the square for the player cards (what's currently in that div)
 
@@ -217,3 +216,25 @@ To do now:
 - need to work on disable buttons
 
 */
+
+//it would be better if we had player ids..
+function getAdventureCards() {
+    stompClient.send("/app/getAdvCard");
+    //stompClient.subscribe("/topic/getAdvCard", callback);
+    stompClient.subscribe('/topic/getAdvCard', function (response) {
+        let data = JSON.parse(response.body);
+        //console.log(data);
+        let hand = document.getElementById("playerHand");
+        /*all for creating a label :))*/
+        let newLabel = document.createElement("label");
+        newLabel.setAttribute("for", 'checkbox');
+        newLabel.innerHTML = data.name; //name of the card
+
+        let newCheckbox = document.createElement("input");
+        newCheckbox.setAttribute("type", 'checkbox');
+        newCheckbox.setAttribute("id", 'checkbox');
+        hand.appendChild(newCheckbox);
+        hand.appendChild(newLabel);
+    });
+    stompClient.unsubscribe('/topic/getAdvCard');
+}

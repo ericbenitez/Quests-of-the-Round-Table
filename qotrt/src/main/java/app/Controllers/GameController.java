@@ -50,53 +50,22 @@ public class GameController {
   }
 
   // After starting, allow other players to connect
-
-  // trying
   @MessageMapping("/playerJoining")
   @SendTo("/topic/joinGame")
   public ResponseEntity<Integer> joinGame(@RequestBody String anotherPlayer, String game) throws Exception {
     // when a player joins the game, send them their unique id (player number)
-
-      String gameID = gameService.joinGame(new Player(anotherPlayer), game);
-
+    String gameID = gameService.joinGame(new Player(anotherPlayer), game);
     int playerNum = gameService.getCurrPlayerNum();
     return ResponseEntity.ok(playerNum);
   }
+
   @MessageMapping("/getAdvCard")
   @SendTo("/topic/getAdvCard")
   public AdventureCard getAdvCard() {
     return gameService.getAdventureCard();
   }
 
-  @MessageMapping("/playerGetCards")
-  public void getCards(@RequestBody Message playerNum){
-    System.out.println("Player number in get cards: " + playerNum.getMessage());
-    ArrayList<String> playersCards = gameService.getPlayerCards(playerNum.getMessage());
-
-    simpMessagingTemplate.convertAndSend("/topic/current-cards/" + playerNum.getMessage(), playersCards);
-  }
-
-  // Game Play from T.T.T
-  // @PostMapping(value="/gameplay")
-  // public ResponseEntity<Game> gamePlay(@RequestBody GamePlay request) {
-  // //TODO: process POST request
-  // Game game =
-  // return entity;
-  // }
-
-  @MessageMapping("/test")
-  @RequestMapping("/test")
-  public void test() {
-    System.out.println("test worked");
-  }
-
-  // Game Play from T.T.T
-  // @PostMapping(value="/gameplay")
-  // public ResponseEntity<Game> gamePlay(@RequestBody GamePlay request) {
-  // //TODO: process POST request
-  // Game game =
-  // return entity;
-  // }
+  
 
   @MessageMapping("/pickCard")
   @SendTo("/topic/pickCard")
