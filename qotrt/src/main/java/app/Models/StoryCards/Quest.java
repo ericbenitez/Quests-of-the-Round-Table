@@ -9,7 +9,7 @@ import app.Models.General.*;
 import app.Service.GameService;
 
 public class Quest extends StoryCard {
-
+    protected String name;
     protected int totalStages;
     protected String foeName;
     protected Player sponsor;
@@ -39,6 +39,15 @@ public class Quest extends StoryCard {
 
         return false;
     }
+    /**
+     * Returns the card's name
+     * @return String
+     */
+    public String getName() {
+        return name;
+    }
+    public String getStages(){return String.valueOf(totalStages);}
+
     
     @Override
     protected void draw(Player player) {
@@ -50,7 +59,7 @@ public class Quest extends StoryCard {
 
 class JourneyThruForest extends Quest {
     public JourneyThruForest() {
-        super("Journey Through the Forest", 3, "Evil Knight");
+        super("Journey Through the Enchanted Forest", 3, "Evil Knight");
     };
 
 }

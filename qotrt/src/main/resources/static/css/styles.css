@@ -77,9 +77,16 @@ button {
     display: hidden;
 }
 
-
+#withdrawQuest {
+    display: none;
+}
 
 #decisionButtons {
     align-self: center;
     margin-top: auto;
+}
+
+#battlePoints {
+    margin-top: 12px;
+    font-size: 30px;
 }

@@ -48,7 +48,7 @@ function displayAllCards(cards) {
     // alert("cards to display: " + theCards);
     //alert("cards total: " + theCards.length);
     for (let i = 0; i < cards.length; i++) {
-        addACardDisplay(cards[i], "playerHand");
+        addACardDisplay(cards[i].name, "playerHand");
     }
 }
 
@@ -158,7 +158,7 @@ function removeCardFromDisplay(cardName) {
 function placeCards(cardsPlaced) {
     // this is in the blue area where the chosen cards are placed
     for (let i = 0; i < cardsPlaced.length; i++) {
-        addACardDisplay(cardsPlaced[i], "stages");
+        addACardDisplay(cardsPlaced[i].name, "stages");
     }
 
 }
@@ -176,51 +176,27 @@ function turnCardsOver() {
     }
 
     // display the cards
-    placeCards(currCardsFacedDown);
-    currCardsFacedDown = [];
+    placeCards(stageCards);
+    //currCardsFacedDown = [];
+
+    // when cards are turned over, display the total points
+    winStage();
 
 }
 
 
 
-/*
-Thinking:
-I need a way to get the player's cards
-I need a way to get the player's number (name?)
-
-
-So.....
-
-When a player joins/connects, we also want them to subscribe to their player num.
-When in the service, we should return the player num instead of the game id?
-
-Then we can use the player num to get their cards, and display them etc
-
-okay how do we connect the index page data (socket and stuff) to the board page?...
-*/
-
-
-/*
-To do now:
-- work on disabling buttons
-- search up how to take info from the index page to the board page
-- try to implement that so that we get the player's cards (on the board page, so in the cards.js)
-*/
-
-
-/*
-- only one html page now
-- subscribe to different nums... but why are the other pages udpated??? because of same function?
-- need to work on disable buttons
-
-*/
 
 //it would be better if we had player ids..
 function getAdventureCards() {
-    stompClient.send("/app/getAdvCard");
+    stompClient.send("/app/getAdvCard", {}, JSON.stringify(playerId));
     //stompClient.subscribe("/topic/getAdvCard", callback);
     stompClient.subscribe('/topic/getAdvCard', function (response) {
         let data = JSON.parse(response.body);
+
+        // for testing purposes
+        playerHand.push(data);
+
         //console.log(data);
         let hand = document.getElementById("playerHand");
         /*all for creating a label :))*/
@@ -231,8 +207,13 @@ function getAdventureCards() {
         let newCheckbox = document.createElement("input");
         newCheckbox.setAttribute("type", 'checkbox');
         newCheckbox.setAttribute("id", 'checkbox');
-        hand.appendChild(newCheckbox);
-        hand.appendChild(newLabel);
+        newCheckbox.setAttribute("name", data.name);
+
+        // added to div first for easier cleanup (removing the cards)
+        let div = document.createElement("div");
+        div.appendChild(newCheckbox);
+        div.appendChild(newLabel);
+        hand.appendChild(div);
     });
     stompClient.unsubscribe('/topic/getAdvCard');
 }

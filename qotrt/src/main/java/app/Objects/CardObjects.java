@@ -107,6 +107,7 @@ public class CardObjects {
     this.storyCards.add(new Quest("Rescue the Fair Maiden", 3, "Black Knight"));
     this.storyCards.add(new Quest("Search for the Holy Grail", 5, "All"));
     this.storyCards.add(new Quest("Test of the Green Knight", 4, "Green Knight"));
+    this.storyCards.add(new Quest("Journey Through the Enchanted Forest",3,"Evil Knight"));
 
     for (int i = 0; i < 2; ++i) {
       this.storyCards.add(new Quest("Vanquish King Arthur's Enemies", 3, null));

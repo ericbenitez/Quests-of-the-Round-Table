@@ -97,7 +97,7 @@ public class Player {
   // returns false if there are not enough cards to draw, or if the player will
   // have more than 12 cards total
   public boolean drawCards(int amount) {
-    if (amount > game.getAdventureDeckSize() || amount + cards.size() > 12) {
+    if (amount > game.getAdventureDeckSize() /*|| amount + cards.size() > 12*/) { // for now, don't check the size because we want the player to have the option to get more than 12 cards, and AFTER they can remove cards so that its <= 12
       return false;
     }
     for (int i = 0; i < amount; ++i) {
@@ -230,5 +230,26 @@ public class Player {
   public int getUniqueId(){
     return uniqueId;
   }
+
+  public int getRankPts(){
+    String rankName = getRankString();
+    if (rankName.equals("Squire")) {
+      // Squire = 5 points
+      return 5;
+    } else if (rankName.equals("Knight")) {
+      // Knight = 10 points
+      return 10;
+    } else {
+      // Champion Knight = 20 points
+      return 20;
+    }
+  }
+
+
+  public void addCard(AdventureCard newCard){
+    cards.add(newCard);
+  }
+
+
 
 }

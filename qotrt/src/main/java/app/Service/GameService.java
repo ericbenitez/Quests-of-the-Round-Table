@@ -5,6 +5,8 @@ import app.Models.AdventureCards.AdventureCard;
 import app.Models.Enums.Rank;
 import app.Models.General.Game;
 import app.Models.General.Player;
+import app.Models.General.Turn;
+import app.Models.StoryCards.Quest;
 import app.Objects.CardObjects;
 //import Models.General.GamePlay;
 import app.Models.General.ProgressStatus;
@@ -140,8 +142,40 @@ public class GameService {
         }
         return cardNames;
     }
-    public AdventureCard getAdventureCard(){
-        return currentGame.getLastCard();
+    public AdventureCard getAdventureCard(int playerId){
+        
+        if (playerId <= 0 || playerId > this.currentGame.getPlayers().size()){return null;}
+        AdventureCard card = currentGame.getLastCard();
+        this.currentGame.getPlayers().get(playerId - 1).addCard(card);
+        return card;
+    }
+
+    public int getPlayerRankBattlePts(String id){
+        int playerId = Integer.parseInt(id);
+        ArrayList<Player> players = this.currentGame.getPlayers();
+        for (int i = 0; i < players.size(); i++){
+            if (players.get(i).getUniqueId() == playerId){
+                return (players.get(i).getRankPts());
+            }
+        }
+        return 0;
+    }
+
+    // update the players shields
+    public boolean updateShields(int playerId, int shields){
+        //int playerId = Integer.parseInt(id);
+        //int shields = Integer.parseInt(numOfShields);
+
+        ArrayList<Player> players = this.currentGame.getPlayers();
+        if (players.size() < playerId){return false;}
+        for (int i = 0; i < players.size(); i++){
+            if (players.get(i).getUniqueId() == playerId){
+                players.get(i).updateShields(shields);
+                return true;
+            }
+        }
+        return false;
+
     }
 
     /**
@@ -160,4 +194,70 @@ public class GameService {
             
         }
     }
+
+    public void discardCards(String playerId, ArrayList<String> cards){
+        // loop through each card and remove it from the player's card
+        int id = Integer.parseInt(playerId);
+        if (id > this.currentGame.getPlayers().size()){return;}
+        Player player = this.currentGame.getPlayers().get(id - 1);
+
+        System.out.println("Cards before: ");
+        for (int i = 0; i < player.getCards().size(); i++){
+            System.out.println("   " + player.getCards().get(i));
+        }
+
+        for (int i = 0; i < cards.size(); i++){
+            System.out.println("deleting: " + cards.get(i));
+
+            AdventureCard removedCard = player.discardCard(cards.get(i));
+            // add it to the discarded cards in turn
+            if (removedCard != null){
+                this.currentGame.getCurrentTurn().addDiscardedCards(removedCard);
+            }
+        }
+
+        System.out.println();
+        Player playerAfter = this.currentGame.getPlayers().get(id - 1);
+        System.out.println("Cards after: ");
+        for (int i = 0; i < playerAfter.getCards().size(); i++){
+            System.out.println("   " + playerAfter.getCards().get(i));
+        }
+
+
+    }
+
+
+    public boolean joinQuest(String id){
+        int playerId = Integer.parseInt(id);
+        if (playerId > this.currentGame.getPlayers().size() || playerId - 1 < 0){return false;}
+        // get player so we can use the addPlayer function in turns
+        Player player = this.currentGame.getPlayers().get(playerId - 1);
+        Turn turn = this.currentGame.getCurrentTurn();
+        if (turn != null){
+            turn.addParticipant(player);
+            return true;
+        }
+        return false;
+    }
+
+
+    public void withdrawQuest(String id){
+        int playerId = Integer.parseInt(id);
+        if (playerId > this.currentGame.getPlayers().size() || playerId - 1 < 0){return;}
+        this.currentGame.getCurrentTurn().withdrawParticipant(playerId);
+
+    }
+    public void settingSponsor(int playerId){
+        for(Player p:currentGame.getPlayers()){
+            if(p.getId()==playerId){
+                currentGame.getCurrentQuest().setSponsor(p);
+            }
+        }
+
+    }
+    public Quest getCurrentQuest(){
+        return currentGame.getCurrentQuest();
+    }
+
+
 }

@@ -1,10 +1,5 @@
 package app.Controllers;
 
-import app.Models.AdventureCards.AdventureCard;
-import app.Models.General.ProgressStatus;
-import app.Models.StoryCards.Quest;
-import app.Models.StoryCards.StoryCard;
-import app.Service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -12,8 +7,18 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import app.Controllers.dto.CardsMessage;
+import app.Controllers.dto.Message;
+import app.Controllers.dto.ShieldMessage;
+import app.Models.AdventureCards.AdventureCard;
+import app.Models.General.ProgressStatus;
+import app.Models.StoryCards.Quest;
+import app.Models.StoryCards.StoryCard;
+import app.Service.GameService;
 
 @RestController
 @RequestMapping("/game")
@@ -60,6 +65,16 @@ public class GameController {
     return gameService.getAdventureCard();
   }
 
+  @MessageMapping("/sponsorQuest")
+  @SendTo("/topic/sponsorQuest")
+  public Quest sponsorQuest(String currentQuest){
+    System.out.println(currentQuest);
+    gameService.settingSponsor(0);
+    gameService.getCurrentGame().setCurrentQuest(currentQuest);
+    System.out.println(gameService.getCurrentGame().getCurrentQuest());
+    return gameService.getCurrentGame().getCurrentQuest();
+  }
+
   @MessageMapping("/pickCard")
   @SendToUser("/topic/pickCard")
   public ResponseEntity<StoryCard> pickCard() throws Exception {
@@ -76,4 +91,37 @@ public class GameController {
     // sponsor id
     return ResponseEntity.ok("sponsor id");
   }
+
+
+  // --------------- Player Participating Stuff ------------------
+  
+  @MessageMapping("/getRankPts")
+  @SendTo("/topic/getRankPts")
+  public ResponseEntity<Integer> getPlayerRankBattlePts(@RequestBody Message playerId) throws Exception {
+    String id = playerId.getMessage();
+    int pts = gameService.getPlayerRankBattlePts(playerId.getMessage());
+    return ResponseEntity.ok(pts);
+  }
+
+  @MessageMapping("updateShields")
+  public void updateShields(@RequestBody ShieldMessage shieldInfo) throws Exception {
+    gameService.updateShields(shieldInfo.getPlayerId(), shieldInfo.getShields());
+  }
+
+
+  @MessageMapping("discardCards")
+  public void discardCards(@RequestBody CardsMessage cards) throws Exception {
+    gameService.discardCards(cards.getPlayerId(), cards.getCards());
+  }
+
+  @MessageMapping("joinQuest")
+  public void joinQuest(@RequestBody Message playerId){
+    gameService.joinQuest(playerId.getMessage());
+  }
+
+  @MessageMapping("withdrawQuest")
+  public void withdrawQuest(@RequestBody Message playerId){
+    gameService.withdrawQuest(playerId.getMessage());
+  }
+
 }

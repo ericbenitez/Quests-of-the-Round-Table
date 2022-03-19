@@ -52,6 +52,10 @@ public class Round {
     return this.storyCard;
   }
 
+  public void addDiscardedCards(AdventureCard card){
+    discardedCards.add(card);
+  }
+
   /*
    * public void decideTurn(){
    * if (this.storyCard instanceof Quest ){

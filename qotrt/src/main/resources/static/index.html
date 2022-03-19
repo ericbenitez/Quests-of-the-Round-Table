@@ -62,9 +62,10 @@
         <div id="shields"> You have 0 shields.</div>
         <div id="decisionButtons">
           <button id="hand">Show Hand</button>
-          <button id="joinQuest">Join Quest</button>
+          <button onclick="sponsorQuest()">Sponsor Quest</button>
           <!--only available to click when they're not sponsporing a quest-->
-          <button id="sponsorQuest">Sponsor Quest</button>
+          <button id="joinQuest" onclick="joinQuest()">Join Quest</button>
+          <button id="withdrawQuest" onclick="withdrawQuest()">Withdraw Quest</button>
           <button id="transferQuest">Transfer Quest</button>
           <!--goes to the player on the left-->
           <button onclick="pickCard()" id="readCard">Read Card</button>
@@ -87,6 +88,14 @@
     </div>
   </div>
 
+
+  <!-- Just for testing -->
+  <button onclick="inQuest()">IN QUEST?</button>
+  <button onclick="placeCardsQuest()">Choose card for stage</button>
+  <button onclick="updateShields(5)">Update Shields</button>
+  <button onclick="removeUsedCardsLocal()">Delete used cards</button>
+  <div id="battlePoints"></div> <!-- To display the total battle points for a player in a stage -->
+  <button onclick="clearBattlePointDisplay()">Clear Battle points</button>
 
 </body>
 

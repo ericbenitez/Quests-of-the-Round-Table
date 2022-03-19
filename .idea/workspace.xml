@@ -17,6 +17,14 @@
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/Quest.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/Quest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/StoryCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/StoryCard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Controllers/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Controllers/GameController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Turn.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Turn.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/css/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Cards/AdventureCards.js" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Cards/AdventureCards.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Client.js" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Client.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -41,6 +49,14 @@
       <filtered-out-file-type name="TAG" />
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
+  </component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="63fabdf0-979f-4a60-9485-8ab7760f100a" />
+        <option name="url" value="https://github.com/ericbenitez/Quests-of-the-Round-Table.git" />
+      </UrlAndAccount>
+    </option>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
