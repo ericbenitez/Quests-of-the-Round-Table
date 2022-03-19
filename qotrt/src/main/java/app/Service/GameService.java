@@ -1,15 +1,18 @@
 package app.Service;
 
+import app.Controllers.GameController;
 import app.Models.AdventureCards.AdventureCard;
+import app.Models.Enums.Rank;
 import app.Models.General.Game;
 import app.Models.General.Player;
 import app.Objects.CardObjects;
 //import Models.General.GamePlay;
-import app.Models.General.GameStatus;
+import app.Models.General.ProgressStatus;
 
 import java.util.ArrayList;
 import java.util.UUID; //for game ID
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,7 +23,7 @@ public class GameService {
         this.currentGame = new Game();
         this.currentGame.setGameID(UUID.randomUUID().toString());
         this.currentGame.setNumOfPlayers(numOfPlayers); // first initialize the array of players
-        this.currentGame.setGameStatus(GameStatus.NEW);
+        this.currentGame.setProgressStatus(ProgressStatus.NEW);
         this.currentGame.setGame(this.currentGame); // storing the game
         
         // initialize cards
@@ -32,36 +35,45 @@ public class GameService {
     }
 
     // Connect other players to the current Game
-    public String joinGame(Player anotherOne, String gameID) { // passes in the current game( a global variable in js)
-        if (this.currentGame != null && this.currentGame.getCurrentGame() == null) {
-            return null; // when game doesnt exist
-        }
-        if (this.currentGame.registerPlayer(anotherOne) != null) { // it means there was some room in the game to join
-            if (this.currentGame.getPlayers().size() == this.currentGame.getNumOfPlayers()) { // last player to join
-                this.currentGame.setGameStatus(GameStatus.IN_PROGRESS); // game start, status = in progress
-                return this.currentGame.getGameID();
-            }
-            return this.currentGame.getGameID();
-        }
-        return null; // there wasnt any room for the new player to join...
+    public Integer joinGame(String playerName) { // passes in the current game( a global variable in js)
+        System.out.println("player joining");
 
+        Player player = new Player(playerName);
+        this.getCurrentGame().registerPlayer(player);
+        return player.getId();
     }
 
     public Game getCurrentGame() {
         return this.currentGame; // current game taking place
     }
 
-    public Game gamePlay() {
+    public void startGame(GameController gameController) throws Exception {
         // the turn class --> in javascript file
         //Check if current game is not initialized..
-        if(currentGame.getGameID()==null){
+        if (currentGame.getGameID()==null){
             System.out.println("Game does not exist");
-            return null;
+            return;
         }
         
-        if (this.currentGame.getGameStatus().equals(GameStatus.NEW)) {
-            this.currentGame.setGameStatus(GameStatus.IN_PROGRESS);
-            
+        if (this.currentGame.getProgressStatus().equals(ProgressStatus.NEW)) {
+            this.currentGame.setProgressStatus(ProgressStatus.IN_PROGRESS);
+
+            int currentPlayerIndex = 0;
+            while (true) {
+                this.currentGame.startNewRound();
+                Player player = this.currentGame.getPlayers().get(currentPlayerIndex);
+
+                currentPlayerIndex++;
+                if (currentPlayerIndex == this.currentGame.getPlayers().size()) {
+                    currentPlayerIndex = 0;
+                }
+
+                if (player.getRankInt().equals(Rank.ChampionKnight)) {
+                    break;
+                }
+
+                break;
+            }
             // while()
             // add participants
             // check who participated
@@ -72,16 +84,13 @@ public class GameService {
         
 
         //Check if the status is finished
-        if(currentGame.getGameStatus().equals(GameStatus.FINISHED)){
+        if(currentGame.getProgressStatus().equals(ProgressStatus.FINISHED)){
             //exception
             System.out.println("Game ended");
-            return null;
+            return;
         }
+
         checkWinner(currentGame);
-
-
-        // end the current game...
-        return currentGame;
     }
 
     /*
@@ -135,4 +144,20 @@ public class GameService {
         return currentGame.getLastCard();
     }
 
+    /**
+     * Next step in the game
+     */
+    public void nextStep() {
+        if (this.currentGame == null) return;
+
+        if (this.currentGame.getProgressStatus() == ProgressStatus.NEW) {
+            this.currentGame.setProgressStatus(ProgressStatus.IN_PROGRESS);
+            this.currentGame.startNewRound();
+        }
+
+        // if game in progress...
+        else if (this.currentGame.getProgressStatus() == ProgressStatus.IN_PROGRESS) {
+            
+        }
+    }
 }

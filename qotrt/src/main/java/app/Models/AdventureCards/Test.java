@@ -22,7 +22,7 @@ public class Test extends AdventureCard {
   }
   
   public int getMinBid(){
-    if (this.name == "Test of the Questing Beast" && this.game.getTurns().get(this.game.getTurns().size()-1).getName() == "Search for the Questing Beast") {
+    if (this.name == "Test of the Questing Beast" && this.game.getRounds().get(this.game.getRounds().size()-1).getName() == "Search for the Questing Beast") {
       return 4;
     }
     return this.minBid;

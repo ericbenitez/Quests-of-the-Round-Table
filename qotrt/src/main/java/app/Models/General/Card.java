@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import app.Service.GameService;
 
 public abstract class Card {
-  public String name;
+  protected String name;
   protected String description;
   protected boolean cardFace = false;
   

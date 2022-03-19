@@ -16,7 +16,7 @@ public class Game implements Mediator { // Main = Game
 
   ArrayList<Player> players; // the observers...
   int uniquePlayerId; // increments every time a player is registered
-  ArrayList<Turn> turns; // size is 0
+  ArrayList<Round> rounds; // size is 0
   public ArrayList<String> requests;
   String gameID;
 
@@ -24,18 +24,17 @@ public class Game implements Mediator { // Main = Game
   int numOfPlayers;
 
   //Status of Game : NEW, IN-Progress, Finished..a set status function below..
-  private GameStatus status;
+  private ProgressStatus status;
 
   //we dont have instances of games, it's just the currentGame, if it's not null, it is NEW/In-progress
   Game currentGame=null; //setGame(Game g) below
 
   @Autowired
   public Game() {
-    this.adventureCardsDeck = new ArrayList<AdventureCard>();
-    this.storyCardsDeck = new ArrayList<StoryCard>();
-    this.turns = new ArrayList<Turn>();
+    this.adventureCardsDeck = new ArrayList<>();
+    this.storyCardsDeck = new ArrayList<>();
+    this.rounds = new ArrayList<>();
     this.uniquePlayerId = 0;
-    this.turns.add(new Turn());
   }
   public int getNumOfPlayers(){
     return numOfPlayers;
@@ -101,40 +100,46 @@ public class Game implements Mediator { // Main = Game
       return null;
     }
     
-    this.getCurrentTurn().storyCard = this.storyCardsDeck.remove(0);
+    this.getCurrentRound().storyCard = this.storyCardsDeck.remove(0);
     
-    return this.getCurrentTurn().storyCard;
+    return this.getCurrentRound().storyCard;
   }
   
   public String getCurrentTurnName() {
-    if (this.turns.isEmpty())
+    if (this.rounds.isEmpty())
       return null;
-    return this.turns.get(this.turns.size() - 1).getName();
+    return this.rounds.get(this.rounds.size() - 1).getName();
   }
 
-  public Turn getCurrentTurn() {
-    if (this.turns.isEmpty())
+  public Round getCurrentRound() {
+    if (this.rounds.isEmpty())
       return null;
-    return this.turns.get(this.turns.size() - 1);
+    return this.rounds.get(this.rounds.size() - 1);
   }
 
   // displays all the discarded cards
   public void displayDiscardedCards() {
-    if (turns.size() == 0) {
+    if (rounds.size() == 0) {
       return;
     }
-    for (AdventureCard card : turns.get(turns.size() - 1).discardedCards) {
+    for (AdventureCard card : rounds.get(rounds.size() - 1).discardedCards) {
       System.out.println(card.name);
     }
+  }
+
+  public Round startNewRound() {
+    Round round  = new Round();
+    this.rounds.add(round);
+    return round;
   }
 
   // returns all the discarded cards
   public ArrayList<String> getDiscardedCards() {
     ArrayList<String> dCards = new ArrayList<>();
-    if (turns.size() == 0) {
+    if (rounds.size() == 0) {
       return dCards;
     }
-    for (AdventureCard card : turns.get(turns.size() - 1).discardedCards) {
+    for (AdventureCard card : rounds.get(rounds.size() - 1).discardedCards) {
       dCards.add(card.name);
     }
     return dCards;
@@ -152,8 +157,8 @@ public class Game implements Mediator { // Main = Game
   /**
    * Returns the turns list
    */
-  public ArrayList<Turn> getTurns() {
-    return this.turns;
+  public ArrayList<Round> getRounds() {
+    return this.rounds;
   }
 
   /**
@@ -181,10 +186,10 @@ public class Game implements Mediator { // Main = Game
     this.players = new ArrayList<Player>(x);
   }
 
-  public void setGameStatus(GameStatus x){
+  public void setProgressStatus(ProgressStatus x){
     status = x;
   }
-  public GameStatus getGameStatus(){
+  public ProgressStatus getProgressStatus(){
     return status;
   }
   public void setGame(Game g){

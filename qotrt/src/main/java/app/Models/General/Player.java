@@ -7,7 +7,7 @@ import app.Models.Enums.Rank;
 
 public class Player {
   public String name;
-  private static int uniqueId = 0;
+  private static int uniqueId = 1;
   private int id;
   private int numShields;
   private Game game; // the mediator of players
@@ -59,9 +59,9 @@ public class Player {
       if ((card.name).equals(cardName)) {
         this.cards.remove(index);
 
-        Turn currentTurn = game.getCurrentTurn();
-        if (currentTurn != null) {
-          currentTurn.discardedCards.add(card);
+        Round currentRound = game.getCurrentRound();
+        if (currentRound != null) {
+          currentRound.discardedCards.add(card);
         }
         return card;
       }
@@ -74,12 +74,12 @@ public class Player {
   public AdventureCard discardCardFromHand(String cardName) {
     int index = 0;
     for (AdventureCard card : this.hand) {
-      if (card.name == cardName) {
+      if (card.name.equals(cardName)) {
         this.cards.remove(index);
 
-        Turn currentTurn = game.getCurrentTurn();
-        if (currentTurn != null) {
-          currentTurn.discardedCards.add(card);
+        Round currentRound = game.getCurrentRound();
+        if (currentRound != null) {
+          currentRound.discardedCards.add(card);
         }
         return card;
       }

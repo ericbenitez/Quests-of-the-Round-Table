@@ -7,21 +7,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import app.Models.AdventureCards.*;
 import app.Models.StoryCards.*;
 import app.Service.GameService;
+import org.springframework.stereotype.Component;
 
-public class Turn {
+@Component
+public class Round {
   public String name;
 
+  private GameService gameService;
+
   @Autowired
-  GameService gameService;
+  public Round(GameService gameService) {
+    this.gameService = gameService;
+  }
 
   StoryCard storyCard; // each turn identified by story card..
 
   ArrayList<Player> participants; // for quests
   ArrayList<AdventureCard> discardedCards;
 
-  public Turn() {
-    this.participants = new ArrayList<Player>();
-    this.discardedCards = new ArrayList<AdventureCard>();
+  public Round() {
+    this.participants = new ArrayList<>();
+    this.discardedCards = new ArrayList<>();
   }
 
   public void addParticipant(Player player) {

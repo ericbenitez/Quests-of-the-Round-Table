@@ -15,7 +15,6 @@ let playerName = "";
 // PROGRAM
 setupWindow()
 
-
 // ----------------------------------------------------------------------------
 // FUNCTIONS
 
@@ -52,6 +51,12 @@ function createGame() {
  */
 function pickCard() {
   stompClient.send("/app/pickCard", {}, "");
+
+  stompClient.subscribe("/topic/pickCard", (response) => {
+    const data = JSON.parse(response.body).body;
+    displayStoryCard(data);
+  })
+  
 }
 
 
@@ -74,7 +79,7 @@ function joinGame() {
 }
 
 function subscriptions() {
-  const joinGameSubscription = stompClient.subscribe("/topic/joinGame", (response) => {
+  const joinGameSubscription = stompClient.subscribe("/user/topic/joinGame", (response) => {
     const data = JSON.parse(response.body);
     playerId = data.body;
     showResponse(data, playerName);
@@ -89,7 +94,7 @@ function subscriptions() {
 
   const gameStartedSubscription = stompClient.subscribe('/topic/game/started', function (response) {
     let data = JSON.parse(response.body);
-    if (response != null) game = response;
+    if (response) game = response;
 
     gameId = game.gameID
 

@@ -14,15 +14,11 @@ public class Quest extends StoryCard {
     protected String foeName;
     protected Player sponsor;
     protected ArrayList<ArrayList<AdventureCard>> stages;
-    
-    @Autowired
-    protected GameService gameService;
 
     // if all the foes pass 'all' to foeName
-
-    public Quest(String name, int stages, String foe) {
+    public Quest(String name, int totalStages, String foe) {
         this.name = name;
-        this.totalStages = stages;
+        this.totalStages = totalStages;
         this.foeName = foe;
         this.stages = new ArrayList<>();
     }
@@ -31,9 +27,13 @@ public class Quest extends StoryCard {
         this.sponsor = player;
     }
 
-    public String getFoe() {
+    public String getFoeName() {
         return foeName;
     }
+
+    public int getTotalStages() { return this.totalStages; }
+
+    public ArrayList<ArrayList<AdventureCard>> getStages() { return this.stages; }
 
     public boolean canPlayerSponsor(Player player) {
 

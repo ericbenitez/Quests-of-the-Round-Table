@@ -1,32 +1,30 @@
 package app.Controllers;
 
 import app.Models.AdventureCards.AdventureCard;
-import app.Models.General.Game;
-import app.Models.General.Player;
+import app.Models.General.ProgressStatus;
+import app.Models.StoryCards.Quest;
 import app.Models.StoryCards.StoryCard;
 import app.Service.GameService;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-
-import java.security.InvalidParameterException;
+import org.springframework.messaging.simp.annotation.SendToUser;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/game")
 @Controller
 
 public class GameController {
-  GameService gameService = new GameService();
-  
-  public GameController(SimpMessagingTemplate simpMessagingTemplate) {
-    gameService = new GameService();
+  private GameService gameService;
+
+  @Autowired
+  public GameController(GameService gameService) {
+    this.gameService = gameService;
   }
 
   // we need an initializing player and the number of player to call createGame()
@@ -34,40 +32,42 @@ public class GameController {
   @PostMapping("/start")
   @MessageMapping("/game/start") // server
   @SendTo("/topic/game/started") // client
-  public ResponseEntity<String> start(int numPlayers) throws InvalidParameterException, Exception {
+  public ResponseEntity<String> start(int numPlayers) throws Exception {
     gameService.createGame(numPlayers);
-    System.out.println("game starting");
-    
+
+    // wait for players
     while (this.gameService.getCurrentGame().getPlayers().size() < numPlayers) {
       Thread.sleep(1000);
     }
-    
+
+    this.gameService.nextStep();
+
     return ResponseEntity.ok(gameService.createGame(numPlayers).getGameID());
   }
 
   // After starting, allow other players to connect
   @MessageMapping("/playerJoining")
-  @SendTo("/topic/joinGame")
+  @SendToUser("/topic/joinGame")
   public ResponseEntity<Integer> joinGame(String playerName) throws Exception {
-    System.out.println("player joining");
-
-    Player player = new Player(playerName);
-    this.gameService.getCurrentGame().registerPlayer(player);
-    return ResponseEntity.ok(player.getId());
+    return ResponseEntity.ok(this.gameService.joinGame(playerName));
   }
 
   @MessageMapping("/getAdvCard")
-  @SendTo("/topic/getAdvCard")
+  @SendToUser("/topic/getAdvCard")
   public AdventureCard getAdvCard() {
+    if (this.gameService.getCurrentGame().getProgressStatus() != ProgressStatus.IN_PROGRESS)
+      return null;
     return gameService.getAdventureCard();
   }
 
-
   @MessageMapping("/pickCard")
-  @SendTo("/topic/pickCard")
-  public ResponseEntity<String> pickCard() throws Exception {
+  @SendToUser("/topic/pickCard")
+  public ResponseEntity<StoryCard> pickCard() throws Exception {
+    if (this.gameService.getCurrentGame().getProgressStatus() != ProgressStatus.IN_PROGRESS)
+      return null;
+
     StoryCard storyCard = this.gameService.getCurrentGame().pickCard();
-    return ResponseEntity.ok(storyCard.name);
+    return ResponseEntity.ok(storyCard);
   }
 
   @SendTo("/topic/doYouWantToSponsor")
