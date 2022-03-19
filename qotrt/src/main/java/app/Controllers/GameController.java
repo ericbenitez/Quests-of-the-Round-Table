@@ -36,6 +36,7 @@ public class GameController {
   @SendTo("/topic/game/started") // client
   public ResponseEntity<String> start(int numPlayers) throws InvalidParameterException, Exception {
     gameService.createGame(numPlayers);
+    System.out.println("game starting");
     
     while (this.gameService.getCurrentGame().getPlayers().size() < numPlayers) {
       Thread.sleep(1000);
@@ -48,6 +49,8 @@ public class GameController {
   @MessageMapping("/playerJoining")
   @SendTo("/topic/joinGame")
   public ResponseEntity<Integer> joinGame(String playerName) throws Exception {
+    System.out.println("player joining");
+
     Player player = new Player(playerName);
     this.gameService.getCurrentGame().registerPlayer(player);
     return ResponseEntity.ok(player.getId());

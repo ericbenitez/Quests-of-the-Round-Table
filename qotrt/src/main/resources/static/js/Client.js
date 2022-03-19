@@ -4,18 +4,13 @@ const url = "http://localhost:8080";
 const socket = new SockJS("/gameplay");
 const stompClient = Stomp.over(socket);
 stompClient.connect()
-let sponsor = false;
-
-function test() {
-  if (sponsor) {
-    console.log("true")
-  }
-}
 
 let game = null;
 let gameId = null;
 let playerId = null;
 let numOfPlayer = 0;
+let playerName = "";
+
 // ----------------------------------------------------------------------------
 // PROGRAM
 setupWindow()
@@ -26,7 +21,7 @@ setupWindow()
 
 // creating a new game
 function createGame() {
-  const playerName = document.getElementById("creator-name").value.trim();
+  playerName = document.getElementById("creator-name").value.trim();
   const numPlayers = document.getElementById("num-players").value;
 
   // doesn't allow to create more than one game (for now)
@@ -49,7 +44,7 @@ function createGame() {
   subscriptions()
 
   stompClient.send("/app/game/start", {}, numPlayers * 1);
-  stompClient.send("/app/playerJoining", {}, playerName);
+  setTimeout(() => { stompClient.send("/app/playerJoining", {}, playerName); }, 1000)
 }
 
 /**
@@ -62,7 +57,9 @@ function pickCard() {
 
 
 function joinGame() {
-  let playerName = document.getElementById("player-name").value.trim();
+  if (playerName !== "") return
+  
+  playerName = document.getElementById("player-name").value.trim();
 
   if (!validInputString(playerName)) {
     alert("Please enter a name.");
@@ -77,7 +74,7 @@ function joinGame() {
 }
 
 function subscriptions() {
-  stompClient.subscribe("/topic/joinGame", (response) => {
+  const joinGameSubscription = stompClient.subscribe("/topic/joinGame", (response) => {
     const data = JSON.parse(response.body);
     playerId = data.body;
     showResponse(data, playerName);
@@ -86,9 +83,11 @@ function subscriptions() {
       const data = JSON.parse(response.body).body;
       displayStoryCard(data);
     })
+    
+    joinGameSubscription.unsubscribe();
   })
 
-  stompClient.subscribe('/topic/game/started', function (response) {
+  const gameStartedSubscription = stompClient.subscribe('/topic/game/started', function (response) {
     let data = JSON.parse(response.body);
     if (response != null) game = response;
 
@@ -96,6 +95,7 @@ function subscriptions() {
 
     displayCreateGameResponse(response.gameID, playerName, parseInt(numPlayers))
 
+    gameStartedSubscription.unsubscribe();
     startGame()
   });
 }
