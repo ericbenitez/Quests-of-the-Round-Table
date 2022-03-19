@@ -5,6 +5,9 @@ import app.Models.General.Game;
 import app.Models.General.Player;
 import app.Models.StoryCards.StoryCard;
 import app.Service.GameService;
+import app.Controllers.dto.CardsMessage;
+import app.Controllers.dto.Message;
+import app.Controllers.dto.ShieldMessage;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -58,8 +61,8 @@ public class GameController {
 
   @MessageMapping("/getAdvCard")
   @SendTo("/topic/getAdvCard")
-  public AdventureCard getAdvCard() {
-    return gameService.getAdventureCard();
+  public AdventureCard getAdvCard(int playerId) {
+    return gameService.getAdventureCard(playerId);
   }
 
 
@@ -76,4 +79,37 @@ public class GameController {
     // sponsor id
     return ResponseEntity.ok("sponsor id");
   }
+
+
+  // --------------- Player Participating Stuff ------------------
+  
+  @MessageMapping("/getRankPts")
+  @SendTo("/topic/getRankPts")
+  public ResponseEntity<Integer> getPlayerRankBattlePts(@RequestBody Message playerId) throws Exception {
+    String id = playerId.getMessage();
+    int pts = gameService.getPlayerRankBattlePts(playerId.getMessage());
+    return ResponseEntity.ok(pts);
+  }
+
+  @MessageMapping("updateShields")
+  public void updateShields(@RequestBody ShieldMessage shieldInfo) throws Exception {
+    gameService.updateShields(shieldInfo.getPlayerId(), shieldInfo.getShields());
+  }
+
+
+  @MessageMapping("discardCards")
+  public void discardCards(@RequestBody CardsMessage cards) throws Exception {
+    gameService.discardCards(cards.getPlayerId(), cards.getCards());
+  }
+
+  @MessageMapping("joinQuest")
+  public void joinQuest(@RequestBody Message playerId){
+    gameService.joinQuest(playerId.getMessage());
+  }
+
+  @MessageMapping("withdrawQuest")
+  public void withdrawQuest(@RequestBody Message playerId){
+    gameService.withdrawQuest(playerId.getMessage());
+  }
+
 }

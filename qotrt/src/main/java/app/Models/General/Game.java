@@ -47,7 +47,7 @@ public class Game implements Mediator { // Main = Game
     }
     player.setMediator(this);
     // added by Donna: so I can see the cards for making the front end
-    player.drawCards(12);
+    // player.drawCards(12);
 
     this.players.add(player);
     this.uniquePlayerId += 1;

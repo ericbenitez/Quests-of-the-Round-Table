@@ -11,6 +11,18 @@ let playerId = null;
 let numOfPlayer = 0;
 let playerName = "";
 
+let participant = false;
+let sponsor = false;
+// the player's 12 cards
+let playerHand = [];
+let stageCards = [];
+let shields = 0;
+let totalPoints = 0;
+
+// temp fake number of stages, battle points
+let numOfStages = 5;
+let stageBattlePts = 10;
+
 // ----------------------------------------------------------------------------
 // PROGRAM
 setupWindow()
@@ -76,7 +88,7 @@ function joinGame() {
 function subscriptions() {
   const joinGameSubscription = stompClient.subscribe("/topic/joinGame", (response) => {
     const data = JSON.parse(response.body);
-    playerId = data.body;
+    playerId = data.body + 1;
     showResponse(data, playerName);
 
     stompClient.subscribe("/topic/pickCard", (response) => {
@@ -101,7 +113,7 @@ function subscriptions() {
 }
 
 function setupWindow() {
-  window.addEventListener("load", displayAllCards(theCards));
+  //window.addEventListener("load", displayAllCards(theCards));
 }
 
 function startGame() {
@@ -177,4 +189,262 @@ function startGame() {
   //later details..
   //greys out the button if it's not the player's turn. 
   //message indicating player's turn.. traffic light
+}
+
+
+
+
+// ----------------------------------- Player participating quest ---------------------------------
+
+
+// player joining a quest, local and server 
+function joinQuest() {
+  if (sponsor){return;}
+  participant = true;
+
+  // change joinQuest button to withdraw button
+  document.getElementById("joinQuest").style.display = "none";
+  document.getElementById("withdrawQuest").style.display = "inline";
+
+  // add participant to server side
+ stompClient.send("/app/joinQuest", {}, JSON.stringify({
+         'message': playerId + ""
+ }));
+
+}
+
+
+
+function withdrawQuest(){
+ participant = false;
+ document.getElementById("joinQuest").style.display = "inline";
+ document.getElementById("withdrawQuest").style.display = "none";
+ // should I disable the joinQuest button until the quest is over?
+
+ stageCards = [];
+
+ // withdraw on server side
+ stompClient.send("/app/withdrawQuest", {}, JSON.stringify({
+             'message': playerId + ""
+ }));
+}
+
+
+// test function
+// shows whether current player is in the quest or not
+function inQuest(){
+ alert("player " + playerId + " quest: "  + participant);
+}
+
+
+// this is for the sponsor (disable the button after the player clicks on sponsor quest)
+function disableJoinQuest(){
+ document.getElementById("joinQuest").disabled = true;
+}
+
+
+
+// check if the cards are unique
+// since players cannot play two Weapon cards of the same type in a stage
+function allWeaponCardsUnique(cards){
+ let tempArr = [];
+ for (let i = 0; i < cards.length; i++){
+     if (tempArr.includes(cards[i].name)){
+         return false;
+     }
+     // only keep tracks of the weapon cards
+     if (isWeaponCard(cards[i].name)){
+         tempArr.push(cards[i].name);
+     }
+
+ }
+ return true;
+}
+
+
+
+// if the total battle points >= stage battle points, return true
+// otherwise false
+// remove the player from the quest if they lose
+// note: I tried to put the stompClient stuff in a separate function so that it gets the rank points first,
+// but it didn't worked
+function winStage(){
+ // rank + card battle points
+  stompClient.send("/app/getRankPts", {}, JSON.stringify({
+     'message': playerId + ""
+  }));
+  stompClient.subscribe('/topic/getRankPts', function (response) {
+     let points = JSON.parse(response.body).body;
+
+     // store total points now, display total points when card face up
+     totalPoints = calcTotalBattlePts(points);
+
+     if (calcTotalBattlePts(points) >= stageBattlePts){
+         displayBattlePoint(totalPoints, stageBattlePts, "won");
+         return true;
+     }else {
+         displayBattlePoint(totalPoints, stageBattlePts, "lost");
+         participant = false;
+         return false;
+     }
+  });
+}
+
+
+
+// displays the total battle points for a stage
+// winMessage = "won" or "lost"
+function displayBattlePoint(totBattlePts, stagePts, winMessage){
+ let div = document.getElementById("battlePoints");
+ div.appendChild(document.createTextNode("Total player battle points: " + totalPoints));
+ div.appendChild(document.createElement("br"));
+ div.appendChild(document.createTextNode("Stage's battle points: " + stagePts));
+ div.appendChild(document.createElement("br"));
+ div.appendChild(document.createTextNode("You have " + winMessage + " this stage!"));
+}
+
+
+function clearBattlePointDisplay(){
+ let div = document.getElementById("battlePoints");
+ while (div.firstChild) {
+         div.removeChild(div.firstChild);
+ }
+}
+
+
+// get total battle points (rank + cards)
+function calcTotalBattlePts(rankPts){
+ let total = rankPts;
+ // get the card points
+ for (let i = 0; i < stageCards.length; i++){
+     if (stageCards[i].battlePoints != -1){
+         total += stageCards[i].battlePoints;
+     }
+ }
+ return total;
+}
+
+// checking if the card is a weapon card
+// if there's a better way let me know lol
+function isWeaponCard(cardName){
+ let weapons = ["Horse", "Sword", "Dagger", "Excalibur", "Lance", "Battle-ax"];
+ if (weapons.includes(cardName)){
+     return true;
+ }
+ return false;
+}
+
+
+// update winner's shields (when player wins the quest/tournament)
+// they win the entire game when shields >= 5
+function updateShields(numOfShields){
+
+ stompClient.send("/app/updateShields", {}, JSON.stringify({
+         'playerId': playerId + "",
+         'shields': numOfShields + ""
+ }));
+
+ // update shields in global var (local)
+ shields += numOfShields;
+
+}
+
+
+
+
+function placeCardsQuest(){
+ // players are allowed to choose no cards, so we don't disable the button
+ checked = getAllChecked();
+
+ // check if weapon cards unique
+ if (!allWeaponCardsUnique(getActualCards(checked))){
+     alert("You may not play two Weapon cards of the same type.");
+     return;
+ }
+
+ // stores the cards for this stage
+ // we need to change this so that stageCards contains the actual cards (so we have data)
+ // but what about like, simple printing... nah, we need the actual cards
+ //stageCards = checked;
+ stageCards = getActualCards(checked);
+
+ // remove from the cards display
+ removeAllCheckedCards(checked);
+
+ let cardAtPlay = document.getElementById("stages");
+ let div = document.createElement("div");
+ //div.id = "cardsDown";
+ div.setAttribute('id', 'cardsDown');
+ div.appendChild(document.createTextNode("P" + playerId));
+ cardAtPlay.appendChild(div);
+ document.getElementById("cardsDown").addEventListener("click", turnCardsOver);
+
+}
+
+
+
+// input: list of card names
+// output: list of object objects with the corresponding given names
+function getActualCards(cardNames){
+ let cards = [];
+ for (let i = 0; i < cardNames.length; i++){
+     for (let j = 0; j < playerHand.length; j++){
+         if (playerHand[j].name == cardNames[i]){
+             console.log("card name: " + cardNames[i]);
+             console.log("playerHand[j].name " + playerHand[j].name);
+             console.log(" ");
+             cards.push(playerHand[j]);
+             break;
+         }
+     }
+ }
+ return cards;
+}
+
+
+
+// need a function for removing cards from player after stage is done
+// this would be server side, I believe the local storage too
+// cards to remove: stageCards, also amour would be removed only after quest is done (not stage)
+function removeUsedCardsLocal(){
+ let temp = stageCards;
+ let newPlayerHand = [];
+
+ let cardFound = false;
+ let toBeDeleted = []
+
+ for (let i = 0; i < stageCards.length; i++){
+     toBeDeleted.push(stageCards[i].name);
+ }
+
+ for (let i = 0; i < playerHand.length; i++){
+     for (let j = 0; j < stageCards.length; j++){
+         if (playerHand[i].name == stageCards[j].name){
+             cardFound = true;
+             break;
+         }
+     }
+     if (!cardFound){
+         newPlayerHand.push(playerHand[i]);
+     }
+ }
+ stageCards = [];
+ playerHand = newPlayerHand;
+ // testing
+ // console.log("new hand after removal: ");
+ // for (let i = 0; i < newPlayerHand.length; i++){
+ //    console.log(newPlayerHand[i].name);
+ //}
+
+ removeUsedCardsServer(toBeDeleted);
+
+ return newPlayerHand;
+
+}
+
+function removeUsedCardsServer(cards){
+ stompClient.send("/app/discardCards", {}, JSON.stringify({
+             'playerId': playerId,
+             'cards': cards
+     }));
 }
