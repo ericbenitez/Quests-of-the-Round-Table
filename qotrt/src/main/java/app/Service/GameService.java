@@ -4,6 +4,7 @@ import app.Models.AdventureCards.AdventureCard;
 import app.Models.General.Game;
 import app.Models.General.Player;
 import app.Models.General.Turn;
+import app.Models.StoryCards.Quest;
 import app.Objects.CardObjects;
 //import Models.General.GamePlay;
 import app.Models.General.GameStatus;
@@ -221,5 +222,17 @@ public class GameService {
         this.currentGame.getCurrentTurn().withdrawParticipant(playerId);
 
     }
+    public void settingSponsor(int playerId){
+        for(Player p:currentGame.getPlayers()){
+            if(p.getId()==playerId){
+                currentGame.getCurrentQuest().setSponsor(p);
+            }
+        }
+
+    }
+    public Quest getCurrentQuest(){
+        return currentGame.getCurrentQuest();
+    }
+
 
 }

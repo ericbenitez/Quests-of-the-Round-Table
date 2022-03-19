@@ -195,4 +195,21 @@ public class Game implements Mediator { // Main = Game
   }
   public int getUniquePlayerId() {return uniquePlayerId;}
   public ArrayList<AdventureCard> getAdventureCardsDeck(){return adventureCardsDeck;}
+
+  Quest currentQuest;
+  public void setCurrentQuest(String name){
+    for(StoryCard c: storyCardsDeck){
+      if(c instanceof Quest){
+        System.out.println("name of the card"+c.getName());
+        if (c.getName().equals(name)){ //added getName
+          System.out.println("setting name");
+          currentQuest = (Quest) c;
+        }
+      }
+    }
+  }
+  public Quest getCurrentQuest(){
+    return currentQuest;
+  }
+
 }

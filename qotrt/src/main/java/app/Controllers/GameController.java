@@ -3,6 +3,7 @@ package app.Controllers;
 import app.Models.AdventureCards.AdventureCard;
 import app.Models.General.Game;
 import app.Models.General.Player;
+import app.Models.StoryCards.Quest;
 import app.Models.StoryCards.StoryCard;
 import app.Service.GameService;
 import app.Controllers.dto.CardsMessage;
@@ -11,11 +12,9 @@ import app.Controllers.dto.ShieldMessage;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 
@@ -60,11 +59,20 @@ public class GameController {
   }
 
   @MessageMapping("/getAdvCard")
-  @SendTo("/topic/getAdvCard")
+  @SendToUser("/topic/getAdvCard")
   public AdventureCard getAdvCard(int playerId) {
     return gameService.getAdventureCard(playerId);
   }
 
+  @MessageMapping("/sponsorQuest")
+  @SendTo("/topic/sponsorQuest")
+  public Quest sponsorQuest(String currentQuest){
+    System.out.println(currentQuest);
+    gameService.settingSponsor(0);
+    gameService.getCurrentGame().setCurrentQuest(currentQuest);
+    System.out.println(gameService.getCurrentGame().getCurrentQuest());
+    return gameService.getCurrentGame().getCurrentQuest();
+  }
 
   @MessageMapping("/pickCard")
   @SendTo("/topic/pickCard")

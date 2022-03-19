@@ -7,7 +7,7 @@ stompClient.connect()
 
 let game = null;
 let gameId = null;
-let playerId = null;
+let playerId = 0;
 let numOfPlayer = 0;
 let playerName = "";
 
@@ -64,6 +64,11 @@ function createGame() {
  */
 function pickCard() {
   stompClient.send("/app/pickCard", {}, "");
+   stompClient.subscribe("/topic/pickCard", function (response) {
+      const data = JSON.parse(response.body).body
+      console.log(data);
+      displayStoryCard(data)
+    })
 }
 
 
@@ -152,6 +157,13 @@ function startGame() {
   //broadcast other players to join
   stompClient.subscribe("/topic/doYouWantToSponsor", (sponsor) => {
     const isSponsoring = confirm("Do you want to sponsor?")
+    if(isSponsoring){
+        alert("Cool, you can press on the button Sponsor Quest button!")
+    }
+    if(!isSponsoring){
+        alert("I see that you don't want to sponsor, press the Transfer Quest button")
+    }
+
     // do alert that asks for yes/no <--- confirm 
     //if no(another alert telling them to click on pass quest)
     //pass quest has an onclick that moves the turn to the next player.. 
