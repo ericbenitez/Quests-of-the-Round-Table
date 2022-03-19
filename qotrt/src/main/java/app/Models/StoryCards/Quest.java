@@ -39,7 +39,7 @@ public class Quest extends StoryCard {
 
         return false;
     }
-
+    
     @Override
     protected void draw(Player player) {
 

@@ -1,9 +1,6 @@
 package app.Models.AdventureCards;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import app.Models.General.*;
-import app.Service.GameService;
 
 public class Ally extends AdventureCard {
   int battlePoints;

@@ -16,11 +16,10 @@ import org.springframework.stereotype.Service;
 public class GameService {
     private Game currentGame;
 
-    public String createGame(Player player, int numOfPlayers) {
+    public Game createGame(int numOfPlayers) {
         this.currentGame = new Game();
         this.currentGame.setGameID(UUID.randomUUID().toString());
         this.currentGame.setNumOfPlayers(numOfPlayers); // first initialize the array of players
-        this.currentGame.registerPlayer(player); // register the player
         this.currentGame.setGameStatus(GameStatus.NEW);
         this.currentGame.setGame(this.currentGame); // storing the game
         
@@ -29,7 +28,7 @@ public class GameService {
         this.currentGame.setAdventureCards(cards.getAdventureCards());
         this.currentGame.setStoryCards(cards.getStoryCards());
         
-        return this.currentGame.getGameID();
+        return this.currentGame;
     }
 
     // Connect other players to the current Game
@@ -59,6 +58,18 @@ public class GameService {
             System.out.println("Game does not exist");
             return null;
         }
+        
+        if (this.currentGame.getGameStatus().equals(GameStatus.NEW)) {
+            this.currentGame.setGameStatus(GameStatus.IN_PROGRESS);
+            
+            // while()
+            // add participants
+            // check who participated
+            // interact with participants
+            
+            // handle turn
+        }
+        
 
         //Check if the status is finished
         if(currentGame.getGameStatus().equals(GameStatus.FINISHED)){
