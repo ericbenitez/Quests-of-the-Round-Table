@@ -2,6 +2,7 @@ package app.Models.General;
 import app.Objects.CardObjects;
 import java.util.ArrayList;
 
+import app.Controllers.GameController;
 import app.Models.AdventureCards.*;
 import app.Models.StoryCards.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,26 +10,21 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Game implements Mediator { // Main = Game
-  Player currentActivePlayer;
+  int currentActivePlayer = 0;
   ArrayList<AdventureCard> adventureCardsDeck;
   ArrayList<StoryCard> storyCardsDeck;
   CardObjects gameCards; //get the adventure /story cards that are in the game
-
   ArrayList<Player> players; // the observers...
   int uniquePlayerId; // increments every time a player is registered
   ArrayList<Round> rounds; // size is 0
   public ArrayList<String> requests;
   String gameID;
-
   // Variable which asks the initial/starting player how many players should join
   int numOfPlayers;
-
   //Status of Game : NEW, IN-Progress, Finished..a set status function below..
   private ProgressStatus status;
-
   //we dont have instances of games, it's just the currentGame, if it's not null, it is NEW/In-progress
   Game currentGame=null; //setGame(Game g) below
-
   @Autowired
   public Game() {
     this.adventureCardsDeck = new ArrayList<>();
@@ -41,13 +37,12 @@ public class Game implements Mediator { // Main = Game
   }
   // observes a player
   public Player registerPlayer(Player player) {
-    if (players.size() >= numOfPlayers) {
-      return null; //we should throw an exception instead...
-    }
-    player.setMediator(this);
+    // if (players.size() >= numOfPlayers) {
+    //   return null; //we should throw an exception instead...
+    // }
+    player.setMediator(this); 
     // added by Donna: so I can see the cards for making the front end
-    // player.drawCards(12);
-
+    player.drawCards(12);
     this.players.add(player);
     this.uniquePlayerId += 1;
     return player;
@@ -100,8 +95,13 @@ public class Game implements Mediator { // Main = Game
       return null;
     }
     
-    this.getCurrentRound().storyCard = this.storyCardsDeck.remove(0);
+    this.getCurrentRound().storyCard = this.storyCardsDeck.get(0);
+    if (this.getCurrentRound().storyCard instanceof Quest) {
+      String name = this.getCurrentRound().storyCard.getName();
+      this.setCurrentQuest(name);
+    }
     
+    this.storyCardsDeck.remove(0);
     return this.getCurrentRound().storyCard;
   }
   
@@ -125,12 +125,6 @@ public class Game implements Mediator { // Main = Game
     for (AdventureCard card : rounds.get(rounds.size() - 1).discardedCards) {
       System.out.println(card.name);
     }
-  }
-
-  public Round startNewRound() {
-    Round round  = new Round();
-    this.rounds.add(round);
-    return round;
   }
 
   // returns all the discarded cards
@@ -170,8 +164,12 @@ public class Game implements Mediator { // Main = Game
     return this.players;
   }
 
-  public Player getCurrentActivePlayer() {
-    return currentActivePlayer;
+  public int getCurrentActivePlayer() {
+    return this.currentActivePlayer;
+  }
+  
+  public void setCurrentActivePlayer(int index) {
+    this.currentActivePlayer = index;
   }
 
   // From TTT
@@ -209,6 +207,7 @@ public class Game implements Mediator { // Main = Game
         if (c.getName().equals(name)){ //added getName
           System.out.println("setting name");
           currentQuest = (Quest) c;
+          this.currentGame.getCurrentRound().setStoryCard(currentQuest);
         }
       }
     }
@@ -217,4 +216,40 @@ public class Game implements Mediator { // Main = Game
     return currentQuest;
   }
 
+  public Player getPlayerById(int playerId) {
+    for (Player player: this.players) {
+      if (player.getId() == playerId) {
+        return player;
+      }
+    }
+    
+    return null;
+  }
+  
+  public void nextStep(GameController gameController) {
+    if (this.currentGame.getProgressStatus() == ProgressStatus.NEW) {
+      this.currentGame.setProgressStatus(ProgressStatus.IN_PROGRESS);
+      this.setCurrentActivePlayer(0); 
+      
+      for (Player player: this.getPlayers()) {
+        player.drawCards(12); 
+      }
+      
+      Round round = new Round(gameController);
+      this.rounds.add(round);
+      round.nextStep(gameController);
+    }
+
+    // if game in progress...
+    else if (this.currentGame.getProgressStatus() == ProgressStatus.IN_PROGRESS) {
+        Round round = this.currentGame.getCurrentRound();
+        round.nextStep(gameController);
+    }
+  }
+  
+  public Round startNewRound(GameController gameController) {
+    Round round = new Round(gameController);
+    this.rounds.add(round);
+    return round;
+  }
 }

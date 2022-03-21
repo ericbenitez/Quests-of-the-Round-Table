@@ -48,8 +48,9 @@
   <div id="gameArea">
     <div id="gameBoard">
       <div id="cardContainer">
-        <div id="storyCards" onclick="getStoryCards()">Story Cards Placeholder</div>
+        <div id="storyCards" onclick="pickCard()">Story Cards Placeholder</div>
         <div id="adventureCards" onclick="getAdventureCards()">Adventure Card Placeholder</div>
+        <div id="activeStoryCard">Current Story Card</div>
       </div>
       <div id="everythingQuest">
         <p>Placeholder for stages and quest foe cards..</p>
@@ -61,6 +62,7 @@
         <!--imageArea (purple box)-->
         <div id="shields"> You have 0 shields.</div>
         <div id="decisionButtons">
+          <button id="initCardButton" onclick='initializeAdv()'>Initialize cards</button>
           <button id="hand">Show Hand</button>
           <button onclick="sponsorQuest()">Sponsor Quest</button>
           <!--only available to click when they're not sponsporing a quest-->
@@ -68,10 +70,10 @@
           <button id="withdrawQuest" onclick="withdrawQuest()">Withdraw Quest</button>
           <button id="transferQuest">Transfer Quest</button>
           <!--goes to the player on the left-->
-          <button onclick="pickCard()" id="readCard">Read Card</button>
           <!--Broadcasts the message to other players-->
           <button id="dealAdventureCard">Deal </button>
           <!--Sponsor deals one adventure card to participating player-->
+          <button onclick="finishTurn()" id="finishTurn">Finish Turn </button>
         </div>
       </div>
     </div>
@@ -84,6 +86,8 @@
       <div id="placeCardButtons">
         <button id="faceUpButton" class="disabledButton">Place Selected Cards Face Up</button>
         <button id="faceDownButton" class="disabledButton">Place Selected Cards Face Down</button>
+        <!-- Testing -->
+        <button id="discardCardButton" onclick="removeSelectedCards()">Discard Cards</button>
       </div>
     </div>
   </div>
@@ -97,16 +101,16 @@
   <div id="battlePoints"></div> <!-- To display the total battle points for a player in a stage -->
   <button onclick="clearBattlePointDisplay()">Clear Battle points</button>
 
+  <script src="./js/Cards/AdventureCards.js"></script>
+  <script src="./js/Cards/Event.js"></script>
+  <script src="./js/Cards/Quest.js"></script>
+  <script src="./js/Cards/StoryCards.js"></script>
+  <script src="./js/Cards/Tournament.js"></script>
+
+
+  <script src="./js/Client.js"></script>
+  <script src="./js/game.js"></script>
+
 </body>
 
 </html>
-
-<script src="./js/Cards/AdventureCards.js"></script>
-<script src="./js/Cards/Event.js"></script>
-<script src="./js/Cards/Quest.js"></script>
-<script src="./js/Cards/StoryCards.js"></script>
-<script src="./js/Cards/Tournament.js"></script>
-
-
-<script src="./js/Client.js"></script>
-<script src="./js/game.js"></script>

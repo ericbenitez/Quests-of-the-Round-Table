@@ -1,7 +1,5 @@
 package app.Models.General;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import app.Service.GameService;
 
 public abstract class Card {
@@ -13,7 +11,7 @@ public abstract class Card {
     return this.name;
   }
   
-  @Autowired
+  // @Autowired
   protected GameService gameService; //mediator ...
 
   boolean getCardFace() { return this.cardFace; }

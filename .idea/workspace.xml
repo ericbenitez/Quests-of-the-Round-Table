@@ -8,24 +8,26 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Config/WebsocketConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Config/WebsocketConfiguration.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Controllers/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Controllers/GameController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/AdventureCards/Ally.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/AdventureCards/Ally.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/AdventureCards/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/AdventureCards/Test.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Card.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/GameStatus.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Turn.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Round.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Round.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/CourtCalledToCamelot.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/CourtCalledToCamelot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/EventCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/EventCard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/KingsRecognition.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/KingsRecognition.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/Quest.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/Quest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/StoryCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/StoryCard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/Tournament.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/Tournament.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Objects/CardObjects.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Objects/CardObjects.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Controllers/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Controllers/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Turn.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Turn.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/css/styles.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Cards/AdventureCards.js" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Cards/AdventureCards.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Cards/Quest.js" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Cards/Quest.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Cards/StoryCards.js" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Cards/StoryCards.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Client.js" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Client.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/game.js" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/game.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -151,7 +153,8 @@
       <option name="presentableId" value="Default" />
       <updated>1646101826305</updated>
       <workItem from="1646361711617" duration="591000" />
-      <workItem from="1647669106297" duration="14798000" />
+      <workItem from="1647669106297" duration="24212000" />
+      <workItem from="1647800093302" duration="1439000" />
     </task>
     <servers />
   </component>
@@ -168,22 +171,6 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/qotrt/src/main/java/app/Controllers/GameController.java</url>
-          <line>68</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/qotrt/src/main/java/app/Controllers/GameController.java</url>
-          <line>65</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

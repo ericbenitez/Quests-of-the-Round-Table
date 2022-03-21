@@ -1,7 +1,5 @@
 package app.Models.General;
-
 import java.util.ArrayList;
-
 import app.Models.AdventureCards.*;
 import app.Models.Enums.Rank;
 
@@ -15,15 +13,13 @@ public class Player {
   // list of cards
   public Card pickedCard; // from the story deck
   public ArrayList<AdventureCard> cards; // 12 cards
-  public ArrayList<AdventureCard> hand;
 
   public Player(String name) {
     this.name = name;
     this.id = uniqueId;
     this.numShields = 0;
-    uniqueId++;
+    uniqueId++; 
     this.cards = new ArrayList<AdventureCard>();
-    this.hand = new ArrayList<AdventureCard>();
   }
 
   /**
@@ -38,6 +34,8 @@ public class Player {
   public Game getGame() {
     return this.game;
   }
+  
+
 
   /**
    * Returns the id of the player
@@ -73,7 +71,7 @@ public class Player {
   // removes the card with the given name, from the hand
   public AdventureCard discardCardFromHand(String cardName) {
     int index = 0;
-    for (AdventureCard card : this.hand) {
+    for (AdventureCard card : this.cards) {
       if (card.name.equals(cardName)) {
         this.cards.remove(index);
 
@@ -150,7 +148,7 @@ public class Player {
 
   //
   public AdventureCard getHandCard(String name) {
-    for (AdventureCard card : this.hand) {
+    for (AdventureCard card : this.cards) {
       if (card.name == name) {
         return card;
       }
@@ -214,7 +212,7 @@ public class Player {
       personalBattleScore += 20;
     }
     // loop through the hand to add the pts: Ally, Amour, Weapon have battle points
-    for (AdventureCard card : this.hand) {
+    for (AdventureCard card : this.cards) {
       if (card instanceof Ally) {
         personalBattleScore += card.getBattlePoints();
       } else if (card instanceof Amour) {

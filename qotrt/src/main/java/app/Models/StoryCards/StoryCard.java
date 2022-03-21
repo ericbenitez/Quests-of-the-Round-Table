@@ -1,11 +1,14 @@
 package app.Models.StoryCards;
 
 import java.util.ArrayList;
+
+import app.Models.Enums.StoryCardType;
 import app.Models.General.*;
 
 public abstract class StoryCard extends Card {
 
     protected Player drawer;
+    protected StoryCardType storyCardType;
 
     public void setDrawer(Player player){
         this.drawer = player;
@@ -23,4 +26,7 @@ public abstract class StoryCard extends Card {
         return this.name;
     }
 
+    public StoryCardType getStoryCardType() {
+        return this.storyCardType;
+    }
 }

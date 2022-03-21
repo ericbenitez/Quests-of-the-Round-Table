@@ -2,11 +2,9 @@ package app.Models.StoryCards;
 
 import java.util.ArrayList;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import app.Models.AdventureCards.*;
-import app.Models.General.*;
-import app.Service.GameService;
+import app.Models.AdventureCards.AdventureCard;
+import app.Models.Enums.StoryCardType;
+import app.Models.General.Player;
 
 public class Quest extends StoryCard {
     protected String name;
@@ -21,6 +19,7 @@ public class Quest extends StoryCard {
         this.totalStages = totalStages;
         this.foeName = foe;
         this.stages = new ArrayList<>();
+        this.storyCardType = StoryCardType.Quest;
     }
 
     public void setSponsor(Player player) {
@@ -30,8 +29,6 @@ public class Quest extends StoryCard {
     public String getFoeName() {
         return foeName;
     }
-
-    public int getTotalStages() { return this.totalStages; }
 
     public ArrayList<ArrayList<AdventureCard>> getStages() { return this.stages; }
 
@@ -46,9 +43,9 @@ public class Quest extends StoryCard {
     public String getName() {
         return name;
     }
-    public String getStages(){return String.valueOf(totalStages);}
-
     
+    public String getTotalStages() { return String.valueOf(totalStages); }
+
     @Override
     protected void draw(Player player) {
 

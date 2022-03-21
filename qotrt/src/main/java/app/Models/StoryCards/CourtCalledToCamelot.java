@@ -12,7 +12,7 @@ public class CourtCalledToCamelot implements EventBehaviour {
     // check and delete for all allies in the player's hand
 
     for (Player player : players) {
-      for (AdventureCard card : player.hand) {
+      for (AdventureCard card : player.cards) {
         if (card instanceof Ally) {
           player.discardCardFromHand(((Ally) card).getName());
         }

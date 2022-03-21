@@ -1,4 +1,3 @@
-let theCards = ["card1", "card2", "card3", "card4", "card5", "card6", "card7", "card8", "card9", "card10", "card11", "card12"];
 let tempPlayerNum = 1;
 let currCardsFacedDown = []
 
@@ -131,11 +130,25 @@ function getAllChecked() {
 
 }
 
+function getAllUnchecked() {
+    let unChecked = [];
+    let cards = document.getElementById("playerHand").children;
+
+    // start at 1 since the first child is just text "Your Cards" (nvm for now)
+    for (let i = 0; i < cards.length; i++) {
+        if (!cards[i].firstChild.checked) {
+            unChecked.push(cards[i].firstChild.name);
+        }
+    }
+    return unChecked;
+
+}
 
 
 function removeAllCheckedCards(checked) {
     for (let i = 0; i < checked.length; i++) {
         removeCardFromDisplay(checked[i]);
+
     }
 }
 
@@ -171,9 +184,8 @@ function turnCardsOver() {
 
     // remove the square for the player cards (what's currently in that div)
 
-    while (currCards.firstChild) {
-        currCards.removeChild(currCards.firstChild);
-    }
+    const cardsDown = document.getElementById("cardsDown-" + playerId);
+    cardsDown.remove();
 
     // display the cards
     placeCards(stageCards);
@@ -191,12 +203,16 @@ function turnCardsOver() {
 function getAdventureCards() {
     stompClient.send("/app/getAdvCard", {}, JSON.stringify(playerId));
     //stompClient.subscribe("/topic/getAdvCard", callback);
-    stompClient.subscribe('/topic/getAdvCard', function (response) {
+    const advCardSubscription = stompClient.subscribe('/user/queue/getAdvCard', function (response) {
         let data = JSON.parse(response.body);
 
         // for testing purposes
-        playerHand.push(data);
-
+        if (playerHand.size < 12) {
+            playerHand.push(data); //{name: "blab", ba..}
+        }
+        if (playerHand.size >= 12) {
+            alert("You already have 12 adventure cards in your hand, discard some to get more!");
+        }
         //console.log(data);
         let hand = document.getElementById("playerHand");
         /*all for creating a label :))*/
@@ -214,6 +230,8 @@ function getAdventureCards() {
         div.appendChild(newCheckbox);
         div.appendChild(newLabel);
         hand.appendChild(div);
+
+        advCardSubscription.unsubscribe();
     });
-    stompClient.unsubscribe('/topic/getAdvCard');
+    //stompClient.unsubscribe('/topic/getAdvCard');
 }

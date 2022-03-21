@@ -5,7 +5,7 @@ function showResponse(data, playerName) {
 
   let message = "The game is full or there was an issue."
   if (data.body != null) {
-    message = playerName + " has successfully joined the game. They are player number "  + data.body;
+    message = playerName + " has successfully joined the game. They are player number " + data.body;
 
   }
 
@@ -18,11 +18,10 @@ function showResponse(data, playerName) {
 
 // displays if the game is successfully created
 function displayCreateGameResponse(data, playerName, numPlayers) {
-
   let message = "The game cannot be created."
   if (data != null) {
 
-    gameID = JSON.parse(data.body).body
+    gameID = data
 
     message = "The game " + gameID + " has successfully been created! Welcome to the game " + playerName + ". " +
       "This game will have " + numPlayers + " players."
@@ -55,3 +54,8 @@ function validInputString(input) {
   return true;
 }
 
+function finishTurn() {
+  //moves on to the next player..
+  stompClient.send("/app/finishTurn", {}, {});
+  
+}

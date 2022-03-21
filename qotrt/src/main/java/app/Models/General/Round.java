@@ -2,34 +2,46 @@ package app.Models.General;
 
 import java.util.ArrayList;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.client.ClientsConfiguredCondition;
 
-import app.Models.AdventureCards.*;
-import app.Models.StoryCards.*;
-import app.Service.GameService;
-import org.springframework.stereotype.Component;
+import app.Controllers.GameController;
+import app.Models.AdventureCards.AdventureCard;
+import app.Models.StoryCards.Quest;
+import app.Models.StoryCards.StoryCard;
 
-@Component
 public class Round {
   public String name;
-
-  private GameService gameService;
-
-  @Autowired
-  public Round(GameService gameService) {
-    this.gameService = gameService;
-  }
+  public ProgressStatus roundProgress;
 
   StoryCard storyCard; // each turn identified by story card..
-
   ArrayList<Player> participants; // for quests
   ArrayList<AdventureCard> discardedCards;
+  ArrayList<ArrayList<String>> stageCards;
+  private int currentStage = 0;
+  private int maxStages = 0;
 
-  public Round() {
+  private GameController gameController;
+
+  public Round(GameController gameController) {
+    this.gameController = gameController;
+    this.roundProgress = ProgressStatus.NEW;
     this.participants = new ArrayList<>();
     this.discardedCards = new ArrayList<>();
+    this.stageCards = new ArrayList<>();
   }
 
+  public void setStages(ArrayList<ArrayList<String>> clientStages) {
+    this.stageCards = clientStages;
+  }
+
+  public void setStage(ArrayList<String> clientStage) {
+    if (this.stageCards.size() >= maxStages) {
+      return;
+    }
+    stageCards.add(clientStage);
+  }
+
+  // the quest participants
   public void addParticipant(Player player) {
     participants.add(player);
   }
@@ -43,17 +55,59 @@ public class Round {
     }
   }
 
+  public int getCurrentStage() {
+    return this.currentStage;
+  }
+
+  public boolean goToNextStage() {
+    this.currentStage++;
+    return (this.currentStage == this.maxStages) ? false : true;
+  }
+
   public String getName() {
     return this.name;
   }
 
   public StoryCard setStoryCard(StoryCard storyCard) {
     this.storyCard = storyCard;
+
+    if (storyCard instanceof Quest) {
+      Quest quest = (Quest) storyCard;
+      this.maxStages = Integer.parseInt(quest.getTotalStages());
+    }
+
     return this.storyCard;
   }
 
-  public void addDiscardedCards(AdventureCard card){
+  public void addDiscardedCards(AdventureCard card) {
     discardedCards.add(card);
+  }
+
+  public ArrayList<ArrayList<String>> getStageCards() {
+    return stageCards;
+  }
+
+  public void nextStep(GameController gameController) {
+    // get active player
+    // send request to pick story card
+
+    // Game game = this.gameService.getCurrentGame();
+    // Player player =
+    // game.getPlayers().get(this.gameService.getCurrentActivePlayer());
+
+    // new story card
+    // if (this.roundProgress == ProgressStatus.NEW) {
+    // Game game = gameService.getCurrentGame();
+
+    // Player player = game.getPlayers().get(game.currentActivePlayer);
+
+    // gameController.startTurn(player.getId()); //tell the player to make a move
+    // game.setCurrentActivePlayer(game,.getc);
+    // }
+
+    // if (this.roundProgress == ProgressStatus.IN_PROGRESS) {
+
+    // }
   }
 
   /*
