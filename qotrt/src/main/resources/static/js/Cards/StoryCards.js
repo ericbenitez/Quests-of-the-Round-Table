@@ -19,13 +19,12 @@ function displayStoryCard(storyCard) {
 
   
   activeStoryCard = storyCard.name; //setting the global variable to info from the pickCard
-  
   activeStoryCardType = storyCard.storyCardType;
+  
   storyCardDiv.appendChild(document.createTextNode(name));
   storyCardDiv.appendChild(document.createElement("br"));
   storyCardDiv.appendChild(document.createTextNode(storyCardType));
 
-  //
   if(storyCardType==="Quest"){
     if (playerId === currentActivePlayer) {
       const isSponsoring = confirm("Do you want to sponsor?");
@@ -35,6 +34,7 @@ function displayStoryCard(storyCard) {
       if (!isSponsoring) {
           alert("I see that you don't want to sponsor, press the Transfer Quest button")
       }
-    }
+    
+  }
   }
 }

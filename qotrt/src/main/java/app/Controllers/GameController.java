@@ -1,8 +1,8 @@
 package app.Controllers;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import app.Controllers.dto.DoubleArrayMessage;
 
@@ -24,7 +25,7 @@ import app.Models.AdventureCards.AdventureCard;
 import app.Models.General.Game;
 import app.Models.General.Player;
 import app.Models.General.ProgressStatus;
-import app.Models.General.Round;
+import app.Models.General.Session;
 import app.Models.StoryCards.Quest;
 import app.Models.StoryCards.StoryCard;
 import app.Service.GameService;
@@ -48,25 +49,22 @@ public class GameController {
   @MessageMapping("/game/start") // server
   @SendTo("/topic/game/started") // client
   public ResponseEntity<String> start(int numPlayers) throws Exception {
-    Game game = gameService.createGame(numPlayers);
-
+    this.gameService.createGame(numPlayers);
     // wait for players
     while (this.gameService.getCurrentGame().getPlayers().size() < numPlayers) {
       Thread.sleep(1000);
     }
-
-    // this.gameService.nextStep();
-    this.gameService.getCurrentGame().startNewRound(this);
-
+    Game game= this.gameService.getCurrentGame();
+    System.out.println("the num of players in this game"+this.gameService.getCurrentGame().getNumOfPlayers());
     return ResponseEntity.ok(game.getGameID());
   }
 
-  // After starting, allow other players to connect
-  @MessageMapping("/playerJoining")
-  @SendToUser("/queue/joinGame")
-  public ResponseEntity<Integer> joinGame(String playerName) throws Exception {
-    return ResponseEntity.ok(this.gameService.joinGame(playerName));
-  }
+   // After starting, allow other players to connect
+   @MessageMapping("/playerJoining")
+   @SendToUser("/queue/joinGame")
+   public ResponseEntity<Integer> joinGame(String playerName) throws Exception {
+     return ResponseEntity.ok(this.gameService.joinGame(playerName));
+   }
 
   @MessageMapping("/getAdvCard")
   @SendToUser("/queue/getAdvCard")
@@ -80,34 +78,37 @@ public class GameController {
   @SendToUser("/queue/giveCards")
   public ArrayList<AdventureCard> giveCards(String playerId) {
     Player player = this.gameService.getCurrentGame().getPlayerById(Integer.parseInt(playerId));
+    player.drawCards(12);
     return player.getCards();
   }
 
+
+  @MessageMapping("/ready")
+  @SendTo("/topic/startTurn")
+  public int ready() {
+    if(this.gameService.getCurrentGame().getPlayers().size() == this.gameService.getCurrentGame().getNumOfPlayers()){
+      return this.gameService.getCurrentActivePlayer();}
+    return 0;
+  }
+
+
   @MessageMapping("/sponsorQuest")
   @SendTo("/topic/sponsorQuest")
-  public Quest sponsorQuest(String currentQuest) {// name of the quest
-    System.out.println(currentQuest); // sponsorQuest()
-    // gameService.getCurrentGame().setCurrentQuest(currentQuest); //setting the
-    // quest before the player
-
-    Player player = gameService.getCurrentGame().getPlayers().get(gameService.getCurrentActivePlayer());
-    gameService.settingSponsor(player.getId());// it's supose to pass in the currActive player's id
-    System.out.println(gameService.getCurrentGame().getCurrentQuest());
-    // this.gameService.nextStep();
-
-    Quest quest = gameService.getCurrentGame().getCurrentQuest();
-    return quest;
+  public Quest sponsorQuest() {// name of the quest
+   
+    Player p = gameService.getCurrentGame().getPlayerById(gameService.getCurrentActivePlayer());
+    gameService.getCurrentGame().getCurrentQuest().setSponsor(p);
+    return gameService.getCurrentGame().getCurrentQuest();
   }
+  
 
   @MessageMapping("/pickCard")
   @SendTo("/topic/pickCard")
-  public ResponseEntity<StoryCard> pickCard() throws Exception {
-    // if (this.gameService.getCurrentGame().getProgressStatus() !=
-    // ProgressStatus.IN_PROGRESS)
-    // return null;
-
+  public StoryCard pickCard(){
+    // System.out.println("this is the player Id for pick Card" +playerId);
     StoryCard storyCard = this.gameService.getCurrentGame().pickCard();
-    return ResponseEntity.ok(storyCard);
+    this.gameService.setCurrentStoryCard(storyCard);
+    return storyCard;
   }
 
   @SendTo("/topic/doYouWantToSponsor")
@@ -148,66 +149,43 @@ public class GameController {
     gameService.withdrawQuest(playerId.getMessage());
   }
 
-  // @SendTo("/topic/startTurn")
-  // @MessageMapping("/startTurn")
-  public void startTurn(int playerId) {
-    this.simpMessage.convertAndSend("/topic/startTurn", playerId);
-    // return ResponseEntity.ok(playerId);
-  }
 
-  @MessageMapping("/nextStep")
-  @SendTo("/topic/nextStep")
-  public int nextStep() {
-    this.gameService.nextStep();
-    this.gameService.startNextPlayer();
-    return this.gameService.getCurrentActivePlayer();
-  }
+  // @MessageMapping("/nextStep")
+  // @SendTo("/topic/nextStep")
+  // public int nextStep() {
+  //   this.gameService.nextStep();
+  //   this.gameService.startNextPlayer();
+  //   return this.gameService.getCurrentActivePlayer();
+  // }
 
   @MessageMapping("/finishTurn")
   @SendTo("/topic/finishTurn")
-  public int finishTurn() {
-    int index = gameService.startNextPlayer();
-    Player player = this.gameService.getCurrentGame().getPlayers().get(index);
-    
-    
-    
-    return player.getId();
+  public Session finishTurn() {
+
+    Session currSession = new Session();
+    currSession.currentActivePlayer = gameService.startNextPlayer();
+    currSession.currentStoryCard = gameService.getCurrentStoryCard();
+    currSession.questInPlay = gameService.getQuestInPlay(); //bool
+    currSession.sponsorId = gameService.getCurrentGame().getCurrentQuest().getSponsor().getId(); //id of the sponsor
+    currSession.participantsId = gameService.getCurrentGame().getCurrentQuest().getParticipantsId();//id of the sponsor
+    return currSession;
   }
 
-  @MessageMapping("/incrementStage")
-  @SendTo("/topic/incrementStage")
-  public boolean incrementStage(int currStage) {
-    return gameService.incrementStage(currStage);
-  }
+  // @MessageMapping("/incrementStage")
+  // @SendTo("/topic/incrementStage")
+  // public boolean incrementStage(int currStage) {
+  //   return gameService.incrementStage(currStage);
+  // }
   
   
   
   // [[stage 1 cards], [stage 2 cards]] .. ["sfs","grgw","rger"]
   @MessageMapping("/setStages")
   @SendTo("/topic/setStages") // String [] clientStages
-  public ArrayList<ArrayList<String>> setStages(@RequestBody DoubleArrayMessage clientStages) {
-    /*
-     * String[] stages = clientStages.split("/");
-     * 
-     * ArrayList<List<String>> serverStages = new ArrayList<>();
-     * 
-     * for (String stage: stages) {
-     * String newStage = stage
-     * String[] stageList = stage.split(",");
-     * List<String> convertedStageList = new ArrayList<String>();
-     * convertedStageList = Arrays.asList(stageList);
-     * 
-     * serverStages.add(convertedStageList);
-     * }
-     * 
-     * System.out.println("stages: " + stages.toString());
-     * Round round = this.gameService.getCurrentGame().getCurrentRound();
-     */
-    Round round = this.gameService.getCurrentGame().getCurrentRound();
-    // the double array list
-    ArrayList<ArrayList<String>> arr = clientStages.getCards();
+  public ArrayList<ArrayList<String>> setStages(@RequestBody DoubleArrayMessage sponsorStages) {
+   
+    ArrayList<ArrayList<String>> arr = sponsorStages.getCards();
     System.out.println(arr);
-    round.setStages(arr);
-    return round.getStageCards();
+    return arr;
   }
 }

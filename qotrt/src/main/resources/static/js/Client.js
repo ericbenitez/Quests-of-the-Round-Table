@@ -14,7 +14,6 @@ let activeStoryCard = "";
 let participant = false;
 let sponsor = false;
 let isTurn = false;
-// the player's 12 cards
 let playerHand = []; //the adventure cards go here...because we can set a limit 
 let stageCards = [];
 
@@ -72,102 +71,26 @@ function createGame() {
  * Send request to pick a story card
  */
 function pickCard() {
-  // if (!isTurn) return
-
-  stompClient.send("/app/pickCard", {}, "");
-
-  // stompClient.subscribe("/user/queue/pickCard", (response) => {
-  //   const data = JSON.parse(response.body).body;
-
-  //   displayStoryCard(data);
-  // })
-
+  stompClient.send("/app/pickCard",{});
 }
-
-
 
 function joinGame() {
   if (playerName !== "") return
-
   playerName = document.getElementById("player-name").value.trim();
 
   if (!validInputString(playerName)) {
     alert("Please enter a name.");
     return;
   }
-
-
   subscriptions();
 
   // send request to server to join
   stompClient.send("/app/playerJoining", {}, playerName);
 }
 
+
+
 function subscriptions() {
-
-  stompClient.subscribe("/topic/setStages", function (response) { //need all players subscribe to this
-    let data = JSON.parse(response.body); //should be an aray
-    let stageSpecificDiv = document.createElement("div");
-    for (let i = 0; i < data.length; i++) {
-      stageSpecificDiv.append("Cards for Stages " + (i + 1));
-      for (let j = 0; j < data[i].length; j++) {
-        stageSpecificDiv.append(data[i][j]);
-        stageSpecificDiv.append(document.createElement("br"));
-      }
-    }
-    document.getElementById("stages").appendChild(stageSpecificDiv);
-  });
-  console.log("subscribed")
-  //From finish Turn...
-  stompClient.subscribe("/topic/finishTurn", function (response) { //response = currentActiveplayer 
-    let data = JSON.parse(response.body); //the id of the next active player..
-    currentActivePlayer = data;
-
-    if (playerId == data) {
-      if (activeStoryCardType === "Quest") {
-        // joinQuest();
-        if (sponsor) {
-          winStage(); //checking the stage cards from each player and deciding who won that specific stage
-          stompClient.send("/app/incrementStage", {}, currentStage);
-          stompClient.subscribe("/topic/incrementStage", function (response) {
-            let data = JSON.parse(response.body); //returns a boolean
-            if (data) { currentStage += 1 };//increment the stage if true.
-            if (!data) {
-              alert("Hey the quest is complete, grab this many adventure cards " + selectedCards);
-              // sponsor = false; 
-              currentQuest = "";
-              activeStoryCardType = "";
-            }
-          })
-          finishTurn(); //move to the next player
-        }
-        if (participant) {
-          alert("set stages for " + currentStage);
-
-        }
-        alert("If you'd like to participate in the quest, click Join Quest"); //if not sponsor/if not pariticpant
-      }
-
-      else { //this is if the current active story card is empty!
-        alert("Pick a story Card!");
-      }
-    }
-  })
-
-
-
-  const joinGameSubscription = stompClient.subscribe("/user/queue/joinGame", (response) => {
-    const data = JSON.parse(response.body);
-    playerId = data.body;
-    showResponse(data, playerName);
-
-    stompClient.subscribe("/topic/pickCard", (response) => {
-      const data = JSON.parse(response.body).body;
-      displayStoryCard(data);
-    })
-
-    joinGameSubscription.unsubscribe();
-  })
 
   const gameStartedSubscription = stompClient.subscribe('/topic/game/started', function (response) {
     let data = JSON.parse(response.body);
@@ -181,65 +104,62 @@ function subscriptions() {
   });
 
   console.log("game started")
-  // subscribe to "wait for server to tell client to start"
-  stompClient.subscribe("/topic/startTurn", (response) => { // does not get called
-    // console.log(response)
-    if (response.body * 1 === playerId) {
-      // isTurn = true;
-      // ungreys out buttons
-      // start turn
-      // wait for player input, request server to pick storyCard
+
+
+  const joinGameSubscription = stompClient.subscribe("/user/queue/joinGame", (response) => {
+    const data = JSON.parse(response.body);
+    playerId = data.body;
+    showResponse(data, playerName);
+    
+    setTimeout(() => {  alert("Click on initialize cards to begin the game"); }, 2000);
+    setTimeout(() => {  stompClient.send("/app/ready",{},""); }, 2000);
+
+     
+    joinGameSubscription.unsubscribe();
+  })
+
+   // subscribe to "wait for server to tell client to start"
+   stompClient.subscribe("/topic/startTurn", (response) => { // does not get called
+    console.log("This is after initilizing", response.body);
+    if (response.body * 1 !== 0 && response.body * 1 === playerId) {
       alert("Pick a Story Card");
     }
   })
 
-  //if it's a quest card ...pickCard returns a name -> 
-  // client does pickCard
-  // server decides what to do with the card
 
-  //alert do you want to sponser?? --> 
-  // do you wnat to sponsor
-  // do you want participate
-  // startQuest/startTournament broadcast
+  stompClient.subscribe("/topic/pickCard", function(response){
+    const data = JSON.parse(response.body);
+    //console.log("From pick Card",data); //name: 'Slay the Dragon', drawer: null, storyCardType: 'Quest', totalStages: '3', foeName: 'Dragon', …}
+    displayStoryCard(data);
+  })
 
-  //broadcast other players to join
-  stompClient.subscribe("/topic/doYouWantToSponsor", (sponsor) => {
-    const isSponsoring = confirm("Do you want to sponsor?")
-    if (isSponsoring) {
-      alert("Cool, you can press on the button Sponsor Quest button!")
+
+  //This is so that all players can see the stages for a quest that the sponsor sets
+  stompClient.subscribe("/topic/setStages", function (response) { //need all players subscribe to this
+    let data = JSON.parse(response.body); //should be an aray
+    let stageSpecificDiv = document.createElement("div");
+    for (let i = 0; i < data.length; i++) {
+      stageSpecificDiv.append("Cards for Stages " + (i + 1));
+      for (let j = 0; j < data[i].length; j++) {
+        stageSpecificDiv.append(data[i][j]);
+        stageSpecificDiv.append(document.createElement("br"));
+      }
     }
-    if (!isSponsoring) {
-      alert("I see that you don't want to sponsor, press the Transfer Quest button")
-    }
-
-    // do alert that asks for yes/no <--- confirm 
-    //if no(another alert telling them to click on pass quest)
-    //pass quest has an onclick that moves the turn to the next player.. 
-    //if (yes).. alert tells the player to click on sponsor quest button which has an onlclick function
-    //that sets the curr player to sponser...calls quest.setSponsor on the server side
-    //... 
+    document.getElementById("stages").appendChild(stageSpecificDiv);
+  });
+  
+  
+  //From finish Turn...
+  stompClient.subscribe("/topic/finishTurn", function (response) { //response = currentActiveplayer 
+    let data = JSON.parse(response.body); //the id of the next active player..
+    console.log(data);
+    
   })
 
-  stompClient.subscribe("/topic/doYouWantToParticipate", (sponsor) => {
-    const isParticipating = confirm("Do you want to participate in the event?")
-    //calls other players to check if they are pariticpating in the quest
-    //alert them to ask to click on paticipate quest 
-    //joinQuest onClick() , Quest 
-  })
 
-  stompClient.subscribe("/topic/startQuest", (participants) => {
-    // if your id is inside participants, you are part of the quest
-    // 
-  })
-
-  stompClient.subscribe("/topic/startTournament", (participants) => {
-
-  })
-
-  //later details..
-  //greys out the button if it's not the player's turn. 
-  //message indicating player's turn.. traffic light
 }
+
+//~~~~~~~~~~~~~Subscription ends here~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 function setupWindow() {
   //window.addEventListener("load", displayAllCards(theCards));
@@ -489,7 +409,6 @@ function initializeAdv() {
   const connection = stompClient.subscribe("/user/queue/giveCards", (response) => {
     const data = JSON.parse(response.body);
     console.log(data);
-    // connection.unsubscribe();
     playerHand = data;
     displayAllCards(data);
   });

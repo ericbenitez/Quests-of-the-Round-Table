@@ -4,11 +4,10 @@ let foe = "";
 function sponsorQuest() {
     //console.log("here");
     sponsor = true;
-    questHappening = true;
-    stompClient.send("/app/sponsorQuest", {}, activeStoryCard);
+    stompClient.send("/app/sponsorQuest", {});
     stompClient.subscribe('/topic/sponsorQuest', function (response) {
         var data = JSON.parse(response.body);
-        //console.log("here is the data", data);
+        console.log("here is the data", data);
         currentQuest = data.name;
         currentStages = data.totalStages * 1;
         foe = data.foeName;
@@ -31,67 +30,17 @@ function setStages(currentQuest, currentStages, foe) {
         dynamicButton.appendChild(t);
         dynamicButton.setAttribute("onclick", "stageNumCards()");
         dynamicButton.setAttribute("id", "stageButton")
-        document.getElementById("placeCardButtons").appendChild(dynamicButton)
+        document.getElementById("placeCardButtons").appendChild(dynamicButton);
 
     }
     else {
         alert("you have no more stages to set, click Complete Turn! ");
         stompClient.send("/app/setStages", {}, JSON.stringify({ 'cards': myStages })); //sends the stages cards name to server
-        alert("click Finish Turn");
     }
 
 }
 
-
-
-
-
-
 participants = [];
-//loop for the quest which only goes around the participating players..
-// function getParticipants(currentActivePlayer) { //id of the sponsor
-//     // currentActivePlayer + 1.. 
-//     //the next player should get some notification
-//     if (currentActivePlayer < numOfPlayer) {
-//         if (currentActivePlayer + 1) { //next person to the sponsor
-//             // tell server to ask next person if they wanna participate
-//             //after they click on participate in quest
-//             stomp.stompClient("/app/addParticipant", {}, ...);
-//             // reponse. and we add the player to participants array {
-//             //tells them to choose their cards for the stages
-//         }
-//         let answer = confirm("Do you want to participate in the quest " + currentQuest);
-//         if (answer) {
-//             //add them to the participants array
-//             participants.push(currentActivePlayer + 1); //push their id into the participants array
-
-//         }
-//         if (!answer) {
-//             alert("ok bye")
-//             getParticipants(currentActivePlayer + 1)
-//         }
-//     }
-// }
-// if (currentActivePlayer === numOfPlayer) {
-//     questBegins(participants);
-// }
-
-
-// function questBegins(participants) {
-//     count = 1;
-//     while (count <= currentStages) {
-//         for (participant in participants) {
-//             if (participant == playerId) {
-//                 alert("choose cards for stage " + count);
-//             }
-//         }
-//         //here we want to check the winners of stage 1
-//         winStage(); //returns true or false, 
-//         count++;
-//     }
-//     placeCardsQuest();//places the cards in the blue area
-// }
-
 let maxBattlePoints = [];
 let myStages = [];
 function stageNumCards() {
@@ -110,6 +59,7 @@ function stageNumCards() {
         battlePointsForThisStage += checked[i].battlePoints; //[{"name":fs,"battlePoints":52},{gsgs}]
         selectedCards++;
     }
+    //here make sure the battlepoints are greater than the previous ones... recall the function
     maxBattlePoints.push(battlePointsForThisStage);
     count++;
     //Remove things

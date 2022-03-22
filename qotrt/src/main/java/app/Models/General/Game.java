@@ -2,7 +2,7 @@ package app.Models.General;
 import app.Objects.CardObjects;
 import java.util.ArrayList;
 
-import app.Controllers.GameController;
+
 import app.Models.AdventureCards.*;
 import app.Models.StoryCards.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,41 +10,37 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Game implements Mediator { // Main = Game
-  int currentActivePlayer = 0;
+  ArrayList<AdventureCard> discardedCards;
   ArrayList<AdventureCard> adventureCardsDeck;
   ArrayList<StoryCard> storyCardsDeck;
   CardObjects gameCards; //get the adventure /story cards that are in the game
-  ArrayList<Player> players; // the observers...
-  int uniquePlayerId; // increments every time a player is registered
-  ArrayList<Round> rounds; // size is 0
-  public ArrayList<String> requests;
+  ArrayList<Player> players; 
   String gameID;
   // Variable which asks the initial/starting player how many players should join
   int numOfPlayers;
   //Status of Game : NEW, IN-Progress, Finished..a set status function below..
-  private ProgressStatus status;
-  //we dont have instances of games, it's just the currentGame, if it's not null, it is NEW/In-progress
-  Game currentGame=null; //setGame(Game g) below
+  private ProgressStatus status;//we dont have instances of games, it's just the currentGame, if it's not null, it is NEW/In-progress
+  Quest currentQuest;
+
   @Autowired
   public Game() {
     this.adventureCardsDeck = new ArrayList<>();
     this.storyCardsDeck = new ArrayList<>();
-    this.rounds = new ArrayList<>();
-    this.uniquePlayerId = 0;
+    this.discardedCards = new ArrayList<>();
+
   }
+  
   public int getNumOfPlayers(){
     return numOfPlayers;
   }
-  // observes a player
+
   public Player registerPlayer(Player player) {
-    // if (players.size() >= numOfPlayers) {
-    //   return null; //we should throw an exception instead...
-    // }
+    if (players.size() >= numOfPlayers) {
+      return null; //we should throw an exception instead...
+    }
     player.setMediator(this); 
-    // added by Donna: so I can see the cards for making the front end
-    player.drawCards(12);
-    this.players.add(player);
-    this.uniquePlayerId += 1;
+    this.players.add(player); //add to array
+    // player.drawCards(12); in the game controller now
     return player;
   }
   
@@ -94,35 +90,23 @@ public class Game implements Mediator { // Main = Game
     if (this.storyCardsDeck.isEmpty()) {
       return null;
     }
-    
-    this.getCurrentRound().storyCard = this.storyCardsDeck.get(0);
-    if (this.getCurrentRound().storyCard instanceof Quest) {
-      String name = this.getCurrentRound().storyCard.getName();
-      this.setCurrentQuest(name);
+    StoryCard card;
+    card = this.storyCardsDeck.get(storyCardsDeck.size() - 1);
+    if (card instanceof Quest) {
+      this.setCurrentQuest((Quest) card); //this is also setting the current whereas we have setcurrent function as well
+      // this.currentQuest.draw(this.getPlayerById(playerId));
     }
+    //have to do this for all other story cards.
     
-    this.storyCardsDeck.remove(0);
-    return this.getCurrentRound().storyCard;
-  }
-  
-  public String getCurrentTurnName() {
-    if (this.rounds.isEmpty())
-      return null;
-    return this.rounds.get(this.rounds.size() - 1).getName();
+    this.storyCardsDeck.remove(storyCardsDeck.size() - 1);
+    return card;
   }
 
-  public Round getCurrentRound() {
-    if (this.rounds.isEmpty())
-      return null;
-    return this.rounds.get(this.rounds.size() - 1);
-  }
+ 
 
   // displays all the discarded cards
   public void displayDiscardedCards() {
-    if (rounds.size() == 0) {
-      return;
-    }
-    for (AdventureCard card : rounds.get(rounds.size() - 1).discardedCards) {
+    for (AdventureCard card : discardedCards) {
       System.out.println(card.name);
     }
   }
@@ -130,15 +114,16 @@ public class Game implements Mediator { // Main = Game
   // returns all the discarded cards
   public ArrayList<String> getDiscardedCards() {
     ArrayList<String> dCards = new ArrayList<>();
-    if (rounds.size() == 0) {
-      return dCards;
-    }
-    for (AdventureCard card : rounds.get(rounds.size() - 1).discardedCards) {
+   
+    for (AdventureCard card : discardedCards) {
       dCards.add(card.name);
     }
     return dCards;
   }
 
+  public void addDiscardedCards(AdventureCard card){
+    discardedCards.add(card);
+  }
   /**
    * Returns the size of the adventure cards deck
    * 
@@ -148,13 +133,7 @@ public class Game implements Mediator { // Main = Game
     return adventureCardsDeck.size();
   }
 
-  /**
-   * Returns the turns list
-   */
-  public ArrayList<Round> getRounds() {
-    return this.rounds;
-  }
-
+ 
   /**
    * Returns the connected players
    * 
@@ -164,13 +143,7 @@ public class Game implements Mediator { // Main = Game
     return this.players;
   }
 
-  public int getCurrentActivePlayer() {
-    return this.currentActivePlayer;
-  }
-  
-  public void setCurrentActivePlayer(int index) {
-    this.currentActivePlayer = index;
-  }
+
 
   // From TTT
   public void setGameID(String x) {
@@ -190,34 +163,20 @@ public class Game implements Mediator { // Main = Game
   public ProgressStatus getProgressStatus(){
     return status;
   }
-  public void setGame(Game g){
-    currentGame=g;
-  }
-  public Game getCurrentGame(){
-    return currentGame;
-  }
-  public int getUniquePlayerId() {return uniquePlayerId;}
+ 
+ 
   public ArrayList<AdventureCard> getAdventureCardsDeck(){return adventureCardsDeck;}
 
-  Quest currentQuest;
-  public void setCurrentQuest(String name){
-    for(StoryCard c: storyCardsDeck){
-      if(c instanceof Quest){
-        System.out.println("name of the card"+c.getName());
-        if (c.getName().equals(name)){ //added getName
-          System.out.println("setting name");
-          currentQuest = (Quest) c;
-          this.currentGame.getCurrentRound().setStoryCard(currentQuest);
-        }
-      }
-    }
-  }
+public void setCurrentQuest(Quest card){
+      this.currentQuest = card;
+}
+
   public Quest getCurrentQuest(){
     return currentQuest;
   }
 
   public Player getPlayerById(int playerId) {
-    for (Player player: this.players) {
+    for (Player player: players) {
       if (player.getId() == playerId) {
         return player;
       }
@@ -226,30 +185,16 @@ public class Game implements Mediator { // Main = Game
     return null;
   }
   
-  public void nextStep(GameController gameController) {
-    if (this.currentGame.getProgressStatus() == ProgressStatus.NEW) {
-      this.currentGame.setProgressStatus(ProgressStatus.IN_PROGRESS);
-      this.setCurrentActivePlayer(0); 
-      
-      for (Player player: this.getPlayers()) {
-        player.drawCards(12); 
-      }
-      
-      Round round = new Round(gameController);
-      this.rounds.add(round);
-      round.nextStep(gameController);
+  public Player checkWinner() {
+    // return the winning player
+    // Player winningPlayer;
+    for (Player p : players) {
+        if (p.getNumShields() >= 7) {
+            return p; // it has enough shields to be a knight
+        }
     }
-
-    // if game in progress...
-    else if (this.currentGame.getProgressStatus() == ProgressStatus.IN_PROGRESS) {
-        Round round = this.currentGame.getCurrentRound();
-        round.nextStep(gameController);
-    }
-  }
+    return null;
+}
   
-  public Round startNewRound(GameController gameController) {
-    Round round = new Round(gameController);
-    this.rounds.add(round);
-    return round;
-  }
+  
 }

@@ -8,7 +8,7 @@ public class Player {
   private static int uniqueId = 1;
   private int id;
   private int numShields;
-  private Game game; // the mediator of players
+  private Game game; 
 
   // list of cards
   public Card pickedCard; // from the story deck
@@ -50,41 +50,24 @@ public class Player {
     return numShields;
   }
 
+
+  /***
+   * Here the problem is the player can discard cards, but they don't go in the discarded pile.......
+   * @param cardName
+   * @return
+   */
   // selects a card to remove from the cards list
   public AdventureCard discardCard(String cardName) {
-    int index = 0;
     for (AdventureCard card : this.cards) {
       if ((card.name).equals(cardName)) {
-        this.cards.remove(index);
-
-        Round currentRound = game.getCurrentRound();
-        if (currentRound != null) {
-          currentRound.discardedCards.add(card);
-        }
+        this.cards.remove(card);
+        this.game.addDiscardedCards(card);
         return card;
       }
-      index++;
     }
     return null;
   }
 
-  // removes the card with the given name, from the hand
-  public AdventureCard discardCardFromHand(String cardName) {
-    int index = 0;
-    for (AdventureCard card : this.cards) {
-      if (card.name.equals(cardName)) {
-        this.cards.remove(index);
-
-        Round currentRound = game.getCurrentRound();
-        if (currentRound != null) {
-          currentRound.discardedCards.add(card);
-        }
-        return card;
-      }
-      index++;
-    }
-    return null;
-  }
 
   // set the mediator for players to communicate
   public void setMediator(Game game) {
