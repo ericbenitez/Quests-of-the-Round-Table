@@ -64,7 +64,7 @@
         <div id="decisionButtons">
           <button id="initCardButton" onclick='initializeAdv()'>Initialize cards</button>
           <button id="hand">Show Hand</button>
-          <button onclick="sponsorQuest()">Sponsor Quest</button>
+          <button id="sponserQuest" onclick="sponsorQuest()">Sponsor Quest</button>
           <!--only available to click when they're not sponsporing a quest-->
           <button id="joinQuest" onclick="joinQuest()">Join Quest</button>
           <button id="withdrawQuest" onclick="withdrawQuest()">Withdraw Quest</button>
@@ -94,12 +94,13 @@
 
 
   <!-- Just for testing -->
-  <button onclick="inQuest()">IN QUEST?</button>
-  <button onclick="placeCardsQuest()">Choose card for stage</button>
+  <button id="placeCardsQuest" onclick="placeCardsQuest()">Choose card for stage</button>
   <button onclick="updateShields(5)">Update Shields</button>
   <button onclick="removeUsedCardsLocal()">Delete used cards</button>
   <div id="battlePoints"></div> <!-- To display the total battle points for a player in a stage -->
   <button onclick="clearBattlePointDisplay()">Clear Battle points</button>
+  <button onclick="clearPlayerStageCards()">Clears player stage cards</button>
+  <button onclick="showCurrentStage()">Show current stage</button>
 
   <script src="./js/Cards/AdventureCards.js"></script>
   <script src="./js/Cards/Event.js"></script>
