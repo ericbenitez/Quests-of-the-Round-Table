@@ -149,7 +149,8 @@ public class GameService {
         if (playerId > this.currentGame.getPlayers().size() || playerId - 1 < 0) {
             return;
         }
-        
+        this.currentGame.getCurrentQuest().withdrawParticipant(playerId);
+
     }
 
 
