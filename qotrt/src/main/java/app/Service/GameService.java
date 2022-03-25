@@ -135,9 +135,9 @@ public class GameService {
 
     public boolean joinQuest(String id) {
         int playerId = Integer.parseInt(id);
-        if (playerId > this.currentGame.getPlayers().size() || playerId - 1 < 0) {
-            return false;
-        }
+        //if (playerId > this.currentGame.getPlayers().size() || playerId - 1 < 0) {
+         //   return false;
+        //}
         // get player so we can use the addPlayer function in turns
         // Player player = this.currentGame.getPlayerById(playerId);
         currentGame.getCurrentQuest().addParticipant(Integer.parseInt(id));

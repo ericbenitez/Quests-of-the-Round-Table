@@ -72,8 +72,9 @@ public class GameController {
   @MessageMapping("/getAdvCard")
   @SendToUser("/queue/getAdvCard")
   public AdventureCard getAdvCard(String playerId) {
-    if (this.gameService.getCurrentGame().getProgressStatus() != ProgressStatus.IN_PROGRESS)
-      return null;
+    // Progress - edit 1
+    //if (this.gameService.getCurrentGame().getProgressStatus() != ProgressStatus.IN_PROGRESS)
+    //  return null;
     return gameService.getAdventureCard(playerId);
   }
 
