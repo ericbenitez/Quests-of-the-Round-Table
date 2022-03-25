@@ -234,9 +234,9 @@ public class GameService {
 
     public boolean joinQuest(String id) {
         int playerId = Integer.parseInt(id);
-        if (playerId > this.currentGame.getPlayers().size() || playerId - 1 < 0) {
-            return false;
-        }
+        //if (playerId > this.currentGame.getPlayers().size() || playerId - 1 < 0) {
+         //   return false;
+        //}
         // get player so we can use the addPlayer function in turns
         Player player = this.currentGame.getPlayerById(playerId);
         Round round = this.currentGame.getCurrentRound();
@@ -252,8 +252,10 @@ public class GameService {
         if (playerId > this.currentGame.getPlayers().size() || playerId - 1 < 0) {
             return;
         }
+        // Testing
+        this.currentGame.getCurrentRound();
         this.currentGame.getCurrentRound().withdrawParticipant(playerId);
-
+        this.currentGame.getCurrentRound();
     }
 
     public void settingSponsor(int playerId) {

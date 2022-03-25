@@ -108,14 +108,38 @@ function subscriptions() {
   stompClient.subscribe("/topic/setStages", function (response) { //need all players subscribe to this
     let data = JSON.parse(response.body); //should be an aray
     let stageSpecificDiv = document.createElement("div");
+    let stageNumOfCardsDiv = document.createElement("div");
+
     for (let i = 0; i < data.length; i++) {
       stageSpecificDiv.append("Cards for Stages " + (i + 1));
+      stageSpecificDiv.append(document.createElement("br"));
+
+      stageNumOfCardsDiv.append("Cards for Stages " + (i + 1) + ": ");
+      stageNumOfCardsDiv.append(data[i].length + " cards");
+      stageNumOfCardsDiv.append(document.createElement("br"));
+      let hidden = document.createElement("div");
+      hidden.setAttribute("id", "stage" + (i + 1));
+      hidden.style.display = "none";
+      stageNumOfCardsDiv.append(hidden);
+      stageNumOfCardsDiv.append(document.createElement("br"));
+
       for (let j = 0; j < data[i].length; j++) {
         stageSpecificDiv.append(data[i][j]);
         stageSpecificDiv.append(document.createElement("br"));
+
+        hidden.appendChild(document.createTextNode(data[i][j]));
+        hidden.appendChild(document.createElement("br"));
+
       }
     }
-    document.getElementById("stages").appendChild(stageSpecificDiv);
+    if (sponsor){
+      document.getElementById("stages").appendChild(stageSpecificDiv);
+    }else{
+      //stageSpecificDiv.style.display = "none";
+      document.getElementById("stages").appendChild(stageNumOfCardsDiv);
+    }
+    
+    
   });
   console.log("subscribed")
   //From finish Turn...
@@ -165,6 +189,8 @@ function subscriptions() {
       const data = JSON.parse(response.body).body;
       displayStoryCard(data);
     })
+
+    initializeAdv();
 
     joinGameSubscription.unsubscribe();
   })
@@ -377,12 +403,13 @@ function placeCardsQuest() {
 
   let cardAtPlay = document.getElementById("stages");
   let div = document.createElement("div");
+  div.setAttribute("class", "placeCardsDiv");
   //div.id = "cardsDown";
   div.setAttribute('id', 'cardsDown-' + playerId);
   div.appendChild(document.createElement("br"));
   div.appendChild(document.createTextNode("---------- Player " + playerId + " cards for stage " + currentStage + " ----------"));
-  div.appendChild(document.createTextNode("P" + playerId));
-  div.appendChild(document.createTextNode("br"));
+  // div.appendChild(document.createTextNode("P" + playerId));
+  div.appendChild(document.createElement("br"));
   cardAtPlay.appendChild(div);
   document.getElementById("cardsDown-" + playerId).addEventListener("click", turnCardsOver);
   alert("Click complete turn if you're done setting your cards for stage " + currentStage);
@@ -462,6 +489,11 @@ function removeUsedCardsServer(cards) {
 function removeSelectedCards() {
   let checked = getAllChecked();
   removeCardsFromHand(checked);
+  alert(playerHand.length);
+  if (playerHand.length <= 12){
+    alert("enabling");
+    enableGameButtons();
+  }
 
 }
 
@@ -491,7 +523,17 @@ function initializeAdv() {
     console.log(data);
     // connection.unsubscribe();
     playerHand = data;
+    clearPlayerHandDisplay();
     displayAllCards(data);
   });
-
 }
+
+function showCurrentStage(){
+    // the first one is 0?
+    let stageNumber =  currentStage + 1;
+    alert("stage: " + stageNumber);
+    document.getElementById("stage" + stageNumber).style.display = "inline";
+}
+
+
+
