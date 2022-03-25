@@ -3,6 +3,9 @@ package app.Controllers;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -171,11 +174,23 @@ public class GameController {
     return currSession;
   }
 
-  // @MessageMapping("/incrementStage")
-  // @SendTo("/topic/incrementStage")
-  // public boolean incrementStage(int currStage) {
-  //   return gameService.incrementStage(currStage);
+  // public HashMap<String, Object> finishTurn() {
+  //   int index = gameService.startNextPlayer();
+  //   Player player = this.gameService.getCurrentGame().getPlayers().get(index);
+    
+  //   HashMap<String, Object> hashMap = new HashMap<>();
+  //   hashMap.put("player-id", player.getId());
+  //   hashMap.put("can-draw", this.gameService.canDraw());
+    
+  //   return hashMap;
   // }
+
+  @MessageMapping("/incrementStage")
+  @SendTo("/topic/incrementStage")
+  public boolean incrementStage(int currStage) {
+    return gameService.incrementStage(currStage);
+  }
+  
   
   
   // [[stage 1 cards], [stage 2 cards]] .. ["sfs","grgw","rger"]
@@ -186,5 +201,19 @@ public class GameController {
     ArrayList<ArrayList<String>> arr = sponsorStages.getCards();
     System.out.println(arr);
     return arr;
+  }
+  
+  @MessageMapping("/transferQuest")
+  @SendTo("/topic/transferQuest")
+  public int transferQuest(int playerId) {
+    Round round = this.gameService.getCurrentGame().getCurrentRound();
+    if (round.getCannotSponsor() < this.gameService.getCurrentGame().getPlayers().size()) {
+      round.increaseCannotSponsor();
+    }
+    
+    int index = gameService.startNextPlayer();
+    Player player = this.gameService.getCurrentGame().getPlayers().get(index);
+    
+    return player.getId();
   }
 }

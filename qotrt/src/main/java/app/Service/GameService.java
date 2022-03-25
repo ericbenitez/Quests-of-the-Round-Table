@@ -156,7 +156,27 @@ public class GameService {
 
 
   
+    public Quest getCurrentQuest() {
+        return currentGame.getCurrentQuest();
+    }
+    
+    public int canDraw() {
+        Quest quest = this.currentGame.getCurrentQuest();
+        int amount = 0;
+        
+        amount+=quest.getStages().size();
+        for (ArrayList<AdventureCard> stage: quest.getStages()) {
+            amount += stage.size();
+        }
+        
+        
+        return amount;
+    }
 
+    /**
+     * Returns the index of the current active player (not player id)
+     * @return int
+     */
     public int getCurrentActivePlayer() {
         return this.currentActivePlayer;
     }

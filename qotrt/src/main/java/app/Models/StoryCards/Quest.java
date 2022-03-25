@@ -63,6 +63,12 @@ public class Quest extends StoryCard {
     }
   }
 
+    
+    public Player getSponsor() {
+        return this.sponsor;
+    }
+    
+    
     public String getFoeName() {
         return foeName;
     }
@@ -82,12 +88,6 @@ public class Quest extends StoryCard {
     }
     
     public String getTotalStages() { return String.valueOf(totalStages); }
-    @Override
-    public void draw(Player player) {
-        // TODO Auto-generated method stub
-            this.drawer = player;   
-    }
-
   
 }
 

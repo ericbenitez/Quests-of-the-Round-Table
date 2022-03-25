@@ -5,7 +5,6 @@ import app.Service.GameService;
 public abstract class Card {
   protected String name;
   protected String description;
-  protected boolean cardFace = false;
   
   public String getName() {
     return this.name;
@@ -14,9 +13,6 @@ public abstract class Card {
   // @Autowired
   protected GameService gameService; //mediator ...
 
-  boolean getCardFace() { return this.cardFace; }
-  
-  protected abstract void draw(Player player);
   
   @Override
   public String toString() {

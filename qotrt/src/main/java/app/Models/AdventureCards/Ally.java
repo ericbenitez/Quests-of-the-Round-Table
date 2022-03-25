@@ -53,9 +53,4 @@ public class Ally extends AdventureCard {
     return name;
   }
 
-	@Override
-	public void draw(Player player) {
-		// TODO Auto-generated method stub
-		
-	}
 }
