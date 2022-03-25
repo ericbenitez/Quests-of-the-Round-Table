@@ -115,7 +115,7 @@ public class CardObjects {
       this.storyCards.add(new Quest("Repel the Saxon Raiders", 2, "All"));
     }
 
-    //this.storyCards.add(new Tournament("some tournament", 1));
+    // this.storyCards.add(new Tournament("some tournament", 1));
 
     Collections.shuffle(this.adventureCards);
     Collections.shuffle(this.storyCards);

@@ -51,12 +51,6 @@ public class Quest extends StoryCard {
     
     public String getTotalStages() { return String.valueOf(totalStages); }
 
-    @Override
-    protected void draw(Player player) {
-
-        // TODO Auto-generated method stub
-        // while something ask player input to find sponsor
-    }
 }
 
 class JourneyThruForest extends Quest {

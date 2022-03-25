@@ -18,12 +18,6 @@ public class EventCard extends StoryCard {
   protected void setEventBehaviour(EventBehaviour e){
     this.eventBehaviour = e;
   }
-
-  @Override
-  protected void draw(Player player) {
-    // TODO Auto-generated method stub
-    
-  }
   
   
   public void performEvent(ArrayList<Player> players, Player drawer) {

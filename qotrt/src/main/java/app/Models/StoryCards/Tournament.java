@@ -15,20 +15,7 @@ public class Tournament extends StoryCard {
     this.storyCardType = StoryCardType.Tournament;
   }
 
-
-  @Override
-  protected void draw(Player player) {
-    // TODO Auto-generated method stub
-    
-  }
-
   public int getBonusShields(){
     return this.bonusShields;
   }
-
-
-
-
-  
-
 }
