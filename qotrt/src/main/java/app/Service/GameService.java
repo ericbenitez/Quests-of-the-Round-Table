@@ -139,8 +139,8 @@ public class GameService {
             return false;
         }
         // get player so we can use the addPlayer function in turns
-        Player player = this.currentGame.getPlayerById(playerId);
-        currentGame.getCurrentQuest().addParticipant(player);
+        // Player player = this.currentGame.getPlayerById(playerId);
+        currentGame.getCurrentQuest().addParticipant(Integer.parseInt(id));
         return true;
     }
 

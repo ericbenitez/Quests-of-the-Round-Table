@@ -9,10 +9,10 @@ public class Quest extends StoryCard {
     protected String name;
     protected int totalStages;
     protected String foeName;
-    protected Player sponsor;
+    protected int sponsor;
     protected ArrayList<ArrayList<AdventureCard>> stages; //sponsor stages
     protected ArrayList<ArrayList<String>> clientStages;
-    ArrayList<Player> participants; // for quests
+    protected ArrayList<Integer> participants; // for quests
     private int currentStage = 0;
     // if all the foes pass 'all' to foeName
     public Quest(String name, int totalStages, String foe) {
@@ -22,8 +22,7 @@ public class Quest extends StoryCard {
         this.stages = new ArrayList<>();
         this.storyCardType = StoryCardType.Quest;
         this.clientStages = new ArrayList<>();
-        this.participants = new ArrayList<>();
-
+        this.participants = new ArrayList<>(3);
     }
 
     public void setSponsorStages(ArrayList<ArrayList<AdventureCard>> stages){
@@ -40,30 +39,24 @@ public class Quest extends StoryCard {
     clientStages.add(clientStage);
     }
 
-    public void setSponsor(Player player) {
-        this.sponsor = player;
+    public void setSponsor(int sponsorId) {
+        this.sponsor = sponsorId;
     }
-    public Player getSponsor(){
+    public int getSponsor(){
         return this.sponsor;
     }
-    public void addParticipant(Player player) {
-        participants.add(player);
+    public void addParticipant(int playerId) {
+        participants.add(playerId);
       }
 
       //get participants id 
-      public int[] getParticipantsId(){
-          int [] paticipantsId = {};
-          int index=0;
-          for(Player p: participants){
-            paticipantsId[index] = p.getId();
-            index++;
-          }
-          return paticipantsId;
+      public ArrayList<Integer> getParticipantsId(){
+          return participants;
       }
       
   public void withdrawParticipant(int playerId) {
     for (int i = 0; i < participants.size(); i++) {
-      if (participants.get(i).getId() == playerId) {
+      if (participants.get(i) == playerId) {
         participants.remove(i);
         return;
       }

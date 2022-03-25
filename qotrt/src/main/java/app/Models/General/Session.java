@@ -1,4 +1,5 @@
 package app.Models.General;
+import java.util.ArrayList;
 
 import app.Models.StoryCards.StoryCard;
 
@@ -19,11 +20,8 @@ public class Session {
    public StoryCard currentStoryCard;
 //    public int currentStage;
    public int sponsorId;
-   public int[] participantsId;
+   public ArrayList<Integer> participantsId;
    public boolean questInPlay;
-
-
-
 
 }
    

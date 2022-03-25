@@ -97,7 +97,7 @@ public class GameController {
   public Quest sponsorQuest() {// name of the quest
    
     Player p = gameService.getCurrentGame().getPlayerById(gameService.getCurrentActivePlayer());
-    gameService.getCurrentGame().getCurrentQuest().setSponsor(p);
+    gameService.getCurrentGame().getCurrentQuest().setSponsor(p.getId());
     return gameService.getCurrentGame().getCurrentQuest();
   }
   
@@ -166,7 +166,7 @@ public class GameController {
     currSession.currentActivePlayer = gameService.startNextPlayer();
     currSession.currentStoryCard = gameService.getCurrentStoryCard();
     currSession.questInPlay = gameService.getQuestInPlay(); //bool
-    currSession.sponsorId = gameService.getCurrentGame().getCurrentQuest().getSponsor().getId(); //id of the sponsor
+    currSession.sponsorId = gameService.getCurrentGame().getCurrentQuest().getSponsor(); //id of the sponsor
     currSession.participantsId = gameService.getCurrentGame().getCurrentQuest().getParticipantsId();//id of the sponsor
     return currSession;
   }
@@ -176,7 +176,6 @@ public class GameController {
   // public boolean incrementStage(int currStage) {
   //   return gameService.incrementStage(currStage);
   // }
-  
   
   
   // [[stage 1 cards], [stage 2 cards]] .. ["sfs","grgw","rger"]
