@@ -20,6 +20,7 @@ let stageCards = [];
 
 let shields = 0;
 let totalPoints = 0;
+let canDraw = 0;
 
 /**
  * The current stage you are on
@@ -121,7 +122,8 @@ function subscriptions() {
   //From finish Turn...
   stompClient.subscribe("/topic/finishTurn", function (response) { //response = currentActiveplayer 
     let data = JSON.parse(response.body); //the id of the next active player..
-    currentActivePlayer = data;
+    currentActivePlayer = data["player-id"];
+    canDraw = data["can-draw"];
 
     if (playerId == data) {
       if (activeStoryCardType === "Quest") {

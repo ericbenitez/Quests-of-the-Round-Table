@@ -25,7 +25,12 @@ public class Quest extends StoryCard {
     public void setSponsor(Player player) {
         this.sponsor = player;
     }
-
+    
+    public Player getSponsor() {
+        return this.sponsor;
+    }
+    
+    
     public String getFoeName() {
         return foeName;
     }

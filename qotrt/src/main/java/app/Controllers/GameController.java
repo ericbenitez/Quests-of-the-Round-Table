@@ -2,6 +2,7 @@ package app.Controllers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -165,13 +166,15 @@ public class GameController {
 
   @MessageMapping("/finishTurn")
   @SendTo("/topic/finishTurn")
-  public int finishTurn() {
+  public HashMap<String, Object> finishTurn() {
     int index = gameService.startNextPlayer();
     Player player = this.gameService.getCurrentGame().getPlayers().get(index);
     
+    HashMap<String, Object> hashMap = new HashMap<>();
+    hashMap.put("player-id", player.getId());
+    hashMap.put("can-draw", this.gameService.canDraw());
     
-    
-    return player.getId();
+    return hashMap;
   }
 
   @MessageMapping("/incrementStage")
@@ -209,5 +212,19 @@ public class GameController {
     System.out.println(arr);
     round.setStages(arr);
     return round.getStageCards();
+  }
+  
+  @MessageMapping("/transferQuest")
+  @SendTo("/topic/transferQuest")
+  public int transferQuest(int playerId) {
+    Round round = this.gameService.getCurrentGame().getCurrentRound();
+    if (round.getCannotSponsor() < this.gameService.getCurrentGame().getPlayers().size()) {
+      round.increaseCannotSponsor();
+    }
+    
+    int index = gameService.startNextPlayer();
+    Player player = this.gameService.getCurrentGame().getPlayers().get(index);
+    
+    return player.getId();
   }
 }

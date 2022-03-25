@@ -165,6 +165,11 @@ function withdrawQuest() {
     }));
 }
 
+function transferQuest() {
+    if (currentActivePlayer === playerId) {
+        stompClient.send("/app/transferQuest", {}, playerId)
+    }
+}
 
 
 // test function

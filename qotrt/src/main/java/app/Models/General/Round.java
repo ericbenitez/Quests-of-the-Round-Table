@@ -2,8 +2,6 @@ package app.Models.General;
 
 import java.util.ArrayList;
 
-import org.springframework.boot.autoconfigure.security.oauth2.client.ClientsConfiguredCondition;
-
 import app.Controllers.GameController;
 import app.Models.AdventureCards.AdventureCard;
 import app.Models.StoryCards.Quest;
@@ -15,6 +13,7 @@ public class Round {
 
   StoryCard storyCard; // each turn identified by story card..
   ArrayList<Player> participants; // for quests
+  private int cannotSponsor = 0;
   ArrayList<AdventureCard> discardedCards;
   ArrayList<ArrayList<String>> stageCards;
   private int currentStage = 0;
@@ -108,6 +107,14 @@ public class Round {
     // if (this.roundProgress == ProgressStatus.IN_PROGRESS) {
 
     // }
+  }
+  
+  public void increaseCannotSponsor() {
+    this.cannotSponsor++;
+  }
+  
+  public int getCannotSponsor() {
+    return this.cannotSponsor;
   }
 
   /*
