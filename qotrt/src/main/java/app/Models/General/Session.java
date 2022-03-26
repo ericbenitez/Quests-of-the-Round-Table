@@ -1,6 +1,4 @@
 package app.Models.General;
-import java.util.ArrayList;
-
 import app.Models.StoryCards.StoryCard;
 
 public class Session {

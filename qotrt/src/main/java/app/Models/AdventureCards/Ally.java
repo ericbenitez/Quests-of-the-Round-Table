@@ -1,7 +1,5 @@
 package app.Models.AdventureCards;
 
-import app.Models.General.*;
-
 public class Ally extends AdventureCard {
   int battlePoints;
   int bids;
@@ -53,9 +51,4 @@ public class Ally extends AdventureCard {
     return name;
   }
 
-	@Override
-	public void draw(Player player) {
-		// TODO Auto-generated method stub
-		
-	}
 }

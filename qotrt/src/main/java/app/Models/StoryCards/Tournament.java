@@ -3,8 +3,6 @@ package app.Models.StoryCards;
 import java.util.ArrayList;
 
 import app.Models.Enums.StoryCardType;
-import app.Models.General.Game;
-import app.Models.General.Player;
 
 public class Tournament extends StoryCard {
 
@@ -20,13 +18,6 @@ public class Tournament extends StoryCard {
     this.storyCardType = StoryCardType.Tournament;
     participants = new ArrayList<>();
     round = 0; // will increase to 1 only when tournament starts
-  }
-
-
-  @Override
-  protected void draw(Player player) {
-    // TODO Auto-generated method stub
-    
   }
 
   public int getBonusShields(){

@@ -1,7 +1,7 @@
 package app.Models.StoryCards;
 
 import java.util.ArrayList;
-import app.Models.AdventureCards.AdventureCard;
+
 import app.Models.Enums.StoryCardType;
 import app.Models.General.Player;
 
@@ -55,20 +55,21 @@ public class Quest extends StoryCard {
         participants.add(playerId);
       }
 
-      //get participants id 
-      public ArrayList<Integer> getParticipantsId(){
-          return participants;
-      }
-      
-  public void withdrawParticipant(int playerId) {
-    for (int i = 0; i < participants.size(); i++) {
-      if (participants.get(i) == playerId) {
-        participants.remove(i);
-        return;
-      }
+    //get participants id 
+    public ArrayList<Integer> getParticipantsId(){
+        return participants;
     }
-  }
-
+      
+    public void withdrawParticipant(int playerId) {
+        for (int i = 0; i < participants.size(); i++) {
+        if (participants.get(i) == playerId) {
+            participants.remove(i);
+            return;
+        }
+        }
+    }
+    
+    
     public String getFoeName() {
         return foeName;
     }
@@ -86,14 +87,8 @@ public class Quest extends StoryCard {
     public String getName() {
         return name;
     }
-    
-    public String getTotalStages() { return String.valueOf(totalStages); }
-    @Override
-    public void draw(Player player) {
-        // TODO Auto-generated method stub
-            this.drawer = player;   
-    }
 
+    public String getTotalStages() { return String.valueOf(totalStages); }
   
 }
 

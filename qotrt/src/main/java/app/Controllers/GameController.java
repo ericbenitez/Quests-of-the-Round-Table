@@ -2,7 +2,6 @@ package app.Controllers;
 
 import java.util.ArrayList;
 
-import com.fasterxml.jackson.databind.type.TypeFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -13,17 +12,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import app.Controllers.dto.DoubleArrayMessage;
 
 import app.Controllers.dto.CardsMessage;
+import app.Controllers.dto.DoubleArrayMessage;
 import app.Controllers.dto.Message;
 import app.Controllers.dto.ShieldMessage;
 import app.Models.AdventureCards.AdventureCard;
 import app.Models.General.Game;
 import app.Models.General.Player;
-import app.Models.General.ProgressStatus;
 import app.Models.General.Session;
 import app.Models.StoryCards.Quest;
 import app.Models.StoryCards.StoryCard;
@@ -171,7 +168,6 @@ public class GameController {
     return currSession;
   }
 
-
   
   // [[stage 1 cards], [stage 2 cards]] .. ["sfs","grgw","rger"]
   @MessageMapping("/setStages")  //recall this is coming from the sponsor.
@@ -181,6 +177,21 @@ public class GameController {
     System.out.println(arr);
     gameService.getCurrentGame().getCurrentQuest().setSponsorStages(arr);
     return gameService.getCurrentGame().getCurrentQuest();
+  }
+  
+  // TODO: eric transfer quest
+  @MessageMapping("/transferQuest")
+  @SendTo("/topic/transferQuest")
+  public void transferQuest(int playerId) {
+    // Round round = this.gameService.getCurrentGame().getCurrentRound();
+    // if (round.getCannotSponsor() < this.gameService.getCurrentGame().getPlayers().size()) {
+    //   round.increaseCannotSponsor();
+    // }
+    
+    // int index = gameService.startNextPlayer();
+    // Player player = this.gameService.getCurrentGame().getPlayers().get(index);
+    
+    // return player.getId();
   }
 
 
