@@ -36,5 +36,15 @@ function displayStoryCard(storyCard) {
       }
     
   }
+  }else if (storyCardType === "Tournament"){
+    storyCardDiv.appendChild(document.createTextNode(storyCard.currentStory));
+
+    // we can immediately start asking if the drawer would like to join
+    drawerTournament = playerId;
+    if (playerId === currentActivePlayer){
+      startTournament(storyCard);
+      askPlayerJoinTournament();
+    }
+    
   }
 }

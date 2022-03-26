@@ -20,6 +20,9 @@ let stageCards = [];
 let shields = 0;
 let totalPoints = 0;
 
+let tourParticipant = false;
+let drawerTournament = 0;
+
 /**
  * The current stage you are on
  */
@@ -92,47 +95,12 @@ function joinGame() {
 
 function subscriptions() {
 
-  stompClient.subscribe("/topic/setStages", function (response) { //need all players subscribe to this
-    let data = JSON.parse(response.body); //should be an aray
-    let stageSpecificDiv = document.createElement("div");
-    let stageNumOfCardsDiv = document.createElement("div");
-
-    for (let i = 0; i < data.length; i++) {
-      stageSpecificDiv.append("Cards for Stages " + (i + 1));
-      stageSpecificDiv.append(document.createElement("br"));
-
-      stageNumOfCardsDiv.append("Cards for Stages " + (i + 1) + ": ");
-      stageNumOfCardsDiv.append(data[i].length + " cards");
-      stageNumOfCardsDiv.append(document.createElement("br"));
-      let hidden = document.createElement("div");
-      hidden.setAttribute("id", "stage" + (i + 1));
-      hidden.style.display = "none";
-      stageNumOfCardsDiv.append(hidden);
-      stageNumOfCardsDiv.append(document.createElement("br"));
-
-      for (let j = 0; j < data[i].length; j++) {
-        stageSpecificDiv.append(data[i][j]);
-        stageSpecificDiv.append(document.createElement("br"));
-
-        hidden.appendChild(document.createTextNode(data[i][j]));
-        hidden.appendChild(document.createElement("br"));
-
-      }
-    }
-    if (sponsor){
-      document.getElementById("stages").appendChild(stageSpecificDiv);
-    }else{
-      //stageSpecificDiv.style.display = "none";
-      document.getElementById("stages").appendChild(stageNumOfCardsDiv);
-    }
-    
-    
-  });
   console.log("subscribed")
   //From finish Turn...
   stompClient.subscribe("/topic/finishTurn", function (response) { //response = currentActiveplayer 
-    let data = JSON.parse(response.body); //the id of the next active player..
-    currentActivePlayer = data;
+    let data = JSON.parse(response.body).currentActivePlayer; //the id of the next active player..
+    currentActivePlayer = data.currentActivePlayer;
+    let storyCard = JSON.parse(response.body).currentStoryCard;
 
     if (playerId == data) {
       if (activeStoryCardType === "Quest") {
@@ -157,6 +125,8 @@ function subscriptions() {
 
         }
         alert("If you'd like to participate in the quest, click Join Quest"); //if not sponsor/if not pariticpant
+      }else if(activeStoryCardType === "Tournament"){
+        
       }
 
       else { //this is if the current active story card is empty!
@@ -188,7 +158,7 @@ function subscriptions() {
     
     setTimeout(() => {  alert("Click on initialize cards to begin the game"); }, 2000);
     setTimeout(() => {  stompClient.send("/app/ready",{},""); }, 2000);
-
+    initializeAdv()
      
     joinGameSubscription.unsubscribe();
   })
@@ -213,14 +183,38 @@ function subscriptions() {
   stompClient.subscribe("/topic/setStages", function (response) { //need all players subscribe to this
     let data = JSON.parse(response.body); //should be an aray
     let stageSpecificDiv = document.createElement("div");
+    let stageNumOfCardsDiv = document.createElement("div");
+
     for (let i = 0; i < data.length; i++) {
       stageSpecificDiv.append("Cards for Stages " + (i + 1));
+      stageSpecificDiv.append(document.createElement("br"));
+
+      stageNumOfCardsDiv.append("Cards for Stages " + (i + 1) + ": ");
+      stageNumOfCardsDiv.append(data[i].length + " cards");
+      stageNumOfCardsDiv.append(document.createElement("br"));
+      let hidden = document.createElement("div");
+      hidden.setAttribute("id", "stage" + (i + 1));
+      hidden.style.display = "none";
+      stageNumOfCardsDiv.append(hidden);
+      stageNumOfCardsDiv.append(document.createElement("br"));
+
       for (let j = 0; j < data[i].length; j++) {
         stageSpecificDiv.append(data[i][j]);
         stageSpecificDiv.append(document.createElement("br"));
+
+        hidden.appendChild(document.createTextNode(data[i][j]));
+        hidden.appendChild(document.createElement("br"));
+
       }
     }
-    document.getElementById("stages").appendChild(stageSpecificDiv);
+    if (sponsor){
+      document.getElementById("stages").appendChild(stageSpecificDiv);
+    }else{
+      stageSpecificDiv.style.display = "none";
+      document.getElementById("stages").appendChild(stageNumOfCardsDiv);
+    }
+    
+    
   });
   
   
@@ -280,6 +274,7 @@ function winStage() {
     if (calcTotalBattlePts(points) >= stageBattlePts) {
       displayBattlePoint(totalPoints, stageBattlePts, "won");
       updateShields(currentStages);
+      updateShieldDisplay();
       return true;
     } else {
       displayBattlePoint(totalPoints, stageBattlePts, "lost");
@@ -460,7 +455,6 @@ function removeSelectedCards() {
   removeCardsFromHand(checked);
   alert(playerHand.length);
   if (playerHand.length <= 12){
-    alert("enabling");
     enableGameButtons();
   }
 
@@ -496,6 +490,20 @@ function initializeAdv() {
   });
 }
 
+
+// updates the player's hand (from server)
+// same as initializeAdv, but without drawing 12 cards
+function getPlayerHand(){
+  stompClient.send("/app/getCards", {}, `${playerId}`);
+
+  const connection = stompClient.subscribe("/user/queue/getCards", (response) => {
+    const data = JSON.parse(response.body);
+    playerHand = data;
+    clearPlayerHandDisplay();
+    displayAllCards(data);
+  });
+}
+
 function showCurrentStage(){
     // the first one is 0?
     let stageNumber =  currentStage + 1;
@@ -504,4 +512,11 @@ function showCurrentStage(){
 }
 
 
+// shields should be updated after winning quests, tournamnets, and for certain events
+// updates the shields display
+// (Note: I thought we didn't update the shields on server side, but we actually did, so the global var shields should be updated)
+function updateShieldDisplay(){
+  shieldDisplay = document.getElementById("shields").innerHTML = "You have " + shields + " shields.";
+
+}
 

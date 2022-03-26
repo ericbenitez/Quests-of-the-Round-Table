@@ -47,6 +47,7 @@ function displayAllCards(cards) {
     // alert("cards to display: " + theCards);
     //alert("cards total: " + theCards.length);
     for (let i = 0; i < cards.length; i++) {
+        console.log("adding card to display: " + cards[i].name);
         addACardDisplay(cards[i].name, "playerHand", true);
     }
 }
@@ -172,9 +173,11 @@ function removeCardFromDisplay(cardName) {
 
 
 function clearPlayerHandDisplay(){
+    console.log("here");
     let playerHandDiv = document.getElementById("playerHand");
     while (playerHandDiv.firstChild) {
     playerHandDiv.removeChild(playerHandDiv.firstChild);
+    console.log("removed");
   }
 }
 
@@ -260,7 +263,7 @@ function getAdventureCards() {
         div.appendChild(newLabel);
         hand.appendChild(div);
 
-        initializeAdv();
+        getPlayerHand();
 
         // playerHand 12 cards - edit 2
         // adding to the hand even if > 12 to allow player to pick and choose

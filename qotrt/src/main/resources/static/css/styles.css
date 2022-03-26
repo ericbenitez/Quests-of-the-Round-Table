@@ -90,3 +90,31 @@ button {
     margin-top: 12px;
     font-size: 30px;
 }
+
+
+#shields {
+    color: white;
+    font-size: 1.5em;
+    padding-top: 0.8em;
+    padding-bottom: 0.8em;
+    text-align: center;
+}
+
+
+#popUpContainer {
+    border: 2.5em darkorange solid;
+    position: fixed; /* or absolute */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 1.8em;
+    display: none;
+}
+
+#popUpButtons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content:space-evenly;
+}

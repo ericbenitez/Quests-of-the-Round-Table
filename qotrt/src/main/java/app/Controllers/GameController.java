@@ -83,6 +83,13 @@ public class GameController {
     return player.getCards();
   }
 
+  // basically what giveCards used to do before drawing cards was added
+  @MessageMapping("/getCards")
+  @SendToUser("/queue/getCards")
+  public ArrayList<AdventureCard> getCards(String playerId) {
+    Player player = this.gameService.getCurrentGame().getPlayerById(Integer.parseInt(playerId));
+    return player.getCards();
+  }
 
   @MessageMapping("/ready")
   @SendTo("/topic/startTurn")
@@ -166,9 +173,11 @@ public class GameController {
     Session currSession = new Session();
     currSession.currentActivePlayer = gameService.startNextPlayer();
     currSession.currentStoryCard = gameService.getCurrentStoryCard();
-    currSession.questInPlay = gameService.getQuestInPlay(); //bool
-    currSession.sponsorId = gameService.getCurrentGame().getCurrentQuest().getSponsor(); //id of the sponsor
-    currSession.participantsId = gameService.getCurrentGame().getCurrentQuest().getParticipantsId();//id of the sponsor
+    if (currSession.currentStoryCard.getStoryCardType().equals("Quest")){
+      currSession.questInPlay = gameService.getQuestInPlay(); //bool
+      currSession.sponsorId = gameService.getCurrentGame().getCurrentQuest().getSponsor(); //id of the sponsor
+      currSession.participantsId = gameService.getCurrentGame().getCurrentQuest().getParticipantsId();//id of the sponsor
+    }
     return currSession;
   }
 
@@ -187,5 +196,15 @@ public class GameController {
     ArrayList<ArrayList<String>> arr = sponsorStages.getCards();
     System.out.println(arr);
     return arr;
+  }
+
+
+  // ------------- Tournaments ---------------
+
+  @MessageMapping("/addParticipantTournament")
+  public void addParticipantTournament(@RequestBody Message playerId){
+  
+    int playerIdInt = Integer.parseInt(playerId.getMessage());
+    this.gameService.getCurrentGame().getCurrentTournament().addParticipant(playerIdInt);
   }
 }
