@@ -2,7 +2,6 @@ package app.Models.StoryCards;
 
 import app.Models.Enums.StoryCardType;
 import app.Models.General.Game;
-import app.Models.General.Player;
 
 public class Tournament extends StoryCard {
 

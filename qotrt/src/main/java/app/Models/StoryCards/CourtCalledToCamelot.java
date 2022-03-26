@@ -14,7 +14,7 @@ public class CourtCalledToCamelot implements EventBehaviour {
     for (Player player : players) {
       for (AdventureCard card : player.cards) {
         if (card instanceof Ally) {
-          player.discardCardFromHand(((Ally) card).getName());
+          // player.discardCardFromHand(((Ally) card).getName());
         }
       }
     }

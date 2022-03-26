@@ -1,7 +1,7 @@
 package app.Models.StoryCards;
 
 import java.util.ArrayList;
-import app.Models.AdventureCards.AdventureCard;
+
 import app.Models.Enums.StoryCardType;
 import app.Models.General.Player;
 
@@ -10,10 +10,10 @@ public class Quest extends StoryCard {
     protected int totalStages;
     protected String foeName;
     protected int sponsor;
-    protected ArrayList<ArrayList<AdventureCard>> stages; //sponsor stages
+    protected ArrayList<ArrayList<String>> stages; //sponsor stages
     protected ArrayList<ArrayList<String>> clientStages;
     protected ArrayList<Integer> participants; // for quests
-    private int currentStage = 0;
+    private int currentStage = 1;
     // if all the foes pass 'all' to foeName
     public Quest(String name, int totalStages, String foe) {
         this.name = name;
@@ -25,7 +25,13 @@ public class Quest extends StoryCard {
         this.participants = new ArrayList<>(3);
     }
 
-    public void setSponsorStages(ArrayList<ArrayList<AdventureCard>> stages){
+    public int getCurrentStageNumber(){
+        return currentStage;
+    }
+    public void incrementCurrentStage (){
+        this.currentStage+=1;
+    }
+    public void setSponsorStages(ArrayList<ArrayList<String>> stages){
         this.stages = stages;
     }
     public void setStages(ArrayList<ArrayList<String>> clientStages) {
@@ -49,23 +55,18 @@ public class Quest extends StoryCard {
         participants.add(playerId);
       }
 
-      //get participants id 
-      public ArrayList<Integer> getParticipantsId(){
-          return participants;
-      }
-      
-  public void withdrawParticipant(int playerId) {
-    for (int i = 0; i < participants.size(); i++) {
-      if (participants.get(i) == playerId) {
-        participants.remove(i);
-        return;
-      }
+    //get participants id 
+    public ArrayList<Integer> getParticipantsId(){
+        return participants;
     }
-  }
-
-    
-    public Player getSponsor() {
-        return this.sponsor;
+      
+    public void withdrawParticipant(int playerId) {
+        for (int i = 0; i < participants.size(); i++) {
+        if (participants.get(i) == playerId) {
+            participants.remove(i);
+            return;
+        }
+        }
     }
     
     
@@ -73,7 +74,7 @@ public class Quest extends StoryCard {
         return foeName;
     }
 
-    public ArrayList<ArrayList<AdventureCard>> getStages() { return this.stages; }
+    public ArrayList<ArrayList<String>> getStages() { return this.stages; }
 
     public boolean canPlayerSponsor(Player player) {
 
@@ -86,7 +87,7 @@ public class Quest extends StoryCard {
     public String getName() {
         return name;
     }
-    
+
     public String getTotalStages() { return String.valueOf(totalStages); }
   
 }

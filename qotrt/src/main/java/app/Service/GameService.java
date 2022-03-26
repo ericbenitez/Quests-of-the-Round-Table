@@ -1,13 +1,14 @@
 package app.Service;
 import java.util.ArrayList;
 import java.util.UUID; //for game ID
+
 import org.springframework.stereotype.Service;
+
 import app.Models.AdventureCards.AdventureCard;
-import app.Models.StoryCards.StoryCard;
-import app.Models.Enums.Rank;
 import app.Models.General.Game;
 import app.Models.General.Player;
 import app.Models.General.ProgressStatus;
+import app.Models.StoryCards.StoryCard;
 import app.Objects.CardObjects;
 
 @Service
@@ -153,24 +154,19 @@ public class GameService {
 
     }
 
-
-
-  
-    public Quest getCurrentQuest() {
-        return currentGame.getCurrentQuest();
-    }
     
-    public int canDraw() {
-        Quest quest = this.currentGame.getCurrentQuest();
-        int amount = 0;
+    // TODO eric: can draw function
+    public void canDraw() {
+        // Quest quest = this.currentGame.getCurrentQuest();
+        // int amount = 0;
         
-        amount+=quest.getStages().size();
-        for (ArrayList<AdventureCard> stage: quest.getStages()) {
-            amount += stage.size();
-        }
+        // amount+=quest.getStages().size();
+        // for (ArrayList<AdventureCard> stage: quest.getStages()) {
+        //     amount += stage.size();
+        // }
         
         
-        return amount;
+        // return amount;
     }
 
     /**

@@ -2,11 +2,6 @@ package app.Controllers;
 
 import java.util.ArrayList;
 
-import com.fasterxml.jackson.databind.type.TypeFactory;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -17,17 +12,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import app.Controllers.dto.DoubleArrayMessage;
 
 import app.Controllers.dto.CardsMessage;
+import app.Controllers.dto.DoubleArrayMessage;
 import app.Controllers.dto.Message;
 import app.Controllers.dto.ShieldMessage;
 import app.Models.AdventureCards.AdventureCard;
 import app.Models.General.Game;
 import app.Models.General.Player;
-import app.Models.General.ProgressStatus;
 import app.Models.General.Session;
 import app.Models.StoryCards.Quest;
 import app.Models.StoryCards.StoryCard;
@@ -102,6 +95,8 @@ public class GameController {
    
     Player p = gameService.getCurrentGame().getPlayerById(gameService.getCurrentActivePlayer());
     gameService.getCurrentGame().getCurrentQuest().setSponsor(p.getId());
+    //setting the boolean to be true;
+    gameService.setQuestInPlay(true);
     return gameService.getCurrentGame().getCurrentQuest();
   }
   
@@ -115,12 +110,7 @@ public class GameController {
     return storyCard;
   }
 
-  @SendTo("/topic/doYouWantToSponsor")
-  public ResponseEntity<String> askForSponsor() throws Exception {
-    // StoryCard storyCard = this.gameService.getCurrentGame().pickCard();
-    // sponsor id
-    return ResponseEntity.ok("sponsor id");
-  }
+ 
 
   // --------------- Player Participating Stuff ------------------
 
@@ -153,68 +143,47 @@ public class GameController {
     gameService.withdrawQuest(playerId.getMessage());
   }
 
-
-  // @MessageMapping("/nextStep")
-  // @SendTo("/topic/nextStep")
-  // public int nextStep() {
-  //   this.gameService.nextStep();
-  //   this.gameService.startNextPlayer();
-  //   return this.gameService.getCurrentActivePlayer();
-  // }
-
   @MessageMapping("/finishTurn")
   @SendTo("/topic/finishTurn")
   public Session finishTurn() {
-
+    
     Session currSession = new Session();
-    currSession.currentActivePlayer = gameService.startNextPlayer();
-    currSession.currentStoryCard = gameService.getCurrentStoryCard();
+    currSession.currentActivePlayer = gameService.startNextPlayer(); ///increments the player
+    //if we round back to the sponsor, the stage goes up
+    if(gameService.getQuestInPlay() && gameService.getCurrentActivePlayer()==gameService.getCurrentGame().getCurrentQuest().getSponsor()){
+      gameService.getCurrentGame().getCurrentQuest().incrementCurrentStage();
+    }
+    currSession.currentStoryCard = gameService.getCurrentStoryCard(); //returns all the elments of that storyCard
     currSession.questInPlay = gameService.getQuestInPlay(); //bool
-    currSession.sponsorId = gameService.getCurrentGame().getCurrentQuest().getSponsor(); //id of the sponsor
-    currSession.participantsId = gameService.getCurrentGame().getCurrentQuest().getParticipantsId();//id of the sponsor
+    // currSession.sponsorId = gameService.getCurrentGame().getCurrentQuest().getSponsor(); //id of the sponsor
+    // currSession.participantsId = gameService.getCurrentGame().getCurrentQuest().getParticipantsId();//id of the sponsor
+   
     return currSession;
   }
 
-  // public HashMap<String, Object> finishTurn() {
-  //   int index = gameService.startNextPlayer();
-  //   Player player = this.gameService.getCurrentGame().getPlayers().get(index);
-    
-  //   HashMap<String, Object> hashMap = new HashMap<>();
-  //   hashMap.put("player-id", player.getId());
-  //   hashMap.put("can-draw", this.gameService.canDraw());
-    
-  //   return hashMap;
-  // }
-
-  @MessageMapping("/incrementStage")
-  @SendTo("/topic/incrementStage")
-  public boolean incrementStage(int currStage) {
-    return gameService.incrementStage(currStage);
-  }
-  
-  
   
   // [[stage 1 cards], [stage 2 cards]] .. ["sfs","grgw","rger"]
-  @MessageMapping("/setStages")
+  @MessageMapping("/setStages")  //recall this is coming from the sponsor.
   @SendTo("/topic/setStages") // String [] clientStages
-  public ArrayList<ArrayList<String>> setStages(@RequestBody DoubleArrayMessage sponsorStages) {
-   
+  public ArrayList<ArrayList<String>> setStages(@RequestBody DoubleArrayMessage sponsorStages) {  
     ArrayList<ArrayList<String>> arr = sponsorStages.getCards();
     System.out.println(arr);
+    gameService.getCurrentGame().getCurrentQuest().setSponsorStages(arr);
     return arr;
   }
   
+  // TODO: eric transfer quest
   @MessageMapping("/transferQuest")
   @SendTo("/topic/transferQuest")
-  public int transferQuest(int playerId) {
-    Round round = this.gameService.getCurrentGame().getCurrentRound();
-    if (round.getCannotSponsor() < this.gameService.getCurrentGame().getPlayers().size()) {
-      round.increaseCannotSponsor();
-    }
+  public void transferQuest(int playerId) {
+    // Round round = this.gameService.getCurrentGame().getCurrentRound();
+    // if (round.getCannotSponsor() < this.gameService.getCurrentGame().getPlayers().size()) {
+    //   round.increaseCannotSponsor();
+    // }
     
-    int index = gameService.startNextPlayer();
-    Player player = this.gameService.getCurrentGame().getPlayers().get(index);
+    // int index = gameService.startNextPlayer();
+    // Player player = this.gameService.getCurrentGame().getPlayers().get(index);
     
-    return player.getId();
+    // return player.getId();
   }
 }
