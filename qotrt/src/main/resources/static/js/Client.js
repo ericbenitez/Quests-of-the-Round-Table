@@ -97,14 +97,19 @@ function subscriptions() {
   //the response after setting the sponsor stages.
   stompClient.subscribe("/topic/setStages", function (response) { //need all players subscribe to this
     let data = JSON.parse(response.body); //should be an aray
+    console.log("response: " + response);
+    alert(data);    
+    console.log("data: "+ data);
     let stageSpecificDiv = document.createElement("div");
     let stageNumOfCardsDiv = document.createElement("div");
-    for (let i = 0; i < data.length; i++) {
+    let stages = data.stages;
+    console.log("stages:" + stages);
+    for (let i = 0; i < stages.length; i++) {
       stageSpecificDiv.append("Cards for Stages " + (i + 1));
       stageSpecificDiv.append(document.createElement("br"));
 
       stageNumOfCardsDiv.append("Cards for Stages " + (i + 1) + ": ");
-      stageNumOfCardsDiv.append(data[i].length + " cards");
+      stageNumOfCardsDiv.append(stages[i].length + " cards");
       stageNumOfCardsDiv.append(document.createElement("br"));
       let hidden = document.createElement("div");
       hidden.setAttribute("id", "stage" + (i + 1));
@@ -112,19 +117,19 @@ function subscriptions() {
       stageNumOfCardsDiv.append(hidden);
       stageNumOfCardsDiv.append(document.createElement("br"));
 
-      for (let j = 0; j < data[i].length; j++) {
-        stageSpecificDiv.append(data[i][j]);
+      for (let j = 0; j < stages[i].length; j++) {
+        stageSpecificDiv.append(stages[i][j]);
         stageSpecificDiv.append(document.createElement("br"));
 
-        hidden.appendChild(document.createTextNode(data[i][j]));
+        hidden.appendChild(document.createTextNode(stages[i][j]));
         hidden.appendChild(document.createElement("br"));
 
       }
     }
-    if (sponsor){
+    if (data.sponsor == playerId){
       document.getElementById("stages").appendChild(stageSpecificDiv);
     }else{
-      //stageSpecificDiv.style.display = "none";
+      stageSpecificDiv.style.display = "none";
       document.getElementById("stages").appendChild(stageNumOfCardsDiv);
     }
     
@@ -154,6 +159,8 @@ function subscriptions() {
     
     setTimeout(() => {  alert("Click on initialize cards to begin the game"); }, 2000);
     setTimeout(() => {  stompClient.send("/app/ready",{},""); }, 2000);
+    initializeAdv();
+
     joinGameSubscription.unsubscribe();
   })
 

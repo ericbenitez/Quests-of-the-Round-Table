@@ -172,11 +172,11 @@ public class GameController {
   // [[stage 1 cards], [stage 2 cards]] .. ["sfs","grgw","rger"]
   @MessageMapping("/setStages")  //recall this is coming from the sponsor.
   @SendTo("/topic/setStages") // String [] clientStages
-  public ArrayList<ArrayList<String>> setStages(@RequestBody DoubleArrayMessage sponsorStages) {  
+  public Quest setStages(@RequestBody DoubleArrayMessage sponsorStages) {  
     ArrayList<ArrayList<String>> arr = sponsorStages.getCards();
     System.out.println(arr);
     gameService.getCurrentGame().getCurrentQuest().setSponsorStages(arr);
-    return arr;
+    return gameService.getCurrentGame().getCurrentQuest();
   }
   
   // TODO: eric transfer quest
