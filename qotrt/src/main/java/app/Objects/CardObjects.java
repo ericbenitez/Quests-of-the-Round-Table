@@ -102,7 +102,7 @@ public class CardObjects {
     // this.storyCards.add(new Quest())
     // this.storyCards.add(new Quest( new JourneyThruForest(this)));
     // this.storyCards.add(new Quest(this));
-   /* this.storyCards.add(new Quest("Defend the Queen's Honor", 4, "All"));
+    this.storyCards.add(new Quest("Defend the Queen's Honor", 4, "All"));
     this.storyCards.add(new Quest("Slay the Dragon", 3, "Dragon"));
     this.storyCards.add(new Quest("Rescue the Fair Maiden", 3, "Black Knight"));
     this.storyCards.add(new Quest("Search for the Holy Grail", 5, "All"));
@@ -113,7 +113,7 @@ public class CardObjects {
       this.storyCards.add(new Quest("Vanquish King Arthur's Enemies", 3, null));
       this.storyCards.add(new Quest("Boar Hunt", 2, "Boar"));
       this.storyCards.add(new Quest("Repel the Saxon Raiders", 2, "All"));
-    }*/
+    }
 
     //this.storyCards.add(new Tournament("some tournament", 1));
     // this.storyCards.add(new Tournament("At Camelot", 3));

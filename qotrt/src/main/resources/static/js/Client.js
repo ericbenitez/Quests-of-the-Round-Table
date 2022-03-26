@@ -94,67 +94,6 @@ function joinGame() {
 
 function subscriptions() {
 
-  stompClient.subscribe("/topic/setStages", function (response) { //need all players subscribe to this
-    let data = JSON.parse(response.body); //should be an aray
-    let stageSpecificDiv = document.createElement("div");
-    for (let i = 0; i < data.length; i++) {
-      stageSpecificDiv.append("Cards for Stages " + (i + 1));
-      for (let j = 0; j < data[i].length; j++) {
-        stageSpecificDiv.append(data[i][j]);
-        stageSpecificDiv.append(document.createElement("br"));
-      }
-    }
-    document.getElementById("stages").appendChild(stageSpecificDiv);
-  });
-  console.log("subscribed")
-  //From finish Turn...
-  stompClient.subscribe("/topic/finishTurn", function (response) { //response = currentActiveplayer 
-    let data = JSON.parse(response.body); //the id of the next active player..
-    currentActivePlayer = data["player-id"];
-    canDraw = data["can-draw"];
-
-    if (playerId == data) {
-      if (activeStoryCardType === "Quest") {
-        // joinQuest();
-        if (sponsor) {
-          winStage(); //checking the stage cards from each player and deciding who won that specific stage
-          stompClient.send("/app/incrementStage", {}, currentStage);
-          stompClient.subscribe("/topic/incrementStage", function (response) {
-            let data = JSON.parse(response.body); //returns a boolean
-            if (data) { currentStage += 1 };//increment the stage if true.
-            if (!data) {
-              alert("Hey the quest is complete, grab this many adventure cards " + selectedCards);
-              // sponsor = false; 
-              currentQuest = "";
-              activeStoryCardType = "";
-            }
-          })
-          finishTurn(); //move to the next player
-        }
-        if (participant) {
-          alert("set stages for " + currentStage);
-
-        }
-        alert("If you'd like to participate in the quest, click Join Quest"); //if not sponsor/if not pariticpant
-      }
-
-      else { //this is if the current active story card is empty!
-        alert("Pick a story Card!");
-      }
-    }
-  })
-}
-
-
-
-  const joinGameSubscription = stompClient.subscribe("/user/queue/joinGame", (response) => {
-    const data = JSON.parse(response.body);
-    playerId = data.body;
-    showResponse(data, playerName);
-  })
-
-function subscriptions() {
-
   //the response after setting the sponsor stages.
   stompClient.subscribe("/topic/setStages", function (response) { //need all players subscribe to this
     let data = JSON.parse(response.body); //should be an aray
