@@ -10,10 +10,10 @@ public class Quest extends StoryCard {
     protected int totalStages;
     protected String foeName;
     protected int sponsor;
-    protected ArrayList<ArrayList<AdventureCard>> stages; //sponsor stages
+    protected ArrayList<ArrayList<String>> stages; //sponsor stages
     protected ArrayList<ArrayList<String>> clientStages;
     protected ArrayList<Integer> participants; // for quests
-    private int currentStage = 0;
+    private int currentStage = 1;
     // if all the foes pass 'all' to foeName
     public Quest(String name, int totalStages, String foe) {
         this.name = name;
@@ -25,7 +25,13 @@ public class Quest extends StoryCard {
         this.participants = new ArrayList<>(3);
     }
 
-    public void setSponsorStages(ArrayList<ArrayList<AdventureCard>> stages){
+    public int getCurrentStageNumber(){
+        return currentStage;
+    }
+    public void incrementCurrentStage (){
+        this.currentStage+=1;
+    }
+    public void setSponsorStages(ArrayList<ArrayList<String>> stages){
         this.stages = stages;
     }
     public void setStages(ArrayList<ArrayList<String>> clientStages) {
@@ -67,7 +73,7 @@ public class Quest extends StoryCard {
         return foeName;
     }
 
-    public ArrayList<ArrayList<AdventureCard>> getStages() { return this.stages; }
+    public ArrayList<ArrayList<String>> getStages() { return this.stages; }
 
     public boolean canPlayerSponsor(Player player) {
 

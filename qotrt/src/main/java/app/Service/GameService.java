@@ -154,9 +154,6 @@ public class GameService {
     }
 
 
-
-  
-
     public int getCurrentActivePlayer() {
         return this.currentActivePlayer;
     }
