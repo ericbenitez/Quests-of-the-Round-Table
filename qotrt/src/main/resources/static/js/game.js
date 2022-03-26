@@ -56,6 +56,6 @@ function validInputString(input) {
 
 function finishTurn() {
   //moves on to the next player..
-  stompClient.send("/app/finishTurn", {}, {});
+  stompClient.send("/app/finishTurn");
   
 }

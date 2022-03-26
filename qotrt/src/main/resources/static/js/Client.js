@@ -10,10 +10,10 @@ let gameId = null;
 let playerId = 0; //player.java also has an id it assigns
 let numOfPlayer = 0;
 let playerName = "";
-let activeStoryCard = "";
-let participant = false;
-let sponsor = false;
-let isTurn = false;
+// let activeStoryCard = "";
+// let participant = false;
+// let sponsor = false;
+// let isTurn = false;
 let playerHand = []; //the adventure cards go here...because we can set a limit 
 let stageCards = [];
 
@@ -92,11 +92,11 @@ function joinGame() {
 
 function subscriptions() {
 
+  //the response after setting the sponsor stages.
   stompClient.subscribe("/topic/setStages", function (response) { //need all players subscribe to this
     let data = JSON.parse(response.body); //should be an aray
     let stageSpecificDiv = document.createElement("div");
     let stageNumOfCardsDiv = document.createElement("div");
-
     for (let i = 0; i < data.length; i++) {
       stageSpecificDiv.append("Cards for Stages " + (i + 1));
       stageSpecificDiv.append(document.createElement("br"));
@@ -129,42 +129,6 @@ function subscriptions() {
     
   });
   console.log("subscribed")
-  //From finish Turn...
-  stompClient.subscribe("/topic/finishTurn", function (response) { //response = currentActiveplayer 
-    let data = JSON.parse(response.body); //the id of the next active player..
-    currentActivePlayer = data;
-
-    if (playerId == data) {
-      if (activeStoryCardType === "Quest") {
-        // joinQuest();
-        if (sponsor) {
-          winStage(); //checking the stage cards from each player and deciding who won that specific stage
-          stompClient.send("/app/incrementStage", {}, currentStage);
-          stompClient.subscribe("/topic/incrementStage", function (response) {
-            let data = JSON.parse(response.body); //returns a boolean
-            if (data) { currentStage += 1 };//increment the stage if true.
-            if (!data) {
-              alert("Hey the quest is complete, grab this many adventure cards " + selectedCards);
-              // sponsor = false; 
-              currentQuest = "";
-              activeStoryCardType = "";
-            }
-          })
-          finishTurn(); //move to the next player
-        }
-        if (participant) {
-          alert("set stages for " + currentStage);
-
-        }
-        alert("If you'd like to participate in the quest, click Join Quest"); //if not sponsor/if not pariticpant
-      }
-
-      else { //this is if the current active story card is empty!
-        alert("Pick a story Card!");
-      }
-    }
-  })
-
 
 
   const gameStartedSubscription = stompClient.subscribe('/topic/game/started', function (response) {
@@ -188,8 +152,6 @@ function subscriptions() {
     
     setTimeout(() => {  alert("Click on initialize cards to begin the game"); }, 2000);
     setTimeout(() => {  stompClient.send("/app/ready",{},""); }, 2000);
-
-     
     joinGameSubscription.unsubscribe();
   })
 
@@ -207,31 +169,75 @@ function subscriptions() {
     //console.log("From pick Card",data); //name: 'Slay the Dragon', drawer: null, storyCardType: 'Quest', totalStages: '3', foeName: 'Dragon', …}
     displayStoryCard(data);
   })
-
-
-  //This is so that all players can see the stages for a quest that the sponsor sets
-  stompClient.subscribe("/topic/setStages", function (response) { //need all players subscribe to this
-    let data = JSON.parse(response.body); //should be an aray
-    let stageSpecificDiv = document.createElement("div");
-    for (let i = 0; i < data.length; i++) {
-      stageSpecificDiv.append("Cards for Stages " + (i + 1));
-      for (let j = 0; j < data[i].length; j++) {
-        stageSpecificDiv.append(data[i][j]);
-        stageSpecificDiv.append(document.createElement("br"));
-      }
-    }
-    document.getElementById("stages").appendChild(stageSpecificDiv);
-  });
-  
-  
+   
   //From finish Turn...
+
+
   stompClient.subscribe("/topic/finishTurn", function (response) { //response = currentActiveplayer 
     let data = JSON.parse(response.body); //the id of the next active player..
     console.log(data);
+
+    /**
+     * {"currentActivePlayer":2,
+     * "currentStoryCard":{"name":"Slay the Dragon","drawer":null,"storyCardType":"Quest","totalStages":"3","foeName":"Dragon","sponsor":1,"stages":[["Evil Knight","Saxons"],["Horse","Thieves"],["Mordred","Horse"]],"participantsId":[]},
+     * "sponsorId":1,
+     * "participantsId":[],
+     * "questInPlay":false}
+     * 
+     * 
+     */
+    if (data.currentActivePlayer = playerId){
+      //activate their buttons
+      enableGameButtons();
+      let currentStoryCard = data.currentStoryCard;
+      if(currentStoryCard.storyCardType === "Quest"){
+        //If the current story card type is quest, it could mean a few things
+        //they're the sponsor, and it has looped back to them, the stage is complete
+        if (data.sponsor === playerId && data.currentStages < currentStoryCard.totalStages){
+          //check winner for data.currentstages
+          checkWinner(data.stages); //this function does the functionality of sending the appropriate reward
+          //and moving the turn
+        }
+        //they're the sponsor and this is the last and total stage
+        if (data.sponsor === playerId && data.currentStage === currentStoryCard.totalStages){
+          //check the winners again and reward them
+          //for the sponsor, it should check how many total cards they used in all of the stages + total stages
+          //for example, alert(pick 6 cards for sponsoring the quest);
+        }
+        //another scenario is that the player is not the sponsor.
+      }if(data.sponsor!=playerId){
+          if(!currentStoryCard.participantsId.includes(playerId) && data.currentStage ===1){
+            //ask them to join
+            alert("click join quest");
+          }
+          if(currentStoryCard.participantsId.includes(playerId) && data.currentStage <= currentStoryCard.totalStages){
+            //pick cards for this stage
+            alert("here 2")
+          }
+          if(!currentStoryCard.participantsId.includes(playerId) && data.currentStage !=1){
+          //this player refused to join the quest;
+          //finishTurn();//increment the currentActivePlayer and move to the next player
+          alert("here 3")
+        }
+      }
+      if(currentStoryCard.storyCardType === "Event"){
+        
+      }
+      if(currentStoryCard.storyCardType === "Tournament"){
+        
+      }
+      if(currentStoryCard.storyCardType === null){
+        //if the story card type is numm it means they might be the first player
+        alert("pick a story card");
+      }
+
+    }
+    else if (data.currentActivePlayer != playerId){
+      //disable their buttons!
+      diableButtons();
+    }
     
-  })
-
-
+  });
 }
 
 //~~~~~~~~~~~~~Subscription ends here~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
