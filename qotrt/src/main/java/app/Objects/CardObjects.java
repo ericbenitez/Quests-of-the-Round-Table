@@ -116,10 +116,10 @@ public class CardObjects {
     }*/
 
     //this.storyCards.add(new Tournament("some tournament", 1));
-    this.storyCards.add(new Tournament("At Camelot", 3));
-    this.storyCards.add(new Tournament("At Orkney", 2));
-    this.storyCards.add(new Tournament("At Tintagel", 1));
-    this.storyCards.add(new Tournament("At York", 0));
+    // this.storyCards.add(new Tournament("At Camelot", 3));
+    // this.storyCards.add(new Tournament("At Orkney", 2));
+    // this.storyCards.add(new Tournament("At Tintagel", 1));
+    // this.storyCards.add(new Tournament("At York", 0));
 
     Collections.shuffle(this.adventureCards);
     Collections.shuffle(this.storyCards);

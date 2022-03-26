@@ -3,7 +3,6 @@ package app.Models.StoryCards;
 import java.util.ArrayList;
 
 import app.Models.Enums.StoryCardType;
-import app.Models.General.Game;
 
 public class Tournament extends StoryCard {
 
