@@ -21,13 +21,14 @@ public class Game implements Mediator { // Main = Game
   //Status of Game : NEW, IN-Progress, Finished..a set status function below..
   private ProgressStatus status;//we dont have instances of games, it's just the currentGame, if it's not null, it is NEW/In-progress
   Quest currentQuest;
+  Tournament currentTournament;
 
   @Autowired
   public Game() {
     this.adventureCardsDeck = new ArrayList<>();
     this.storyCardsDeck = new ArrayList<>();
     this.discardedCards = new ArrayList<>();
-
+    currentTournament = null;
   }
   
   public int getNumOfPlayers(){
@@ -95,6 +96,8 @@ public class Game implements Mediator { // Main = Game
     if (card instanceof Quest) {
       this.setCurrentQuest((Quest) card); //this is also setting the current whereas we have setcurrent function as well
       // this.currentQuest.draw(this.getPlayerById(playerId));
+    }else if (card instanceof Tournament){
+      this.setCurrentTournament((Tournament) card);
     }
     //have to do this for all other story cards.
     
@@ -195,6 +198,15 @@ public void setCurrentQuest(Quest card){
     }
     return null;
 }
-  
+
+
+// ------------- Tournament ---------------
+public void setCurrentTournament(Tournament tournament){
+    currentTournament = tournament;
+}
+
+public Tournament getCurrentTournament(){
+  return currentTournament;
+}
   
 }

@@ -21,6 +21,9 @@ let shields = 0;
 let totalPoints = 0;
 let canDraw = 0;
 
+let tourParticipant = false;
+let drawerTournament = 0;
+
 /**
  * The current stage you are on
  */
@@ -226,7 +229,7 @@ function subscriptions() {
 
   stompClient.subscribe("/topic/pickCard", function(response){
     const data = JSON.parse(response.body);
-    //console.log("From pick Card",data); //name: 'Slay the Dragon', drawer: null, storyCardType: 'Quest', totalStages: '3', foeName: 'Dragon', …}
+    //console.log("From pick Card",data); //name: 'Slay the Dragon', drawer: null, storyCardType: 'Quest', totalStages: '3', foeName: 'Dragon', …}
     displayStoryCard(data);
   })
    
@@ -253,28 +256,28 @@ function subscriptions() {
       if(currentStoryCard.storyCardType === "Quest"){
         //If the current story card type is quest, it could mean a few things
         //they're the sponsor, and it has looped back to them, the stage is complete
-        if (data.sponsor === playerId && data.currentStages < currentStoryCard.totalStages){
+        if (currentStoryCard.sponsor === playerId && currentStoryCard.currentStageNumber < currentStoryCard.totalStages){
           //check winner for data.currentstages
           checkWinner(data.stages); //this function does the functionality of sending the appropriate reward
           //and moving the turn
         }
         //they're the sponsor and this is the last and total stage
-        if (data.sponsor === playerId && data.currentStage === currentStoryCard.totalStages){
+        if (currentStoryCard.sponsor === playerId && currentStoryCard.currentStageNumber === currentStoryCard.totalStages){
           //check the winners again and reward them
           //for the sponsor, it should check how many total cards they used in all of the stages + total stages
           //for example, alert(pick 6 cards for sponsoring the quest);
         }
         //another scenario is that the player is not the sponsor.
-      }if(data.sponsor!=playerId){
-          if(!currentStoryCard.participantsId.includes(playerId) && data.currentStage ===1){
+      }if(currentStoryCard.sponsor!=playerId){
+          if(!currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber ===1){
             //ask them to join
             alert("click join quest");
           }
-          if(currentStoryCard.participantsId.includes(playerId) && data.currentStage <= currentStoryCard.totalStages){
+          if(currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber<= currentStoryCard.totalStages){
             //pick cards for this stage
             alert("here 2")
           }
-          if(!currentStoryCard.participantsId.includes(playerId) && data.currentStage !=1){
+          if(!currentStoryCard.participantsId.includes(playerId) &&currentStoryCard.currentStageNumber !=1){
           //this player refused to join the quest;
           //finishTurn();//increment the currentActivePlayer and move to the next player
           alert("here 3")
@@ -346,6 +349,7 @@ function winStage() {
     if (calcTotalBattlePts(points) >= stageBattlePts) {
       displayBattlePoint(totalPoints, stageBattlePts, "won");
       updateShields(currentStages);
+      updateShieldDisplay();
       return true;
     } else {
       displayBattlePoint(totalPoints, stageBattlePts, "lost");
@@ -526,7 +530,6 @@ function removeSelectedCards() {
   removeCardsFromHand(checked);
   alert(playerHand.length);
   if (playerHand.length <= 12){
-    alert("enabling");
     enableGameButtons();
   }
 
@@ -562,6 +565,20 @@ function initializeAdv() {
   });
 }
 
+
+// updates the player's hand (from server)
+// same as initializeAdv, but without drawing 12 cards
+function getPlayerHand(){
+  stompClient.send("/app/getCards", {}, `${playerId}`);
+
+  const connection = stompClient.subscribe("/user/queue/getCards", (response) => {
+    const data = JSON.parse(response.body);
+    playerHand = data;
+    clearPlayerHandDisplay();
+    displayAllCards(data);
+  });
+}
+
 function showCurrentStage(){
     // the first one is 0?
     let stageNumber =  currentStage + 1;
@@ -570,4 +587,11 @@ function showCurrentStage(){
 }
 
 
+// shields should be updated after winning quests, tournamnets, and for certain events
+// updates the shields display
+// (Note: I thought we didn't update the shields on server side, but we actually did, so the global var shields should be updated)
+function updateShieldDisplay(){
+  shieldDisplay = document.getElementById("shields").innerHTML = "You have " + shields + " shields.";
+
+}
 

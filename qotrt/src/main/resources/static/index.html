@@ -101,6 +101,19 @@
   <button onclick="clearBattlePointDisplay()">Clear Battle points</button>
   <button onclick="clearPlayerStageCards()">Clears player stage cards</button>
   <button onclick="showCurrentStage()">Show current stage</button>
+  <button onclick="updateShieldDisplay()">update shield display</button>
+  
+
+  <!-- Pop up To ask Player if they want to join tournament -->
+  <div id="popUpContainer">
+    <h1>Would you like to join this tournament?</h1>
+    <br>
+    <div id="popUpButtons">
+      <button onclick="joinTournament('yes')">Yes</button>
+      <button onclick="joinTournament('no')">No</button>
+    </div>
+    
+  </div>
 
   <script src="./js/Cards/AdventureCards.js"></script>
   <script src="./js/Cards/Event.js"></script>

@@ -79,6 +79,13 @@ public class GameController {
     return player.getCards();
   }
 
+  // basically what giveCards used to do before drawing cards was added
+  @MessageMapping("/getCards")
+  @SendToUser("/queue/getCards")
+  public ArrayList<AdventureCard> getCards(String playerId) {
+    Player player = this.gameService.getCurrentGame().getPlayerById(Integer.parseInt(playerId));
+    return player.getCards();
+  }
 
   @MessageMapping("/ready")
   @SendTo("/topic/startTurn")
@@ -185,5 +192,15 @@ public class GameController {
     // Player player = this.gameService.getCurrentGame().getPlayers().get(index);
     
     // return player.getId();
+  }
+
+
+  // ------------- Tournaments ---------------
+
+  @MessageMapping("/addParticipantTournament")
+  public void addParticipantTournament(@RequestBody Message playerId){
+  
+    int playerIdInt = Integer.parseInt(playerId.getMessage());
+    this.gameService.getCurrentGame().getCurrentTournament().addParticipant(playerIdInt);
   }
 }
