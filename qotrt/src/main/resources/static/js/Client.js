@@ -75,7 +75,7 @@ function createGame() {
  * Send request to pick a story card
  */
 function pickCard() {
-  stompClient.send("/app/pickCard",{});
+  stompClient.send("/app/pickCard", {});
 }
 
 function joinGame() {
@@ -93,13 +93,17 @@ function joinGame() {
 }
 
 function subscriptions() {
-
+  // subscribe to calculate stage winners
+  stompClient.subscribe("/topic/calculateStage", function (response) {
+    let data = JSON.parse(response.body);
+    
+    alert("Congratulations to: " + data);
+  });
+  
   //the response after setting the sponsor stages.
   stompClient.subscribe("/topic/setStages", function (response) { //need all players subscribe to this
     let data = JSON.parse(response.body); //should be an aray
-    console.log("response: " + response);
-    alert(data);    
-    console.log("data: "+ data);
+
     let stageSpecificDiv = document.createElement("div");
     let stageNumOfCardsDiv = document.createElement("div");
     let stages = data.stages;
@@ -126,14 +130,14 @@ function subscriptions() {
 
       }
     }
-    if (data.sponsor == playerId){
+    if (data.sponsor == playerId) {
       document.getElementById("stages").appendChild(stageSpecificDiv);
-    }else{
+    } else {
       stageSpecificDiv.style.display = "none";
       document.getElementById("stages").appendChild(stageNumOfCardsDiv);
     }
-    
-    
+
+
   });
   console.log("subscribed")
 
@@ -156,16 +160,16 @@ function subscriptions() {
     const data = JSON.parse(response.body);
     playerId = data.body;
     showResponse(data, playerName);
-    
-    setTimeout(() => {  alert("Click on initialize cards to begin the game"); }, 2000);
-    setTimeout(() => {  stompClient.send("/app/ready",{},""); }, 2000);
+
+    // setTimeout(() => { alert("Click on initialize cards to begin the game"); }, 2000);
+    setTimeout(() => { stompClient.send("/app/ready", {}, ""); }, 2000);
     initializeAdv();
 
     joinGameSubscription.unsubscribe();
   })
 
-   // subscribe to "wait for server to tell client to start"
-   stompClient.subscribe("/topic/startTurn", (response) => { // does not get called
+  // subscribe to "wait for server to tell client to start"
+  stompClient.subscribe("/topic/startTurn", (response) => { // does not get called
     console.log("This is after initilizing", response.body);
     if (response.body * 1 !== 0 && response.body * 1 === playerId) {
       alert("Pick a Story Card");
@@ -173,12 +177,12 @@ function subscriptions() {
   })
 
 
-  stompClient.subscribe("/topic/pickCard", function(response){
+  stompClient.subscribe("/topic/pickCard", function (response) {
     const data = JSON.parse(response.body);
     //console.log("From pick Card",data); //name: 'Slay the Dragon', drawer: null, storyCardType: 'Quest', totalStages: '3', foeName: 'Dragon', …}
     displayStoryCard(data);
   })
-   
+
   //From finish Turn...
 
 
@@ -195,57 +199,64 @@ function subscriptions() {
      * 
      * 
      */
-    if (data.currentActivePlayer = playerId){
+    if (data.currentActivePlayer === playerId) {
       //activate their buttons
+
+      // this needs work vv
       enableGameButtons();
       let currentStoryCard = data.currentStoryCard;
-      if(currentStoryCard.storyCardType === "Quest"){
+      if (currentStoryCard.storyCardType === "Quest") {
         //If the current story card type is quest, it could mean a few things
         //they're the sponsor, and it has looped back to them, the stage is complete
-        if (currentStoryCard.sponsor === playerId && currentStoryCard.currentStageNumber < currentStoryCard.totalStages){
+        if (currentStoryCard.sponsor === playerId && (currentStoryCard.currentStageNumber - 1) < (currentStoryCard.totalStages * 1)) {
           //check winner for data.currentstages
-          checkWinner(data.stages); //this function does the functionality of sending the appropriate reward
+          //CLEAR THE HASHMAP FOR CLIENT STAGE
+          //checkWinner(currentStoryCard.clientStages, currentStoryCard.stages); //this function does the functionality of sending the appropriate reward
           //and moving the turn
+          // request for winner
+          stompClient.send("/app/calculateStage"); //the response to this will be subscriptions so that everybody gets to see the dying player
+          //alert("player 2 won!");
         }
         //they're the sponsor and this is the last and total stage
-        if (currentStoryCard.sponsor === playerId && currentStoryCard.currentStageNumber === currentStoryCard.totalStages){
+        if (currentStoryCard.sponsor === playerId && currentStoryCard.currentStageNumber === currentStoryCard.totalStages) {
           //check the winners again and reward them
           //for the sponsor, it should check how many total cards they used in all of the stages + total stages
           //for example, alert(pick 6 cards for sponsoring the quest);
+          //send something to the server, stomp.client(/app/setStoryCardToNull );
         }
         //another scenario is that the player is not the sponsor.
-      }if(currentStoryCard.sponsor!=playerId){
-          if(!currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber ===1){
-            //ask them to join
-            alert("click join quest");
-          }
-          if(currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber<= currentStoryCard.totalStages){
-            //pick cards for this stage
-            alert("here 2")
-          }
-          if(!currentStoryCard.participantsId.includes(playerId) &&currentStoryCard.currentStageNumber !=1){
+      } if (currentStoryCard.sponsor != playerId) {
+        if (!currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber === 1) {
+          //ask them to join
+          alert("click join quest");
+        }
+        if (currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber <= currentStoryCard.totalStages) {
+          //pick cards for this stage
+          alert("here 2")
+        }
+        if (!currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber != 1) {
           //this player refused to join the quest;
           //finishTurn();//increment the currentActivePlayer and move to the next player
           alert("here 3")
         }
       }
-      if(currentStoryCard.storyCardType === "Event"){
-        
+      if (currentStoryCard.storyCardType === "Event") {
+
       }
-      if(currentStoryCard.storyCardType === "Tournament"){
-        
+      if (currentStoryCard.storyCardType === "Tournament") {
+
       }
-      if(currentStoryCard.storyCardType === null){
+      if (currentStoryCard.storyCardType === null) {
         //if the story card type is numm it means they might be the first player
         alert("pick a story card");
       }
 
     }
-    else if (data.currentActivePlayer != playerId){
+    else if (data.currentActivePlayer != playerId) {
       //disable their buttons!
-      diableButtons();
+      //disableButtons();
     }
-    
+
   });
 }
 
@@ -376,6 +387,10 @@ function placeCardsQuest() {
     alert("You may not play two Weapon cards of the same type.");
     return;
   }
+  
+  stompClient.send("/app/setClientStage",{}, JSON.stringify({"playerId":playerId, "cards":checked}));
+  alert("Click Finish Turn!");
+
 
   // stores the cards for this stage
   // we need to change this so that stageCards contains the actual cards (so we have data)
@@ -475,7 +490,7 @@ function removeSelectedCards() {
   let checked = getAllChecked();
   removeCardsFromHand(checked);
   alert(playerHand.length);
-  if (playerHand.length <= 12){
+  if (playerHand.length <= 12) {
     enableGameButtons();
   }
 
@@ -514,7 +529,7 @@ function initializeAdv() {
 
 // updates the player's hand (from server)
 // same as initializeAdv, but without drawing 12 cards
-function getPlayerHand(){
+function getPlayerHand() {
   stompClient.send("/app/getCards", {}, `${playerId}`);
 
   const connection = stompClient.subscribe("/user/queue/getCards", (response) => {
@@ -525,18 +540,18 @@ function getPlayerHand(){
   });
 }
 
-function showCurrentStage(){
-    // the first one is 0?
-    let stageNumber =  currentStage + 1;
-    alert("stage: " + stageNumber);
-    document.getElementById("stage" + stageNumber).style.display = "inline";
+function showCurrentStage() {
+  // the first one is 0?
+  let stageNumber = currentStage + 1;
+  alert("stage: " + stageNumber);
+  document.getElementById("stage" + stageNumber).style.display = "inline";
 }
 
 
 // shields should be updated after winning quests, tournamnets, and for certain events
 // updates the shields display
 // (Note: I thought we didn't update the shields on server side, but we actually did, so the global var shields should be updated)
-function updateShieldDisplay(){
+function updateShieldDisplay() {
   shieldDisplay = document.getElementById("shields").innerHTML = "You have " + shields + " shields.";
 
 }

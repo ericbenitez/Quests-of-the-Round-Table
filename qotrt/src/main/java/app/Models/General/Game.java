@@ -1,7 +1,9 @@
 package app.Models.General;
+
 import app.Objects.CardObjects;
 import java.util.ArrayList;
-
+import java.util.HashMap;
+import java.util.Map;
 
 import app.Models.AdventureCards.*;
 import app.Models.StoryCards.*;
@@ -13,15 +15,17 @@ public class Game implements Mediator { // Main = Game
   ArrayList<AdventureCard> discardedCards;
   ArrayList<AdventureCard> adventureCardsDeck;
   ArrayList<StoryCard> storyCardsDeck;
-  CardObjects gameCards; //get the adventure /story cards that are in the game
-  ArrayList<Player> players; 
+  // CardObjects gameCards; //get the adventure /story cards that are in the game
+  ArrayList<Player> players;
   String gameID;
   // Variable which asks the initial/starting player how many players should join
   int numOfPlayers;
-  //Status of Game : NEW, IN-Progress, Finished..a set status function below..
-  private ProgressStatus status;//we dont have instances of games, it's just the currentGame, if it's not null, it is NEW/In-progress
+  // Status of Game : NEW, IN-Progress, Finished..a set status function below..
+  private ProgressStatus status;// we dont have instances of games, it's just the currentGame, if it's not null,
+                                // it is NEW/In-progress
   Quest currentQuest;
   Tournament currentTournament;
+  CardObjects cardObjects;
 
   @Autowired
   public Game() {
@@ -29,26 +33,71 @@ public class Game implements Mediator { // Main = Game
     this.storyCardsDeck = new ArrayList<>();
     this.discardedCards = new ArrayList<>();
     currentTournament = null;
+    this.cardObjects = new CardObjects();
   }
-  
-  public int getNumOfPlayers(){
+
+  public int getNumOfPlayers() {
     return numOfPlayers;
   }
 
   public Player registerPlayer(Player player) {
     if (players.size() >= numOfPlayers) {
-      return null; //we should throw an exception instead...
+      return null; // we should throw an exception instead...
     }
-    player.setMediator(this); 
-    this.players.add(player); //add to array
+    player.setMediator(this);
+    this.players.add(player); // add to array
     // player.drawCards(12); in the game controller now
     return player;
   }
-  
-  public String getGameID(){
+
+  public String getGameID() {
     return gameID;
   }
-  
+
+  public ArrayList<String> calculateSurvivor() {
+    int sponsorBattlePoints = 0;
+    int playerBattlePoints = 0; // max player's points
+
+    ArrayList<ArrayList<String>> stages = currentQuest.getStages(); // the sponsors stage
+    HashMap<Integer, ArrayList<String>> clientStage = currentQuest.getClientStage();
+    int index = currentQuest.getCurrentStageNumber() - 1;
+    // need some calcs and return id or player name
+    ArrayList<String> currentSponsorStage = stages.get(index);
+
+    // calculate sponsor battlepoints for stage
+    for (String nameOfCard : currentSponsorStage) {
+      AdventureCard advCard = this.cardObjects.getCardByName(nameOfCard);
+      int battlePoints = advCard.getBattlePoints();
+      sponsorBattlePoints += battlePoints;
+    }
+
+    for (Map.Entry<Integer, ArrayList<String>> entry : clientStage.entrySet()) {
+      Integer playerId = entry.getKey();
+      ArrayList<String> cards = entry.getValue();
+      // remove the loserfrom the participants id if they dont have battlepoints
+      // higher than sponsor
+      for (String cardName : cards) {
+        AdventureCard card = this.cardObjects.getCardByName(cardName);
+        playerBattlePoints += card.getBattlePoints();
+      }
+
+      playerBattlePoints += this.getPlayerById(playerId).getRankPts();
+
+      if (playerBattlePoints < sponsorBattlePoints) {
+        this.currentQuest.getParticipantsId().remove(playerId);
+      }
+    }
+
+    ArrayList<String> survivors = new ArrayList<>();
+
+    for (Integer playerId : currentQuest.getParticipantsId()){
+      String playerName = this.getPlayerById(playerId).getName();
+      survivors.add(playerName);
+    }
+    
+    return survivors; // the peeps who survived
+  }
+
   // removes a player
   public Player removePlayer(Player player) {
     int i = this.players.indexOf(player);
@@ -61,14 +110,16 @@ public class Game implements Mediator { // Main = Game
 
   /**
    * Sets the game's adventure cards to a list
+   * 
    * @param cards
    */
   public void setAdventureCards(ArrayList<AdventureCard> cards) {
     this.adventureCardsDeck = cards;
   }
-  
+
   /**
    * Sets the game's story cards a list
+   * 
    * @param cards
    */
   public void setStoryCards(ArrayList<StoryCard> cards) {
@@ -85,6 +136,7 @@ public class Game implements Mediator { // Main = Game
 
   /**
    * Picks a story card from the deck and returns it
+   * 
    * @return StoryCard
    */
   public StoryCard pickCard() {
@@ -94,18 +146,17 @@ public class Game implements Mediator { // Main = Game
     StoryCard card;
     card = this.storyCardsDeck.get(storyCardsDeck.size() - 1);
     if (card instanceof Quest) {
-      this.setCurrentQuest((Quest) card); //this is also setting the current whereas we have setcurrent function as well
+      this.setCurrentQuest((Quest) card); // this is also setting the current whereas we have setcurrent function as
+                                          // well
       // this.currentQuest.draw(this.getPlayerById(playerId));
-    }else if (card instanceof Tournament){
+    } else if (card instanceof Tournament) {
       this.setCurrentTournament((Tournament) card);
     }
-    //have to do this for all other story cards.
-    
+    // have to do this for all other story cards.
+
     this.storyCardsDeck.remove(storyCardsDeck.size() - 1);
     return card;
   }
-
- 
 
   // displays all the discarded cards
   public void displayDiscardedCards() {
@@ -117,16 +168,17 @@ public class Game implements Mediator { // Main = Game
   // returns all the discarded cards
   public ArrayList<String> getDiscardedCards() {
     ArrayList<String> dCards = new ArrayList<>();
-   
+
     for (AdventureCard card : discardedCards) {
       dCards.add(card.name);
     }
     return dCards;
   }
 
-  public void addDiscardedCards(AdventureCard card){
+  public void addDiscardedCards(AdventureCard card) {
     discardedCards.add(card);
   }
+
   /**
    * Returns the size of the adventure cards deck
    * 
@@ -136,7 +188,6 @@ public class Game implements Mediator { // Main = Game
     return adventureCardsDeck.size();
   }
 
- 
   /**
    * Returns the connected players
    * 
@@ -146,67 +197,68 @@ public class Game implements Mediator { // Main = Game
     return this.players;
   }
 
-
-
   // From TTT
   public void setGameID(String x) {
     gameID = x;
   }
 
-  // Sets the num of players and initializes the arraylist with that capacity so no
+  // Sets the num of players and initializes the arraylist with that capacity so
+  // no
   // more players can join
   public void setNumOfPlayers(int x) {
     numOfPlayers = x;
     this.players = new ArrayList<Player>(x);
   }
 
-  public void setProgressStatus(ProgressStatus x){
+  public void setProgressStatus(ProgressStatus x) {
     status = x;
   }
-  public ProgressStatus getProgressStatus(){
+
+  public ProgressStatus getProgressStatus() {
     return status;
   }
- 
- 
-  public ArrayList<AdventureCard> getAdventureCardsDeck(){return adventureCardsDeck;}
 
-public void setCurrentQuest(Quest card){
-      this.currentQuest = card;
-}
+  public ArrayList<AdventureCard> getAdventureCardsDeck() {
+    return adventureCardsDeck;
+  }
 
-  public Quest getCurrentQuest(){
+  public void setCurrentQuest(Quest card) {
+    this.currentQuest = card;
+    // this.currentQuest.setGame()
+  }
+
+  public Quest getCurrentQuest() {
     return currentQuest;
   }
 
   public Player getPlayerById(int playerId) {
-    for (Player player: players) {
+    for (Player player : players) {
       if (player.getId() == playerId) {
         return player;
       }
     }
-    
+
     return null;
   }
-  
+
   public Player checkWinner() {
     // return the winning player
     // Player winningPlayer;
     for (Player p : players) {
-        if (p.getNumShields() >= 7) {
-            return p; // it has enough shields to be a knight
-        }
+      if (p.getNumShields() >= 7) {
+        return p; // it has enough shields to be a knight
+      }
     }
     return null;
-}
+  }
 
-
-// ------------- Tournament ---------------
-public void setCurrentTournament(Tournament tournament){
+  // ------------- Tournament ---------------
+  public void setCurrentTournament(Tournament tournament) {
     currentTournament = tournament;
-}
+  }
 
-public Tournament getCurrentTournament(){
-  return currentTournament;
-}
-  
+  public Tournament getCurrentTournament() {
+    return currentTournament;
+  }
+
 }

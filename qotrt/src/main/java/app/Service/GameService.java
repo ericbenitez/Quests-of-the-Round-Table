@@ -19,6 +19,7 @@ public class GameService {
     private boolean tournamentInPlay = false;
     private boolean eventInPlay = false;
     private StoryCard currentStoryCard ;
+    
 
     /***********Create Game Function **************
      * 
@@ -136,12 +137,10 @@ public class GameService {
 
     public boolean joinQuest(String id) {
         int playerId = Integer.parseInt(id);
-        //if (playerId > this.currentGame.getPlayers().size() || playerId - 1 < 0) {
-         //   return false;
-        //}
+       
         // get player so we can use the addPlayer function in turns
         // Player player = this.currentGame.getPlayerById(playerId);
-        currentGame.getCurrentQuest().addParticipant(Integer.parseInt(id));
+        currentGame.getCurrentQuest().addParticipant(playerId);
         return true;
     }
 
@@ -151,7 +150,6 @@ public class GameService {
             return;
         }
         this.currentGame.getCurrentQuest().withdrawParticipant(playerId);
-
     }
 
     

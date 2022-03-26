@@ -81,7 +81,7 @@ function advCardsForSponsor() {
 // ----------------------------------- Player participating quest ---------------------------------
 // player joining a quest, local and server 
 function joinQuest() {
-    if (sponsor) { return; }
+    // if (sponsor) { return; }
     participant = true;
     participants.push(currentActivePlayer);
     // change joinQuest button to withdraw button

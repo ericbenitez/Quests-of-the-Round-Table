@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.Controllers.dto.CardsMessage;
@@ -202,5 +203,26 @@ public class GameController {
   
     int playerIdInt = Integer.parseInt(playerId.getMessage());
     this.gameService.getCurrentGame().getCurrentTournament().addParticipant(playerIdInt);
+  }
+  
+  @MessageMapping("/calculateStage")
+  @SendTo("/topic/calculateStage")
+  public ArrayList<String> calculateStage() {
+    ArrayList<String> survivors = this.gameService.getCurrentGame().calculateSurvivor();
+    return survivors;
+  }
+  
+  @MessageMapping("/setClientStage")
+  public void setClientStage(@RequestBody CardsMessage cardsMessage) {
+
+    int playerId = Integer.parseInt(cardsMessage.getPlayerId());
+    ArrayList<String> cards = cardsMessage.getCards();
+    System.out.println(playerId);
+    System.out.println(cards.toString());
+    
+    Quest quest = this.gameService.getCurrentGame().getCurrentQuest();
+    quest.setClientStage(playerId, cards);
+    
+    //https://bushansirgur.in/spring-boot-requestparam-annotation-example/
   }
 }

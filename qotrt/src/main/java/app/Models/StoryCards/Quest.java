@@ -4,92 +4,111 @@ import java.util.ArrayList;
 
 import app.Models.Enums.StoryCardType;
 import app.Models.General.Player;
+import java.util.HashMap;
 
 public class Quest extends StoryCard {
     protected String name;
     protected int totalStages;
     protected String foeName;
-    protected int sponsor;
-    protected ArrayList<ArrayList<String>> stages; //sponsor stages
-    protected ArrayList<ArrayList<String>> clientStages;
+    protected int sponsor; // [[[player 1], [player2]],[]]
+    protected ArrayList<ArrayList<String>> stages; // sponsor stages
+    // client stages is overwritten for a new stage
+    protected HashMap<Integer, ArrayList<String>> clientStage;
+    // protected ArrayList<ArrayList<String>> clientStages; //client = player
+    // {key:value,key:value} playerId : stage cards
     protected ArrayList<Integer> participants; // for quests
     private int currentStage = 1;
+
     // if all the foes pass 'all' to foeName
     public Quest(String name, int totalStages, String foe) {
+
         this.name = name;
         this.totalStages = totalStages;
         this.foeName = foe;
         this.stages = new ArrayList<>();
         this.storyCardType = StoryCardType.Quest;
-        this.clientStages = new ArrayList<>();
+        this.clientStage = new HashMap<>();
         this.participants = new ArrayList<>(3);
     }
 
-    public int getCurrentStageNumber(){
+    public int getCurrentStageNumber() {
         return currentStage;
     }
-    public void incrementCurrentStage (){
-        this.currentStage+=1;
+
+    public void incrementCurrentStage() {
+        if(totalStages < currentStage ){
+            currentStage+=1;
+        }
+        else{
+            currentStage=totalStages;
+        }
     }
-    public void setSponsorStages(ArrayList<ArrayList<String>> stages){
+
+    public void setSponsorStages(ArrayList<ArrayList<String>> stages) {
         this.stages = stages;
     }
-    public void setStages(ArrayList<ArrayList<String>> clientStages) {
-        this.clientStages = clientStages;
-      }
 
-    public void setStage(ArrayList<String> clientStage) {
-    if (this.clientStages.size() >= totalStages) {
-        return;
+    public void setClientStage(int playerId, ArrayList<String> cards) {
+        clientStage.put(playerId, cards);
     }
-    clientStages.add(clientStage);
-    }
+
 
     public void setSponsor(int sponsorId) {
         this.sponsor = sponsorId;
     }
-    public int getSponsor(){
+
+    public int getSponsor() {
         return this.sponsor;
     }
+
     public void addParticipant(int playerId) {
         participants.add(playerId);
-      }
+    }
 
-    //get participants id 
-    public ArrayList<Integer> getParticipantsId(){
+    // get participants id
+    public ArrayList<Integer> getParticipantsId() {
         return participants;
     }
-      
+
     public void withdrawParticipant(int playerId) {
         for (int i = 0; i < participants.size(); i++) {
-        if (participants.get(i) == playerId) {
-            participants.remove(i);
-            return;
-        }
+            if (participants.get(i) == playerId) {
+                participants.remove(i);
+                return;
+            }
         }
     }
-    
-    
+
     public String getFoeName() {
         return foeName;
     }
 
-    public ArrayList<ArrayList<String>> getStages() { return this.stages; }
+    public ArrayList<ArrayList<String>> getStages() {
+        return this.stages;
+    }
+
+    public HashMap<Integer, ArrayList<String>> getClientStage() {
+        return this.clientStage;
+    }
 
     public boolean canPlayerSponsor(Player player) {
 
         return false;
     }
+
     /**
      * Returns the card's name
+     * 
      * @return String
      */
     public String getName() {
         return name;
     }
 
-    public String getTotalStages() { return String.valueOf(totalStages); }
-  
+    public String getTotalStages() {
+        return String.valueOf(totalStages);
+    }
+
 }
 
 class JourneyThruForest extends Quest {

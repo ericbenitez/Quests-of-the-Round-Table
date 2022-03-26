@@ -13,6 +13,7 @@ public abstract class AdventureCard extends Card {
    * @return String
    */
   public String getName() {
-    return this.name;
+    return this.name; 
   }
+ 
 }
