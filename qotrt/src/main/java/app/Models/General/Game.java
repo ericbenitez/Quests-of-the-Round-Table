@@ -25,6 +25,8 @@ public class Game implements Mediator { // Main = Game
                                 // it is NEW/In-progress
   Quest currentQuest;
   Tournament currentTournament;
+  EventCard currentEvent;
+
   CardObjects cardObjects;
 
   @Autowired
@@ -152,8 +154,10 @@ public class Game implements Mediator { // Main = Game
     } else if (card instanceof Tournament) {
       this.setCurrentTournament((Tournament) card);
     }
-    // have to do this for all other story cards.
-
+    else if(card instanceof EventCard){
+      this.setCurrentEvent((EventCard) card);
+    }
+    
     this.storyCardsDeck.remove(storyCardsDeck.size() - 1);
     return card;
   }
@@ -259,6 +263,15 @@ public class Game implements Mediator { // Main = Game
 
   public Tournament getCurrentTournament() {
     return currentTournament;
+  }
+
+  //~~~~~~~~~~~~~~~EventCard~~~~~~~~~~~~~~~~~~~~~~~~~
+  public void setCurrentEvent(EventCard event) {
+    currentEvent = event;
+  }
+
+  public EventCard getCurrentEvent(EventCard event) {
+    return currentEvent;
   }
 
 }

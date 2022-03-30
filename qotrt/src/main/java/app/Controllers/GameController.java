@@ -109,13 +109,20 @@ public class GameController {
   }
   
 
+
+  //We will also be returning the session here because we need to ask the currentActive player if they wanna sponsor quest, bid etc.
   @MessageMapping("/pickCard")
   @SendTo("/topic/pickCard")
-  public StoryCard pickCard(){
+  public Session pickCard(){
     // System.out.println("this is the player Id for pick Card" +playerId);
     StoryCard storyCard = this.gameService.getCurrentGame().pickCard();
     this.gameService.setCurrentStoryCard(storyCard);
-    return storyCard;
+    
+    Session currSession = new Session();
+    currSession.currentActivePlayer = gameService.getCurrentActivePlayer();
+    currSession.currentStoryCard = gameService.getCurrentStoryCard(); //returns all the elments of that storyCard
+    currSession.questInPlay = gameService.getQuestInPlay(); //bool 
+    return currSession;
   }
 
  
