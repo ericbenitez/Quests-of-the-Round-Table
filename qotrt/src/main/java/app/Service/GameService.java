@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import app.Models.AdventureCards.AdventureCard;
 import app.Models.AdventureCards.Ally;
+import app.Models.AdventureCards.Test;
 import app.Models.AdventureCards.Amour;
 import app.Models.General.Card;
 import app.Models.General.Game;
@@ -24,6 +25,7 @@ public class GameService {
     private boolean tournamentInPlay = false;
     private boolean eventInPlay = false;
     private StoryCard currentStoryCard ;
+    private CardObjects cards;
     
 
     /***********Create Game Function **************
@@ -37,7 +39,7 @@ public class GameService {
         this.currentGame.setNumOfPlayers(numOfPlayers); // first initialize the array of players
         this.currentGame.setProgressStatus(ProgressStatus.NEW);
         // initialize cards
-        CardObjects cards = new CardObjects();
+        cards = new CardObjects();
         this.currentGame.setAdventureCards(cards.getAdventureCards());
         this.currentGame.setStoryCards(cards.getStoryCards());
         
@@ -357,6 +359,24 @@ public class GameService {
         }
 
         return winner.getNumShields();
+    }
+
+    public Test setTestCard(ArrayList<ArrayList<String>> stages){
+        Test testCard = null;
+       for (int i = 0; i < stages.size(); i++)
+        {
+            for (int j = 0; j < stages.get(i).size(); j++)
+            {
+                String nameOfCard = stages.get(i).get(j);
+                AdventureCard advCard = cards.getCardByName(nameOfCard);
+                if(advCard instanceof Test){
+                
+                    testCard = (Test) advCard;
+
+                }
+            } 
+        }
+        return testCard;
     }
 
 }

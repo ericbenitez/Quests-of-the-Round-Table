@@ -177,7 +177,7 @@ function subscriptions() {
         //activate their buttons
   
         // this needs work vv
-        enableGameButtons();
+       // enableGameButtons();
         let currentStoryCard = data.currentStoryCard;
         if (currentStoryCard.storyCardType === "Quest") {
           //If the current story card type is quest, it could mean a few things
