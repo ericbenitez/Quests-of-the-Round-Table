@@ -1,12 +1,14 @@
 package app.Models.AdventureCards;
+import java.util.ArrayList;
 
-import app.Models.General.*;
 
 public class Test extends AdventureCard {
   int minBid;
-  Game game;
+  // Game game;
+  ArrayList<String> bids = new ArrayList<String>();
+  int lastBid;
 
-  //three constructors, one without the min Bid which will set it to a default value of 0
+  //two constructors, one without the min Bid which will set it to a default value of 0
   public Test(String name){
     this.name = name;
     this.description = "";
@@ -14,7 +16,6 @@ public class Test extends AdventureCard {
   }
 
  
-
   public Test(String name, int minBid){
     this.name = name;
     this.description = "";
@@ -22,15 +23,23 @@ public class Test extends AdventureCard {
   }
   
   public int getMinBid(){
-    // if (this.name == "Test of the Questing Beast" && this.game.getRounds().get(this.game.getRounds().size()-1).getName() == "Search for the Questing Beast") {
-    //   return 4;
-    // }
-    // return this.minBid;
-    // TODO CHANGE RETURN VALUE
+    return minBid;
+  }
+  public void addBid(ArrayList<String> bids){
+    this.bids = bids;
+  }
+  public int getLastBid(){
+    return bids.size();
+  }
+  public ArrayList<String> getBids(){
+    return bids;
+  }
+
+
+  @Override
+  public int getBattlePoints() {
+    // TODO Auto-generated method stub
     return 0;
   }
 
-  public int getBattlePoints(){
-    return 0;
-  }
 }

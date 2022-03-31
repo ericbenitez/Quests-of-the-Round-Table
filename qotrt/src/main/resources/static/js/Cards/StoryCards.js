@@ -55,4 +55,9 @@ function displayStoryCard(data) {
     }
     
   }
+
+
+  else if (storyCardType === "Event"){
+    alert("Click on Perform Event!")
+  }
 }

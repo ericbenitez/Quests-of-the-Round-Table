@@ -1,5 +1,11 @@
 
 function subscriptions() {
+
+    stompClient.subscribe("/topic/testWinner", function(response){
+        let data = JSON.parse(response.body);
+        alert("The test was won by "+ data);
+    })
+    
     // subscribe to calculate stage winners
     stompClient.subscribe("/topic/calculateStage", function (response) {
       let data = JSON.parse(response.body);
@@ -89,6 +95,12 @@ function subscriptions() {
       //console.log("From pick Card",data); //name: 'Slay the Dragon', drawer: null, storyCardType: 'Quest', totalStages: '3', foeName: 'Dragon', …}
       displayStoryCard(data);
     })
+
+     //This function should also use session data and send it back.
+     stompClient.subscribe("/topic/nextStageIsTest", function (response) {
+        const data = JSON.parse(response.body);
+        console.log(data);
+      })
   
     //~~~~~~~~~~~~~~~~~~~~~~~~From finish Turn~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~/
   
@@ -96,6 +108,7 @@ function subscriptions() {
     stompClient.subscribe("/topic/finishTurn", function (response) { //response = currentActiveplayer 
       let data = JSON.parse(response.body); //the id of the next active player..
       console.log(data);
+      serverData = data;
   
       /**
        * {"currentActivePlayer":2,
@@ -115,7 +128,7 @@ function subscriptions() {
         if (currentStoryCard.storyCardType === "Quest") {
           //If the current story card type is quest, it could mean a few things
           //they're the sponsor, and it has looped back to them, the stage is complete
-          if (currentStoryCard.sponsor === playerId && (currentStoryCard.currentStageNumber - 1) < (currentStoryCard.totalStages * 1)) {
+          if (currentStoryCard.sponsor === playerId && (currentStoryCard.currentStageNumber <= (currentStoryCard.totalStages * 1))) {
             //check winner for data.currentstages
             //CLEAR THE HASHMAP FOR CLIENT STAGE
             //checkWinner(currentStoryCard.clientStages, currentStoryCard.stages); //this function does the functionality of sending the appropriate reward
@@ -123,14 +136,26 @@ function subscriptions() {
             // request for winner
             stompClient.send("/app/calculateStage"); //the response to this will be subscriptions so that everybody gets to see the dying player
             //after this nothing happens so we need the sponsor to click finish quest
-            alert("player click finish quest!");
+            //the surviving player are rewarded with an extra adventure card
+            
+            if(data.testInPlay){
+                alert("The upcoming stage is a test");
+                //send to server and broadcast it to all players
+                stompClient.send("/app/nextStageIsTest");
+                alert("click finish Turn");
+            }
+            alert("Hey Sponsor, click finish quest!");
+
+
           }
           //they're the sponsor and this is the last and total stage
-          if (currentStoryCard.sponsor === playerId && currentStoryCard.currentStageNumber === currentStoryCard.totalStages) {
+          if (currentStoryCard.sponsor === playerId && currentStoryCard.currentStageNumber > currentStoryCard.totalStages) {
             //check the winners again and reward them
             //for the sponsor, it should check how many total cards they used in all of the stages + total stages
             //for example, alert(pick 6 cards for sponsoring the quest);
             //send something to the server, stomp.client(/app/setStoryCardToNull );
+            alert("The Quest is complete!");
+            //send some server things to clear the current quest
           }
           //another scenario is that the player is not the sponsor.
           if (currentStoryCard.sponsor != playerId) {
@@ -142,6 +167,16 @@ function subscriptions() {
                 //pick cards for this stage
                 //they've already joined the quset, they have to pick cards for the next stage or withdraw
                 alert("Pick cards for stage # " ,currentStoryCard.currentStageNumber);
+                if(data.testInPlay){
+                    alert("This is a test");
+                    let placeBidButton = document.createElement("button");
+                    var t = document.createTextNode("Place Bid (Test)");
+                    placeBidButton.appendChild(t);
+                    placeBidButton.setAttribute("onclick", "placeTestBid()");
+                    placeBidButton.setAttribute("id", "placeTestBid")
+                    document.getElementById("placeCardButtons").appendChild(placeBidButton);
+                }
+                //place bid function through a button which takes in the server Data;
           }
           if (!currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber != 1) {
             //this player refused to join the quest;

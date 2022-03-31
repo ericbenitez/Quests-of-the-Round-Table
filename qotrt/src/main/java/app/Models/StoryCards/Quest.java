@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import app.Models.Enums.StoryCardType;
 import app.Models.General.Player;
 import java.util.HashMap;
+import app.Models.AdventureCards.*;
+import app.Objects.CardObjects;
+
+
 
 public class Quest extends StoryCard {
     protected String name;
@@ -18,6 +22,11 @@ public class Quest extends StoryCard {
     // {key:value,key:value} playerId : stage cards
     protected ArrayList<Integer> participants; // for quests
     private int currentStage = 1;
+    protected boolean questIncludesTest;  //we figure this out from the stages the sponsor sets
+    protected int testInStage;
+    protected Test testCard;
+    private CardObjects cardObjects;
+
 
     // if all the foes pass 'all' to foeName
     public Quest(String name, int totalStages, String foe) {
@@ -29,6 +38,8 @@ public class Quest extends StoryCard {
         this.storyCardType = StoryCardType.Quest;
         this.clientStage = new HashMap<>();
         this.participants = new ArrayList<>(3);
+        this.cardObjects = new CardObjects();
+
     }
 
     public int getCurrentStageNumber() {
@@ -39,13 +50,30 @@ public class Quest extends StoryCard {
         if(totalStages < currentStage ){
             currentStage+=1;
         }
-        else{
-            currentStage=totalStages;
+        else if(currentStage==totalStages){
+            currentStage+=1;
         }
+        
     }
 
     public void setSponsorStages(ArrayList<ArrayList<String>> stages) {
+        //here it should go through the cards and set the tests
         this.stages = stages;
+        for (int i = 0; i < stages.size(); i++)
+        {
+            for (int j = 0; j < stages.get(i).size(); j++)
+            {
+                String nameOfCard = stages.get(i).get(j);
+
+                AdventureCard advCard = this.cardObjects.getCardByName(nameOfCard);
+                if(advCard instanceof Test){
+                    questIncludesTest=true;
+                    testInStage = i+1;
+                    testCard = (Test) advCard;
+
+                }
+            } 
+        }
     }
 
     public void setClientStage(int playerId, ArrayList<String> cards) {
@@ -109,6 +137,18 @@ public class Quest extends StoryCard {
         return String.valueOf(totalStages);
     }
 
+    public boolean getQuestIncludesTest(){
+        return questIncludesTest;
+    }  //we figure this out from the stages the sponsor sets
+   
+    public int getTestInStage(){
+        return testInStage;
+    }
+
+
+    public Test getTestCard(){
+        return testCard;
+    }
 }
 
 class JourneyThruForest extends Quest {

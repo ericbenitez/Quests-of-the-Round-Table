@@ -21,10 +21,8 @@ let count = 1;
 let selectedCards = 0;
 let totalAdventureCardsWon = (count - 1) + selectedCards;
 function setStages(currentQuest, currentStages, foe) {
-    let stagesArea = document.getElementById("stages");
     if (count <= currentStages) {
         alert("pick cards for your " + count + "/" + currentStages + " stages");
-        let stage = document.createElement("div");
         let dynamicButton = document.createElement("button");
         var t = document.createTextNode("Create Stage " + count);
         dynamicButton.appendChild(t);
@@ -42,16 +40,29 @@ function setStages(currentQuest, currentStages, foe) {
 
 participants = [];
 let maxBattlePoints = [];
+//only one foe per stage(foe can be supplied different weapons tho), only one test per stage & quest
 let myStages = [];
+let testCards = ["Test of the Questing Beast", "Test of temptation", "Test of Valor", "Test of Morgan Le Fey"];
 function stageNumCards() {
     let checkedString = getAllChecked(); //returns checked cards
     let checked = getActualCards(checkedString);
     console.log("This is checked!", checked);
     //send the cards to server to place in array of stages.
     //place cards
+
+    //check for test (it should be a single and only card for that stage)
+    if((checkedString.includes(testCards[0]) && checkedString.length !=1) ||
+    (checkedString.includes(testCards[1]) && checkedString.length !=1) ||
+    (checkedString.includes(testCards[2]) && checkedString.length !=1) ||
+    (checkedString.includes(testCards[3]) && checkedString.length !=1) ){
+        //there is a test card but the stage has more than one card
+        alert("There should only be one test card!");
+        return;
+    }
     let battlePointsForThisStage = 0;
-    removeAllCheckedCards(checkedString);//remove from UI
-    removeCardsFromHand(checkedString); //remove them from hand
+    //removeAllCheckedCards(checkedString);//remove from UI
+    
+    removeCardsFromHand(checkedString); //remove them from hand (server) + UI
     myStages.push(checkedString); //["hello","hi","he"]
     // myStages.push("/");
     for (let i = 0; i < checkedString.length; i++) {
@@ -133,3 +144,35 @@ function inQuest() {
 function disableJoinQuest() {
     document.getElementById("joinQuest").disabled = true;
 }
+
+
+function placeTestBid(){
+    let testCard = serverData.testCard;
+    let checkedString = getAllChecked(); //returns checked cards
+    if(testCard.lastBid==0){ //meaning this player is about to make the first bid so it should be greater than min Bid
+        if(checkedString.length >= testCard.minBid ){
+            //send their bid to the server
+            stompClient.send("/app/placeTestBid", {}, JSON.stringify({
+                'message': checkedString.length + ""
+            }));
+        }
+        else{
+            alert("Your bid is less than the min bid! Try again or withdraw quest!");
+        }
+    }
+    else if(testCard.bids.length > 0){
+        const lastBid = testCard.lastBid;
+        if(checkedString.length >= lastBid ){
+            //send to server
+            stompClient.send("/app/placeTestBid", {}, JSON.stringify({ 'bids': checkedString }))
+        }
+
+        else{
+            alert("The last bid was "+lastBid+" you need to increase your bid! If you can't, click withdraw quest!");
+        }
+
+    }
+
+}
+
+

@@ -1,5 +1,6 @@
 package app.Controllers;
 
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import app.Controllers.dto.CardsMessage;
 import app.Controllers.dto.DoubleArrayMessage;
+import app.Controllers.dto.ArrayMessage;
+
 import app.Controllers.dto.Message;
 import app.Controllers.dto.ShieldMessage;
-import app.Models.AdventureCards.AdventureCard;
+import app.Models.AdventureCards.*;
 import app.Models.General.Game;
 import app.Models.General.Player;
 import app.Models.General.Session;
@@ -122,6 +125,8 @@ public class GameController {
     currSession.currentActivePlayer = gameService.getCurrentActivePlayer();
     currSession.currentStoryCard = gameService.getCurrentStoryCard(); //returns all the elments of that storyCard
     currSession.questInPlay = gameService.getQuestInPlay(); //bool 
+    currSession.testInPlay = false;
+    currSession.testCard= null;
     return currSession;
   }
 
@@ -156,6 +161,7 @@ public class GameController {
   @MessageMapping("withdrawQuest")
   public void withdrawQuest(@RequestBody Message playerId) {
     gameService.withdrawQuest(playerId.getMessage());
+    finishTurn();//move on to the next player
   }
 
   @MessageMapping("/finishTurn")
@@ -164,17 +170,75 @@ public class GameController {
     
     Session currSession = new Session();
     currSession.currentActivePlayer = gameService.startNextPlayer(); ///increments the player
-    //if we round back to the sponsor, the stage goes up
-    if(gameService.getQuestInPlay() && gameService.getCurrentActivePlayer()==gameService.getCurrentGame().getCurrentQuest().getSponsor()){
-      gameService.getCurrentGame().getCurrentQuest().incrementCurrentStage();
-    }
     currSession.currentStoryCard = gameService.getCurrentStoryCard(); //returns all the elments of that storyCard
     currSession.questInPlay = gameService.getQuestInPlay(); //bool
+    currSession.testInPlay = (gameService.getCurrentGame().getCurrentQuest().getQuestIncludesTest() && (gameService.getCurrentGame().getCurrentQuest().getTestInStage() == gameService.getCurrentGame().getCurrentQuest().getCurrentStageNumber()));
+    currSession.testCard= (currSession.testInPlay) ?  gameService.getCurrentGame().getCurrentQuest().getTestCard() : null;
+    //if we round back to the sponsor, the stage goes up
+    if(gameService.getQuestInPlay() && gameService.getCurrentActivePlayer()==gameService.getCurrentGame().getCurrentQuest().getSponsor()){
+      if(!currSession.testInPlay){
+        gameService.getCurrentGame().getCurrentQuest().incrementCurrentStage();
+      } 
+      if(currSession.testInPlay && gameService.getCurrentGame().getCurrentQuest().getParticipantsId().size()==0) {//everyone dropped out with no bids
+        gameService.getCurrentGame().getCurrentQuest().incrementCurrentStage();
+        currSession.testInPlay = false;
+      }
+      if(currSession.testInPlay && gameService.getCurrentGame().getCurrentQuest().getParticipantsId().size()==1) { //the winner
+        //some function to announce the winner and then takes cards of the test winner (last bid in test.bids is the number of cards we remove from the winner)
+        testWinner(gameService.getCurrentGame().getCurrentQuest().getParticipantsId());
+        gameService.getCurrentGame().getCurrentQuest().incrementCurrentStage(); 
+        currSession.testInPlay = false;
+
+      }
+      if(currSession.testInPlay && gameService.getCurrentGame().getCurrentQuest().getParticipantsId().size()>1) { //test keeps going
+        currSession.currentActivePlayer = gameService.startNextPlayer(); //skip the sponsor
+      } 
+    }
+
     // currSession.sponsorId = gameService.getCurrentGame().getCurrentQuest().getSponsor(); //id of the sponsor
     // currSession.participantsId = gameService.getCurrentGame().getCurrentQuest().getParticipantsId();//id of the sponsor
    
     return currSession;
   }
+
+@SendTo("/topic/testWinner")
+public String testWinner(ArrayList<Integer> participantsId){
+  String name = "";
+  if(participantsId.size() == 1){
+    int id  = participantsId.get(participantsId.size()-1);
+    Player player = gameService.getCurrentGame().getPlayerById(id);
+    gameService.discardCards(Integer.toString(id), gameService.getCurrentGame().getCurrentQuest().getTestCard().getBids());
+    name = player.getName();
+  }
+  return name;
+}
+
+  @MessageMapping("/nextStageIsTest")
+  @SendTo("/topic/nextStageIsTest")
+  public Test nextStageIsTest() {
+    return gameService.getCurrentGame().getCurrentQuest().getTestCard();
+  }
+  
+
+  
+
+  @MessageMapping("/placeTestBid")
+  @SendTo("/topic/finishTurn")
+  public Session placeTestBid(@RequestBody ArrayMessage bid) {    
+    gameService.getCurrentGame().getCurrentQuest().getTestCard().addBid(bid.getCards());
+    Session currSession = new Session();
+    currSession.currentActivePlayer = gameService.startNextPlayer(); ///increments the player
+    //skip the sponsor
+    if(gameService.getCurrentActivePlayer()==gameService.getCurrentGame().getCurrentQuest().getSponsor()){
+      currSession.currentActivePlayer = gameService.startNextPlayer(); ///increments the player
+    }
+    currSession.currentStoryCard = gameService.getCurrentStoryCard(); //returns all the elments of that storyCard
+    currSession.questInPlay = gameService.getQuestInPlay(); //bool
+    currSession.testInPlay = (gameService.getCurrentGame().getCurrentQuest().getQuestIncludesTest() && (gameService.getCurrentGame().getCurrentQuest().getTestInStage() == gameService.getCurrentGame().getCurrentQuest().getCurrentStageNumber()));
+    currSession.testCard= (currSession.testInPlay) ?  gameService.getCurrentGame().getCurrentQuest().getTestCard() : null;
+    return currSession;
+  }
+  
 
   
   // [[stage 1 cards], [stage 2 cards]] .. ["sfs","grgw","rger"]

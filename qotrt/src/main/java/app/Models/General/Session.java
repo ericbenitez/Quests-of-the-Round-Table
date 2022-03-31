@@ -1,5 +1,6 @@
 package app.Models.General;
 import app.Models.StoryCards.StoryCard;
+import app.Models.AdventureCards.*;
 
 public class Session {
 /*****
@@ -20,7 +21,8 @@ public class Session {
    // public int sponsorId;
    // public ArrayList<Integer> participantsId;
    public boolean questInPlay;
-
+   public boolean testInPlay; //comes from the Quest.java 
+   public Test testCard;
 }
    
  

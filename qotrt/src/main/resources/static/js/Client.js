@@ -10,6 +10,7 @@ let gameId = null;
 let playerId = 0; //player.java also has an id it assigns
 let numOfPlayer = 0;
 let playerName = "";
+let serverData; //this is data saved from finish Turn (Session Data)
 // let activeStoryCard = "";
 // let participant = false;
 // let sponsor = false;
