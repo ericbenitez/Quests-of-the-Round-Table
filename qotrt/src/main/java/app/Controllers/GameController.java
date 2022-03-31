@@ -20,11 +20,13 @@ import app.Controllers.dto.DoubleArrayMessage;
 import app.Controllers.dto.Message;
 import app.Controllers.dto.ShieldMessage;
 import app.Models.AdventureCards.AdventureCard;
+import app.Models.General.Card;
 import app.Models.General.Game;
 import app.Models.General.Player;
 import app.Models.General.Session;
 import app.Models.StoryCards.Quest;
 import app.Models.StoryCards.StoryCard;
+import app.Models.StoryCards.Tournament;
 import app.Service.GameService;
 
 @RestController
@@ -200,10 +202,84 @@ public class GameController {
 
   @MessageMapping("/addParticipantTournament")
   public void addParticipantTournament(@RequestBody Message playerId){
-  
     int playerIdInt = Integer.parseInt(playerId.getMessage());
     this.gameService.getCurrentGame().getCurrentTournament().addParticipant(playerIdInt);
+    Tournament x = this.gameService.getCurrentGame().getCurrentTournament();
+    System.out.println(x);
   }
+
+  @MessageMapping("/isSinglePlayerTournament")
+  @SendToUser("/queue/isSinglePlayerTournament")
+  public boolean isSinglePlayerTournament(){
+    if (this.gameService.getNumPlayersTourn() == 1){
+      return true;
+    }
+    return false;
+  }
+
+  @MessageMapping("emptyTournament")
+  @SendToUser("/queue/emptyTournament")
+  public boolean emptyTournament(){
+    if (this.gameService.getNumPlayersTourn() <= 0){
+      return true;
+    }
+    return false;
+  }
+
+  @MessageMapping("/autoAwardSingleTourn")
+  @SendTo("/topic/autoAwardSingleTourn")
+  public int autoAwardSingleTourn(){
+    return this.gameService.getAutoAwardSinglePlayer();
+
+  }
+
+  @MessageMapping("/addPlayerCardsTourn")
+  public boolean addPlayerCardsTourn(@RequestBody CardsMessage message){
+    return this.gameService.addPlayerCardsTourn(Integer.parseInt(message.getPlayerId()), message.getCards()); 
+  }
+
+  @MessageMapping("/getAllTournPlayerCards")
+  @SendTo("/topic/getAllTournPlayerCards")
+  public ArrayList<ArrayList<Card>> getAllTournPlayerCards(){
+    return this.gameService.getAllTournamentPlayerCards();
+  }
+  
+
+  // award for when there is no tie (doesn't matter which round)
+  // returns the updated shields for the winner
+  @MessageMapping("/awardSingleWinner")
+  @SendToUser("/queue/awardSingleWinner")
+  public int awardSingleWinner(@RequestBody Message message){
+    int winnerId = Integer.parseInt(message.getMessage());
+    return this.gameService.awardSingleWinner(winnerId);
+  }
+
+  @MessageMapping("/awardTiedWinner")
+  @SendToUser("/queue/awardTiedWinner")
+  public int awardTiedWinner(@RequestBody Message message){
+    int winnerId = Integer.parseInt(message.getMessage());
+    return this.gameService.awardTiedWinner(winnerId);
+  }
+
+  @MessageMapping("/awardSingleGameWinner")
+  @SendToUser("/queue/awardSingleGameWinner")
+  public int awardSingleGameWinner(@RequestBody Message message){
+    int winnerId = Integer.parseInt(message.getMessage());
+    return this.gameService.awardSingleGameWinner(winnerId);
+  }
+  
+
+  @MessageMapping("/discardCardsAfterTournament")
+  public void discardCardsAfterTournament(){
+    this.gameService.discardCardsAfterTournament();
+  }
+
+  @MessageMapping("/discardCardsAfterTie")
+  public void discardCardsAfterTie(){
+    this.gameService.discardCardsAfterTie();
+  }
+
+
   
   @MessageMapping("/calculateStage")
   @SendTo("/topic/calculateStage")

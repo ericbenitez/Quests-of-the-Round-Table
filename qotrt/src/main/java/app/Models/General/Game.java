@@ -261,4 +261,38 @@ public class Game implements Mediator { // Main = Game
     return currentTournament;
   }
 
+  // calculates total battle points given a list of cards
+  public int calcBattlePtsOfCards(ArrayList<String> cards){
+    int total = 0;
+    for (String cardName: cards){
+      total += cardObjects.getBattlePtsByName(cardName);
+    }
+    return total;
+  }
+
+
+
+  public ArrayList<Integer> calcWinnersTournament(){
+    int max = 0;
+
+    ArrayList<Integer> winners = new ArrayList<>();
+    for (int i : this.currentTournament.getParticipants()){
+      int currPts = calcBattlePtsOfCards(currentTournament.getPlayerCards(i));
+      currPts += this.getPlayerById(i).getRankPts();
+      if (currPts > max){
+        max = currPts;
+        winners.clear();
+        winners.add(i);
+      }else if (currPts == max){
+        winners.add(i);
+      }
+    }
+
+    return winners;
+  }
+
+  public CardObjects getCardObjects(){
+    return cardObjects;
+  }
+
 }

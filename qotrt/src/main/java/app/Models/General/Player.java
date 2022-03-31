@@ -13,6 +13,7 @@ public class Player {
   // list of cards
   public Card pickedCard; // from the story deck
   public ArrayList<AdventureCard> cards; // 12 cards
+  private Amour currentAmour;
 
   public Player(String name) {
     this.name = name;
@@ -20,6 +21,7 @@ public class Player {
     this.numShields = 0;
     uniqueId++; 
     this.cards = new ArrayList<AdventureCard>();
+    this.currentAmour = null;
   }
 
   /**
@@ -231,6 +233,12 @@ public class Player {
     cards.add(newCard);
   }
 
+  public void setAmour(Amour amourCard){
+    currentAmour = amourCard;
+  }
 
+  public Amour getAmour(){
+    return currentAmour;
+  }
 
 }

@@ -5,14 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d0c03061-7b1e-4005-97e5-ca68a2317e3f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Controllers/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Controllers/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Round.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Session.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/Quest.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/Quest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/General/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/Tournament.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/Tournament.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Objects/CardObjects.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Objects/CardObjects.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/css/styles.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Cards/StoryCards.js" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Cards/StoryCards.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Cards/Tournament.js" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Cards/Tournament.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Client.js" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Client.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/game.js" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/game.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +67,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="codeWithMe.voiceChat.enabledByDefault" value="false" />
     <property name="full.screen.before.presentation.mode" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../git-debug/debug-2/Quests-of-the-Round-Table" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -158,8 +162,33 @@
     </option>
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java</url>
+          <line>359</line>
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java</url>
+          <line>345</line>
+          <option name="timeStamp" value="28" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java</url>
+          <line>328</line>
+          <option name="timeStamp" value="29" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/Tournament.java</url>
+          <line>34</line>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
+        <PinnedItemInfo parentTag="app.Models.General.Game" memberName="currentTournament" />
         <PinnedItemInfo parentTag="app.Models.General.Round" memberName="participants" />
       </pinned-members>
     </pin-to-top-manager>
