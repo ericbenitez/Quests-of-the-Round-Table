@@ -109,17 +109,17 @@ public class CardObjects {
     // this.storyCards.add(new Quest("Test of the Green Knight", 4, "Green Knight"));
     // this.storyCards.add(new Quest("Journey Through the Enchanted Forest",3,"Evil Knight"));
 
-    for (int i = 0; i < 2; ++i) {
+   // for (int i = 0; i < 2; ++i) {
       // this.storyCards.add(new Quest("Vanquish King Arthur's Enemies", 3, null));
-      this.storyCards.add(new Quest("Boar Hunt", 2, "Boar"));
-      this.storyCards.add(new Quest("Repel the Saxon Raiders", 2, "All"));
-    }
+     // this.storyCards.add(new Quest("Boar Hunt", 2, "Boar"));
+     // this.storyCards.add(new Quest("Repel the Saxon Raiders", 2, "All"));
+    //}
 
     //this.storyCards.add(new Tournament("some tournament", 1));
-    // this.storyCards.add(new Tournament("At Camelot", 3));
-    // this.storyCards.add(new Tournament("At Orkney", 2));
-    // this.storyCards.add(new Tournament("At Tintagel", 1));
-    // this.storyCards.add(new Tournament("At York", 0));
+    this.storyCards.add(new Tournament("At Camelot", 3));
+    this.storyCards.add(new Tournament("At Orkney", 2));
+    this.storyCards.add(new Tournament("At Tintagel", 1));
+    this.storyCards.add(new Tournament("At York", 0));
 
     Collections.shuffle(this.adventureCards);
     Collections.shuffle(this.storyCards);
@@ -141,5 +141,14 @@ public class CardObjects {
       }
     }
     return null;
+  }
+
+  public int getBattlePtsByName(String name){
+    for (AdventureCard adventureCard : adventureCards){
+      if (adventureCard.getName().equals(name)){
+        return adventureCard.getBattlePoints();
+      }
+    }
+    return 0;
   }
 }

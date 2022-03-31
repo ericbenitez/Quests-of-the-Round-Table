@@ -14,6 +14,7 @@
   <link rel='stylesheet' type='text/css' media='screen' href='./css/playerCards.css'>
 
 
+
 </head>
 
 <body>
@@ -86,8 +87,9 @@
       <div id="placeCardButtons">
         <button id="faceUpButton" class="disabledButton">Place Selected Cards Face Up</button>
         <button id="faceDownButton" class="disabledButton">Place Selected Cards Face Down</button>
-        <!-- Testing -->
         <button id="discardCardButton" onclick="removeSelectedCards()">Discard Cards</button>
+        <button id="bidReadyButton" onclick="placeCardsTournament()">Bid</button>
+        
       </div>
     </div>
   </div>
@@ -95,13 +97,17 @@
 
   <!-- Just for testing -->
   <button id="placeCardsQuest" onclick="placeCardsQuest()">Choose card for stage</button>
-  <button onclick="updateShields(5)">Update Shields</button>
-  <button onclick="removeUsedCardsLocal()">Delete used cards</button>
   <div id="battlePoints"></div> <!-- To display the total battle points for a player in a stage -->
-  <button onclick="clearBattlePointDisplay()">Clear Battle points</button>
   <button onclick="clearPlayerStageCards()">Clears player stage cards</button>
   <button onclick="showCurrentStage()">Show current stage</button>
-  <button onclick="updateShieldDisplay()">update shield display</button>
+
+  <!-- Testing tournament functionality -->
+  <br><br>
+  <p>TESTING TOURNAMENT BUTTONS</p>
+  <button onclick="addParticipantTournament()">Join tournament</button>
+  <button onclick="autoAwardSingleParticipant()">Get award single player tournament</button>
+  <button onclick="displayAllCardsAtOnce()">Display All at once</button>
+
   
 
   <!-- Pop up To ask Player if they want to join tournament -->
@@ -113,6 +119,42 @@
       <button onclick="joinTournament('no')">No</button>
     </div>
     
+  </div>
+
+
+  <!-- Pop up to display tournament cards, as well as winner(s)/result --> 
+  <div id="tournament">
+    <h1>Tournament</h1>
+    <div id="playerCardsTourn">
+      <div class="tournRow">
+        <div id="Player1Tourn" class="playerTourn">
+          <p>Player 1</p>
+          <div id="player1Cards" class="allCardsT"></div>
+          <div id="player1Total" class="playerTotal">Total:</div>
+        </div>
+        <div id="Player2Tourn" class="playerTourn">
+          <p>Player 2</p>
+          <div id="player2Cards" class="allCardsT"></div>
+          <div id="player2Total" class="playerTotal">Total:</div>
+        </div>
+      </div>
+      <div class="tournRow" >
+        <div id="Player3Tourn" class="playerTourn">
+          <p>Player 3</p>
+          <div id="player3Cards" class="allCardsT">
+          </div>
+          <div id="player3Total" class="playerTotal">Total:</div>
+        </div>
+        <div id="Player4Tourn" class="playerTourn">
+          <p>Player 4</p>
+          <div id="player4Cards" class="allCardsT"></div>
+          <div id="player4Total" class="playerTotal">Total:</div>
+        </div>
+      </div>
+    </div>
+    <div id="tournResults">
+      <h1>Winner</h1>
+    </div>
   </div>
 
   <script src="./js/Cards/AdventureCards.js"></script>

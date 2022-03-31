@@ -24,6 +24,7 @@ let canDraw = 0;
 
 let tourParticipant = false;
 let drawerTournament = 0;
+let tieBreakerPlayed = false;  // false when the tie breaker round has not yet been played
 
 /**
  * The current stage you are on

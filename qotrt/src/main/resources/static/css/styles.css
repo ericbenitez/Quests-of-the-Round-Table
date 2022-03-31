@@ -118,3 +118,61 @@ button {
     align-items: center;
     justify-content:space-evenly;
 }
+
+#tournament {
+    width: 80%;
+    min-height: 550px;
+    border: 1.5em black solid;
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+    text-align: center;
+    /*position: fixed; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);*/
+}
+
+#playerCardsTourn {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+
+}
+
+
+.tournRow {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+}
+
+.playerTourn {
+    border: 1px black solid;
+    flex: 1;
+    padding: 2em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.playerTourn > p {
+    font-size: 1vw;
+    text-align: center;  
+}
+
+
+#tournResults {
+    flex: 1;
+}
+
+
+.playerTotal {  
+    align-self:flex-start;   
+    color: red;
+}
+
+
+.allCardsT{
+    text-align: left;
+}

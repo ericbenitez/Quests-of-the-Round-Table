@@ -6,6 +6,60 @@ function subscriptions() {
         alert("The test was won by "+ data);
     })
     
+  
+  // subscribe to get tournamnet cards displayed, as well as tournament results
+  const singlePLayerSub = stompClient.subscribe('/topic/getAllTournPlayerCards', function (response) {
+    // clear it first = need to do this later
+    let data = JSON.parse(response.body);
+    let playerPts = {};
+    for (let i = 0; i < data.length; i++){
+        let id = i+ 1;
+        console.log("id: " + id);
+        let playerCardDiv = document.getElementById("player" + id + "Cards");
+        if (data[i] == null){continue;}
+        let totalPts = 0;
+        for (let j = 0; j < data[i].length; j++){
+            playerCardDiv.appendChild(document.createTextNode(data[i][j].name + ": " + data[i][j].battlePoints + " battle points"));
+            playerCardDiv.appendChild(document.createElement("br"));
+            totalPts += data[i][j].battlePoints;
+        }
+        // YOU NEED TO ADD ALLY PTS TOO
+        document.getElementById("player" + id + "Total").appendChild(document.createTextNode(" " + totalPts + " battle points"));
+        playerPts[id] = totalPts;
+    }
+    // calc winner(s) or result (tie)
+    let allWinners = calcTournamentResult(playerPts);
+    
+    alert("allWinners: " + allWinners);
+    if (allWinners.length == 1){
+      alert("winner length = 1");
+      if (playerId == allWinners[0]){
+        awardSingleWinner(allWinners[0]);
+        alert("YOU WON SOME SHIELDS BRUH");
+      }
+    }else {
+      if (!tieBreakerPlayed){
+        alert("There's a tie -- play the tie breaker round!");
+        tieBreakerPlayed = true;
+      }else {
+        for (let i = 0; i < allWinners.length; i++){
+          if (allWinners[i] == playerId){
+            awardTiedWinner(playerId);
+          }
+        }
+      }
+      
+    }
+    
+  });
+
+  // tournament award/winner alert for single participant
+  const autoAwardSingleSub = stompClient.subscribe('/topic/autoAwardSingleTourn', function (response) {
+    let data = JSON.stringify(response);
+    alert(data);
+  });
+
+
     // subscribe to calculate stage winners
     stompClient.subscribe("/topic/calculateStage", function (response) {
       let data = JSON.parse(response.body);

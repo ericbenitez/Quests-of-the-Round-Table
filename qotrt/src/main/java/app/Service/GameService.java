@@ -5,10 +5,15 @@ import java.util.UUID; //for game ID
 import org.springframework.stereotype.Service;
 
 import app.Models.AdventureCards.AdventureCard;
+import app.Models.AdventureCards.Ally;
+import app.Models.AdventureCards.Amour;
+import app.Models.General.Card;
 import app.Models.General.Game;
 import app.Models.General.Player;
 import app.Models.General.ProgressStatus;
+import app.Models.RankCards.Rank;
 import app.Models.StoryCards.StoryCard;
+import app.Models.StoryCards.Tournament;
 import app.Objects.CardObjects;
 
 @Service
@@ -195,6 +200,9 @@ public class GameService {
     //~~~~~~~`turn~~~~~~~~~`
     public void setCurrentStoryCard(StoryCard card){
         this.currentStoryCard=card;
+        if (card instanceof Tournament){
+            tournamentInPlay = true;
+        }
     }
     public StoryCard getCurrentStoryCard(){
         return this.currentStoryCard;
@@ -206,4 +214,150 @@ public class GameService {
         return this.questInPlay;
     }
 
+
+    // -------------- Tournament functionality --------------
+    public int getNumPlayersTourn(){
+        int numOfPlayers = this.currentGame.getCurrentTournament().getParticipantSize();
+        return numOfPlayers;
+    }
+
+    public int getAutoAwardSinglePlayer(){
+        return this.currentGame.getCurrentTournament().getAutoAwardSinglePlayer();
+    }
+
+    public boolean addPlayerCardsTourn(int playerId, ArrayList<String> cardsToAdd){
+        // sets amour card if exists
+        Player player = this.currentGame.getPlayerById(playerId);
+        for (String cardName : cardsToAdd){
+            if (cardName.equals("Amour")){
+                player.setAmour((Amour)this.currentGame.getCardObjects().getCardByName(cardName));
+                cardsToAdd.remove(cardName);
+                break;
+            }
+        }
+        return this.currentGame.getCurrentTournament().addPlacedCards(playerId, cardsToAdd);
+    }
+
+    // discard cards (all but ally) after the tournament is complete 
+    // new: basically only discards amour
+    public void discardCardsAfterTournament(){
+        for (int i : this.currentGame.getCurrentTournament().getAllPlayerCards().keySet()){
+            Player player = this.getCurrentGame().getPlayerById(i);
+
+            // remove amour card
+            if(player.getAmour() != null){
+                player.discardCard(player.getAmour().getName());
+                player.setAmour(null);
+            }
+         
+            tournamentInPlay = false;
+        }
+    }
+
+
+    // discard cards after a tournament tie (only weapon cards, ally and amour stay)
+    public void discardCardsAfterTie(){
+        for (int i : this.currentGame.getCurrentTournament().getAllPlayerCards().keySet()){
+            Player player = this.getCurrentGame().getPlayerById(i);
+
+            for (String cardName : this.currentGame.getCurrentTournament().getPlayerCards(i)){
+                AdventureCard cardToRemove = this.getCurrentGame().getCardObjects().getCardByName(cardName);
+                if (!(cardToRemove instanceof Ally) && !(cardToRemove instanceof Amour)){
+                    cardToRemove = player.discardCard(cardName);
+                } 
+            }
+        }
+    }
+
+
+    // returns a double array list [   [real cards for player 1], [real cards for player 2], ...      ]
+    // if  a player is not in the tournament, then in that array spot, there will be null
+    public ArrayList<ArrayList<Card>> getAllTournamentPlayerCards(){
+        ArrayList<ArrayList<Card>> temp = new ArrayList<>();
+        int maxPts = 0;
+        ArrayList<Integer> winners = new ArrayList<>();
+
+        for (int i = 1; i < this.currentGame.getPlayers().size()+1; i++){
+            ArrayList<Card> tempCards = new ArrayList<>();
+            Player player = this.currentGame.getPlayerById(i);
+            int playerTotal = 0;
+
+            ArrayList<String> currCards = this.currentGame.getCurrentTournament().getPlayerCards(i);
+            if (currCards != null){
+                for (String cardName : currCards ){
+                    tempCards.add(this.currentGame.getCardObjects().getCardByName(cardName));
+                    playerTotal += this.currentGame.getCardObjects().getBattlePtsByName(cardName);
+                }
+                // add amour card
+                if (player.getAmour() != null){
+                    tempCards.add(player.getAmour());
+                    playerTotal += player.getAmour().getBattlePoints();
+                }
+                // add Rank pts (now we just need to deal with Ally pts)
+                tempCards.add(new Rank(player.getRankString(), player.getRankPts()));
+                playerTotal += player.getRankPts();
+                temp.add(tempCards);    
+            }else {
+                temp.add(null);
+            }
+            if (playerTotal > maxPts){
+                winners.clear();
+                winners.add(i);
+                maxPts = playerTotal;
+            }else if (playerTotal == maxPts){
+                winners.add(i);
+            }
+
+        }
+        // technically, at this point, either the tournament is done OR theres a tie, in
+        // which case we will need to discard the adventure cards
+        discardCardsAfterTie();
+
+        // maybe reset for potential tiebreaker round here
+        this.currentGame.getCurrentTournament().resetRound(winners);
+
+        return temp;
+    }
+    
+    
+    public int awardSingleWinner(int winnerId){
+        int award = this.currentGame.getCurrentTournament().getAward();
+        Player winner = this.currentGame.getPlayerById(winnerId);
+        winner.updateShields(award);
+        // tournament is over, discard the cards
+        if (tournamentInPlay){
+            discardCardsAfterTournament();
+        }
+
+        return winner.getNumShields();
+    }
+
+    public int awardTiedWinner(int winnerId){
+        int award = this.currentGame.getCurrentTournament().getAwardTie();
+        Player winner = this.currentGame.getPlayerById(winnerId);
+        winner.updateShields(award);
+
+        // tournament is over, discard the cards
+        if (tournamentInPlay){
+            discardCardsAfterTournament();
+        }
+
+        return winner.getNumShields();
+    }
+
+    // if only one person enters the tournament
+    public int awardSingleGameWinner(int winnerId){
+        int award = this.currentGame.getCurrentTournament().getAutoAwardSinglePlayer();
+        Player winner = this.currentGame.getPlayerById(winnerId);
+        winner.updateShields(award);
+
+        // tournament is over, discard the cards
+        if (tournamentInPlay){
+            discardCardsAfterTournament();
+        }
+
+        return winner.getNumShields();
+    }
+
 }
+
