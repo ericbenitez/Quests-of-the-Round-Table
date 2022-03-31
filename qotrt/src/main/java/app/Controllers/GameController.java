@@ -123,7 +123,7 @@ public class GameController {
     // System.out.println("this is the player Id for pick Card" +playerId);
     StoryCard storyCard = this.gameService.getCurrentGame().pickCard();
     this.gameService.setCurrentStoryCard(storyCard);
-    
+    //maybe a timeout because it returns null as currentStorycard...
     Session currSession = new Session();
     currSession.currentActivePlayer = gameService.getCurrentActivePlayer();
     currSession.currentStoryCard = gameService.getCurrentStoryCard(); //returns all the elments of that storyCard
@@ -249,8 +249,11 @@ public String testWinner(ArrayList<Integer> participantsId){
   @SendTo("/topic/setStages") // String [] clientStages
   public Quest setStages(@RequestBody DoubleArrayMessage sponsorStages) {  
     ArrayList<ArrayList<String>> arr = sponsorStages.getCards();
+
     System.out.println(arr);
     gameService.getCurrentGame().getCurrentQuest().setSponsorStages(arr);
+    Test test = gameService.setTestCard(arr); //<----------------make this function which returns a Test; 
+    gameService.getCurrentGame().getCurrentQuest().setTestCard(test);
     return gameService.getCurrentGame().getCurrentQuest();
   }
   

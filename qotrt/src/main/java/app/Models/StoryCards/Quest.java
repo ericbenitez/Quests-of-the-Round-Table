@@ -25,7 +25,8 @@ public class Quest extends StoryCard {
     protected boolean questIncludesTest;  //we figure this out from the stages the sponsor sets
     protected int testInStage;
     protected Test testCard;
-    private CardObjects cardObjects;
+    //CardObjects cardObjects;
+    ArrayList<String> testNames;
 
 
     // if all the foes pass 'all' to foeName
@@ -38,7 +39,12 @@ public class Quest extends StoryCard {
         this.storyCardType = StoryCardType.Quest;
         this.clientStage = new HashMap<>();
         this.participants = new ArrayList<>(3);
-        this.cardObjects = new CardObjects();
+        //this.cardObjects = new CardObjects();
+        testNames = new ArrayList<>();
+        testNames.add("Test of the Questing Beast");
+        testNames.add("Test of Temptation");
+        testNames.add("Test of Valor");
+        testNames.add("Test of Morgan Le Fey");
 
     }
 
@@ -59,21 +65,27 @@ public class Quest extends StoryCard {
     public void setSponsorStages(ArrayList<ArrayList<String>> stages) {
         //here it should go through the cards and set the tests
         this.stages = stages;
+
         for (int i = 0; i < stages.size(); i++)
         {
             for (int j = 0; j < stages.get(i).size(); j++)
             {
                 String nameOfCard = stages.get(i).get(j);
-
-                AdventureCard advCard = this.cardObjects.getCardByName(nameOfCard);
-                if(advCard instanceof Test){
-                    questIncludesTest=true;
-                    testInStage = i+1;
-                    testCard = (Test) advCard;
-
+                for(String x:testNames ){
+                    if(x.equals(nameOfCard)){
+                        questIncludesTest = true;  //we figure this out from the stages the sponsor sets
+                        testInStage = i+1;
+                    }
                 }
+               
             } 
         }
+        
+     
+    }
+    //from the game service...
+    public void setTestCard(Test testCard){
+        this.testCard = testCard;
     }
 
     public void setClientStage(int playerId, ArrayList<String> cards) {
