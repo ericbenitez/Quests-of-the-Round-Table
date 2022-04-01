@@ -84,14 +84,14 @@ public class CardObjects {
           "All Allies in play must be discarded."));
     }
 
-    this.storyCards
-        .add(new EventCard(new Pox(), "Pox", "All players except the player drawing this card lose 1 shield."));
+    // this.storyCards
+    //     .add(new EventCard(new Pox(), "Pox", "All players except the player drawing this card lose 1 shield."));
 
-    this.storyCards.add(new EventCard(new Plague(), "Plague",
-        "Drawer loses 2 shields if possible."));
+    // this.storyCards.add(new EventCard(new Plague(), "Plague",
+    //     "Drawer loses 2 shields if possible."));
 
-    this.storyCards.add(new EventCard(new ChivalrousDeed(), "Chivalrous Deed",
-        "Player(s) with both lowest rank and least amount of shields, receives 3 shields"));
+    // this.storyCards.add(new EventCard(new ChivalrousDeed(), "Chivalrous Deed",
+    //     "Player(s) with both lowest rank and least amount of shields, receives 3 shields"));
 
     this.storyCards.add(new EventCard(new ProsperityThroughoutTheRealm(), "Prosperity Throughout the Realm",
         "All players may immediately draw 2 Adventure Cards."));

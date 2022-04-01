@@ -22,11 +22,13 @@ public class Quest extends StoryCard {
     // {key:value,key:value} playerId : stage cards
     protected ArrayList<Integer> participants; // for quests
     private int currentStage = 1;
+    protected int sponsorAttempts = 1; // the amount of times a player was asked to sponsor
     protected boolean questIncludesTest;  //we figure this out from the stages the sponsor sets
     protected int testInStage;
     protected Test testCard;
     //CardObjects cardObjects;
     ArrayList<String> testNames;
+    protected boolean isActive = true;
 
 
     // if all the foes pass 'all' to foeName
@@ -61,6 +63,31 @@ public class Quest extends StoryCard {
         }
         
     }
+    
+    /**
+     * Returns the amount of sponsor attempts
+     * @return int
+     */
+    public int getSponsorAttempts() {
+        return this.sponsorAttempts;
+    }
+    
+    /**
+     * Increments the sponsor attempts by 1 and returns it
+     * @return int
+     */
+    public int incrementSponsorAttempts() {
+        return ++this.sponsorAttempts;
+    }
+    
+    public boolean isActive() {
+        return this.isActive;
+    }
+    
+    public boolean setActive(Boolean active) {
+        this.isActive = active;
+        return active;
+    }
 
     public void setSponsorStages(ArrayList<ArrayList<String>> stages) {
         //here it should go through the cards and set the tests
@@ -90,6 +117,7 @@ public class Quest extends StoryCard {
 
     public void setClientStage(int playerId, ArrayList<String> cards) {
         clientStage.put(playerId, cards);
+
     }
 
 

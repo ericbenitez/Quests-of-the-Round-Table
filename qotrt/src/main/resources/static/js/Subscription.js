@@ -1,5 +1,24 @@
 
 function subscriptions() {
+  
+  const transferQuestSubscription = stompClient.subscribe("/topic/transferQuest", (data) => {
+    if (data.body * 1 === -1) {
+      finishTurn()
+      return
+    }
+    
+    currentActivePlayer = data.body * 1
+    if (playerId === currentActivePlayer) {
+      const isSponsoring = confirm("Do you want to sponsor?");
+      if (isSponsoring) {
+          alert("Cool, you can press on the button Sponsor Quest button!")
+      }
+      if (!isSponsoring) {
+          alert("I see that you don't want to sponsor, press the Transfer Quest button")
+      }
+    }
+  })
+  
 
     stompClient.subscribe("/topic/testWinner", function(response){
         let data = JSON.parse(response.body);
@@ -191,14 +210,14 @@ function subscriptions() {
             stompClient.send("/app/calculateStage"); //the response to this will be subscriptions so that everybody gets to see the dying player
             //after this nothing happens so we need the sponsor to click finish quest
             //the surviving player are rewarded with an extra adventure card
-            
+            clearPlayerStageCards();
             if(data.testInPlay){
                 alert("The upcoming stage is a test");
                 //send to server and broadcast it to all players
                 stompClient.send("/app/nextStageIsTest");
                 alert("click finish Turn");
             }
-            alert("Hey Sponsor, click finish quest!");
+            alert("Hey Sponsor, click finish Turn!");
 
 
           }
@@ -220,7 +239,7 @@ function subscriptions() {
             if (currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber <= currentStoryCard.totalStages) {
                 //pick cards for this stage
                 //they've already joined the quset, they have to pick cards for the next stage or withdraw
-                alert("Pick cards for stage # " ,currentStoryCard.currentStageNumber);
+                alert("Pick cards for stage # ", currentStoryCard.currentStageNumber);
                 if(data.testInPlay){
                     alert("This is a test");
                     let placeBidButton = document.createElement("button");

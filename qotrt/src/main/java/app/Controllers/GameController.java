@@ -257,19 +257,28 @@ public String testWinner(ArrayList<Integer> participantsId){
     return gameService.getCurrentGame().getCurrentQuest();
   }
   
-  // TODO: eric transfer quest
   @MessageMapping("/transferQuest")
   @SendTo("/topic/transferQuest")
-  public void transferQuest(int playerId) {
-    // Round round = this.gameService.getCurrentGame().getCurrentRound();
-    // if (round.getCannotSponsor() < this.gameService.getCurrentGame().getPlayers().size()) {
-    //   round.increaseCannotSponsor();
-    // }
+  public int transferQuest(int playerId) {
+    int currentActivePlayerIndex = this.gameService.getCurrentActivePlayer();
+    Player currentActivePlayer = this.gameService.getCurrentGame().getPlayers().get(currentActivePlayerIndex - 1);
+    // if (currentActivePlayer.getId() != playerId) return -1;
     
-    // int index = gameService.startNextPlayer();
-    // Player player = this.gameService.getCurrentGame().getPlayers().get(index);
+    // if people still left to ask, get next player
+    Quest quest = this.gameService.getCurrentGame().getCurrentQuest();
+    int amountOfPlayers = this.gameService.getCurrentGame().getPlayers().size();
+    int sponsorAttempts = quest.getSponsorAttempts();
+    if (sponsorAttempts < amountOfPlayers) {
+      int value = sponsorAttempts + (currentActivePlayerIndex - 1);
+      int nextPlayerIndex = value > amountOfPlayers ? value - amountOfPlayers: value;
+      quest.incrementSponsorAttempts();
+      return this.gameService.getCurrentGame().getPlayers().get(nextPlayerIndex).getId();
+    }
     
-    // return player.getId();
+    // else finish turn
+    else {
+      return -1;
+    }
   }
 
 
@@ -373,7 +382,9 @@ public String testWinner(ArrayList<Integer> participantsId){
     
     Quest quest = this.gameService.getCurrentGame().getCurrentQuest();
     quest.setClientStage(playerId, cards);
+
+    //setting the active ally for the player
+    this.gameService.setActiveAlliesFromQuestStage(playerId,cards);
     
-    //https://bushansirgur.in/spring-boot-requestparam-annotation-example/
   }
 }

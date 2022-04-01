@@ -14,6 +14,8 @@ public class Player {
   public Card pickedCard; // from the story deck
   public ArrayList<AdventureCard> cards; // 12 cards
   private Amour currentAmour;
+  public ArrayList <Ally> activeAllies;
+
 
   public Player(String name) {
     this.name = name;
@@ -22,6 +24,7 @@ public class Player {
     uniqueId++; 
     this.cards = new ArrayList<AdventureCard>();
     this.currentAmour = null;
+    this.activeAllies = new ArrayList<Ally>();
   }
 
   /**
