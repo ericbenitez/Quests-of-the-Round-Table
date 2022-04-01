@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d0c03061-7b1e-4005-97e5-ca68a2317e3f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/QOTRTApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/QOTRTApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -175,18 +175,8 @@
           <option name="timeStamp" value="30" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/qotrt/src/main/java/app/Controllers/GameController.java</url>
-          <line>142</line>
-          <option name="timeStamp" value="31" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/qotrt/src/main/java/app/Controllers/GameController.java</url>
-          <line>150</line>
-          <option name="timeStamp" value="32" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/Quest.java</url>
-          <line>181</line>
+          <line>88</line>
           <option name="timeStamp" value="33" />
         </line-breakpoint>
       </breakpoints>

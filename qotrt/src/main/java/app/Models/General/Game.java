@@ -83,8 +83,13 @@ public class Game implements Mediator { // Main = Game
         playerBattlePoints += card.getBattlePoints();
       }
 
-      playerBattlePoints += this.getPlayerById(playerId).getRankPts();
-
+      Player currentPlayer = this.getPlayerById(playerId);
+      playerBattlePoints += currentPlayer.getRankPts();
+      playerBattlePoints += calcAllyPtsForPlayer(playerId);
+      if (currentPlayer.getAmour() != null){
+        playerBattlePoints += currentPlayer.getAmour().getBattlePoints();
+      }
+      
       if (playerBattlePoints < sponsorBattlePoints) {
         this.currentQuest.getParticipantsId().remove(playerId);
       }
@@ -99,6 +104,20 @@ public class Game implements Mediator { // Main = Game
     
     return survivors; // the peeps who survived
   }
+
+  // Helper function - Given a playerId, calculates and returns the battle pts for the allies in play
+  private int calcAllyPtsForPlayer(int playerId){
+    Player player = this.getPlayerById(playerId);
+    int totalPts = 0;
+    
+    ArrayList<Ally> activeAllies = new ArrayList<>(); /*player.getActiveAllies();*/ // change once we have the actual arraylist
+    for (Ally ally: activeAllies){
+      totalPts += ally.getBattlePoints(this.getCurrentQuest().getName(), activeAllies);
+    }
+    return totalPts;
+  }
+
+
 
   // removes a player
   public Player removePlayer(Player player) {
