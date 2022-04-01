@@ -38,7 +38,7 @@ button {
     padding: 3rem; /*all around*/
     margin: auto;
     
-    height: 400px; /*30% of the browser visible viewport, makes the sections a little taller*/
+    min-height: 400px; /*30% of the browser visible viewport, makes the sections a little taller*/
     width: 500px;
 }
 
@@ -120,13 +120,15 @@ button {
 }
 
 #tournament {
-    width: 80%;
-    min-height: 550px;
-    border: 1.5em black solid;
+    width: 94%;
+    min-height: fit-content;
+    border: 0.5em black solid;
     display: flex;
     flex-direction: column;
     padding: 1em;
     text-align: center;
+    background-color: white;
+    display: none;
     /*position: fixed; 
     top: 50%;
     left: 50%;
@@ -157,7 +159,7 @@ button {
 }
 
 .playerTourn > p {
-    font-size: 1vw;
+    font-size: 0.7vw;
     text-align: center;  
 }
 

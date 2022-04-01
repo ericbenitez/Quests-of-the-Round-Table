@@ -228,14 +228,23 @@ public class GameService {
     }
 
     public boolean addPlayerCardsTourn(int playerId, ArrayList<String> cardsToAdd){
-        // sets amour card if exists
+        
         Player player = this.currentGame.getPlayerById(playerId);
         for (String cardName : cardsToAdd){
+            Card currentCard = this.currentGame.getCardObjects().getCardByName(cardName);
+            // sets amour card if exists
             if (cardName.equals("Amour")){
-                player.setAmour((Amour)this.currentGame.getCardObjects().getCardByName(cardName));
+                player.setAmour((Amour)currentCard);
                 cardsToAdd.remove(cardName);
-                break;
+                continue;
             }
+
+            // sets allies (add to player's ally array)
+            if (currentCard instanceof Ally){
+                // player.addActiveAlly(currentCard); uncommment and test after ally array is added
+                // cardsToAdd.remove(cardName);
+            }
+            
         }
         return this.currentGame.getCurrentTournament().addPlacedCards(playerId, cardsToAdd);
     }
@@ -295,6 +304,13 @@ public class GameService {
                     tempCards.add(player.getAmour());
                     playerTotal += player.getAmour().getBattlePoints();
                 }
+
+                // add active ally cards - uncomment once ally array is added
+                /*for (Ally allyCard : player.getActiveAllies()){
+                    tempCards.add(allyCard);
+                    playerTotal += allyCard.getBattlePoints(this.currentGame.getCurrentTournament().getName(), player.getActiveAllies());
+                }*/
+
                 // add Rank pts (now we just need to deal with Ally pts)
                 tempCards.add(new Rank(player.getRankString(), player.getRankPts()));
                 playerTotal += player.getRankPts();

@@ -23,7 +23,7 @@ function subscriptions() {
             playerCardDiv.appendChild(document.createElement("br"));
             totalPts += data[i][j].battlePoints;
         }
-        // YOU NEED TO ADD ALLY PTS TOO
+        // YOU NEED TO ADD ALLY PTS TOO - update: ally should be added now, just needs testing
         document.getElementById("player" + id + "Total").appendChild(document.createTextNode(" " + totalPts + " battle points"));
         playerPts[id] = totalPts;
     }

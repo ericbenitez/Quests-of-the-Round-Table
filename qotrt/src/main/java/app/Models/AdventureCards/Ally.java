@@ -37,7 +37,7 @@ public class Ally extends AdventureCard {
     // }
     // return this.battlePoints;
     // TODO FIX BATTLEPOINTS LATER
-    return 0;
+    return battlePoints; // so that the client has it (for tournaments)
   }
 
   // return the correct battle points given the current quest, and the allies at play 
