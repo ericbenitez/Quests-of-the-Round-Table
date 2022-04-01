@@ -1,5 +1,7 @@
 package app.Models.AdventureCards;
 
+import java.util.ArrayList;
+
 public class Ally extends AdventureCard {
   int battlePoints;
   int bids;
@@ -36,6 +38,31 @@ public class Ally extends AdventureCard {
     // return this.battlePoints;
     // TODO FIX BATTLEPOINTS LATER
     return 0;
+  }
+
+  // return the correct battle points given the current quest, and the allies at play 
+  public int getBattlePoints(String questName, ArrayList<Ally> alliesInPlay){
+    if (this.name == "Sir Gawain" && questName == "Test of the Green Knight Quest") {
+      return this.battlePoints + 20;
+    }
+
+    if (this.name == "Sir Percival" && questName == "Search for the Holy Grail Quest") {
+      return this.battlePoints + 20;
+    }
+  
+    if (this.name == "Sir Lancelot" && questName == "Quest to Defend the Queen's Honor") {
+        return this.battlePoints + 25;
+    }
+
+    if (this.name == "Sir Tristan"){
+      for (Ally ally: alliesInPlay){
+        if (ally.getName() == "Queen Iseult"){
+          return this.battlePoints + 20;
+        }
+      }
+    }
+
+    return this.battlePoints;
   }
 
   public int getBids() {
