@@ -284,7 +284,7 @@ function getAdventureCards() {
 
 // disbles everything except for discard card button
 // intended to be used to force player to discard cards so that they have <= 12 cards
-function disableGameButtons(){
+/*function disableGameButtons(){
     document.getElementById("adventureCards").style.pointerEvents = "none";
     
     document.getElementById("initCardButton").disabled = true;
@@ -296,11 +296,11 @@ function disableGameButtons(){
     document.getElementById("dealAdventureCard").disabled = true;
     document.getElementById("finishTurn").disabled = true;
     document.getElementById("placeCardsQuest").disabled = true;
-}
+}*/
 
 
 // enable the game buttons (used after player has the valid number of cards)
-function enableGameButtons(){
+/*function enableGameButtons(){
     document.getElementById("adventureCards").style.pointerEvents = "auto";
     document.getElementById("initCardButton").disabled = false;
     document.getElementById("hand").disabled = false;
@@ -312,3 +312,4 @@ function enableGameButtons(){
     document.getElementById("finishTurn").disabled = false;
     document.getElementById("placeCardsQuest").disabled = false;
 }
+*/

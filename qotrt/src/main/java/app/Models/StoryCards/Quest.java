@@ -22,10 +22,13 @@ public class Quest extends StoryCard {
     // {key:value,key:value} playerId : stage cards
     protected ArrayList<Integer> participants; // for quests
     private int currentStage = 1;
+    protected int sponsorAttempts = 1; // the amount of times a player was asked to sponsor
     protected boolean questIncludesTest;  //we figure this out from the stages the sponsor sets
     protected int testInStage;
     protected Test testCard;
-    private CardObjects cardObjects;
+    //CardObjects cardObjects;
+    ArrayList<String> testNames;
+    protected boolean isActive = true;
 
 
     // if all the foes pass 'all' to foeName
@@ -38,7 +41,12 @@ public class Quest extends StoryCard {
         this.storyCardType = StoryCardType.Quest;
         this.clientStage = new HashMap<>();
         this.participants = new ArrayList<>(3);
-        this.cardObjects = new CardObjects();
+        //this.cardObjects = new CardObjects();
+        testNames = new ArrayList<>();
+        testNames.add("Test of the Questing Beast");
+        testNames.add("Test of Temptation");
+        testNames.add("Test of Valor");
+        testNames.add("Test of Morgan Le Fey");
 
     }
 
@@ -55,25 +63,56 @@ public class Quest extends StoryCard {
         }
         
     }
+    
+    /**
+     * Returns the amount of sponsor attempts
+     * @return int
+     */
+    public int getSponsorAttempts() {
+        return this.sponsorAttempts;
+    }
+    
+    /**
+     * Increments the sponsor attempts by 1 and returns it
+     * @return int
+     */
+    public int incrementSponsorAttempts() {
+        return ++this.sponsorAttempts;
+    }
+    
+    public boolean isActive() {
+        return this.isActive;
+    }
+    
+    public boolean setActive(Boolean active) {
+        this.isActive = active;
+        return active;
+    }
 
     public void setSponsorStages(ArrayList<ArrayList<String>> stages) {
         //here it should go through the cards and set the tests
         this.stages = stages;
+
         for (int i = 0; i < stages.size(); i++)
         {
             for (int j = 0; j < stages.get(i).size(); j++)
             {
                 String nameOfCard = stages.get(i).get(j);
-
-                AdventureCard advCard = this.cardObjects.getCardByName(nameOfCard);
-                if(advCard instanceof Test){
-                    questIncludesTest=true;
-                    testInStage = i+1;
-                    testCard = (Test) advCard;
-
+                for(String x:testNames ){
+                    if(x.equals(nameOfCard)){
+                        questIncludesTest = true;  //we figure this out from the stages the sponsor sets
+                        testInStage = i+1;
+                    }
                 }
+               
             } 
         }
+        
+     
+    }
+    //from the game service...
+    public void setTestCard(Test testCard){
+        this.testCard = testCard;
     }
 
     public void setClientStage(int playerId, ArrayList<String> cards) {

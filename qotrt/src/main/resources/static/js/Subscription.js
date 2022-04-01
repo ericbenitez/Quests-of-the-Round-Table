@@ -1,5 +1,24 @@
 
 function subscriptions() {
+  
+  const transferQuestSubscription = stompClient.subscribe("/topic/transferQuest", (data) => {
+    if (data.body * 1 === -1) {
+      finishTurn()
+      return
+    }
+    
+    currentActivePlayer = data.body * 1
+    if (playerId === currentActivePlayer) {
+      const isSponsoring = confirm("Do you want to sponsor?");
+      if (isSponsoring) {
+          alert("Cool, you can press on the button Sponsor Quest button!")
+      }
+      if (!isSponsoring) {
+          alert("I see that you don't want to sponsor, press the Transfer Quest button")
+      }
+    }
+  })
+  
 
     stompClient.subscribe("/topic/testWinner", function(response){
         let data = JSON.parse(response.body);
@@ -177,7 +196,7 @@ function subscriptions() {
         //activate their buttons
   
         // this needs work vv
-        enableGameButtons();
+       // enableGameButtons();
         let currentStoryCard = data.currentStoryCard;
         if (currentStoryCard.storyCardType === "Quest") {
           //If the current story card type is quest, it could mean a few things
@@ -220,7 +239,7 @@ function subscriptions() {
             if (currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber <= currentStoryCard.totalStages) {
                 //pick cards for this stage
                 //they've already joined the quset, they have to pick cards for the next stage or withdraw
-                alert("Pick cards for stage # " ,currentStoryCard.currentStageNumber);
+                alert("Pick cards for stage # ", currentStoryCard.currentStageNumber);
                 if(data.testInPlay){
                     alert("This is a test");
                     let placeBidButton = document.createElement("button");

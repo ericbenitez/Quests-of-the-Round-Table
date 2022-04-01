@@ -74,15 +74,15 @@ public class CardObjects {
     for (int i = 0; i < 8; i++) {
       this.adventureCards.add(new Amour("Amour", "", 10, 1));
     }
-
-    // this.storyCards.add(new EventCard(new KingsRecognition(), "King's Recognition",
-    //     "The next player(s) to complete a Quest will receive 2 extra shields."));
-    // for (int i = 0; i < 2; i++) {
-    //   this.storyCards.add(new EventCard(new QueensFavor(), "Queens Favour",
-    //       "The lowest ranked player(s) immediately receives 2 Adventure Cards."));
-    //   this.storyCards.add(new EventCard(new CourtCalledToCamelot(), "Court Called To Camelot",
-    //       "All Allies in play must be discarded."));
-    // }
+/*
+    this.storyCards.add(new EventCard(new KingsRecognition(), "King's Recognition",
+        "The next player(s) to complete a Quest will receive 2 extra shields."));
+    for (int i = 0; i < 2; i++) {
+      this.storyCards.add(new EventCard(new QueensFavor(), "Queens Favour",
+          "The lowest ranked player(s) immediately receives 2 Adventure Cards."));
+      this.storyCards.add(new EventCard(new CourtCalledToCamelot(), "Court Called To Camelot",
+          "All Allies in play must be discarded."));
+    }
 
     // this.storyCards
     //     .add(new EventCard(new Pox(), "Pox", "All players except the player drawing this card lose 1 shield."));
@@ -93,11 +93,11 @@ public class CardObjects {
     // this.storyCards.add(new EventCard(new ChivalrousDeed(), "Chivalrous Deed",
     //     "Player(s) with both lowest rank and least amount of shields, receives 3 shields"));
 
-    // this.storyCards.add(new EventCard(new ProsperityThroughoutTheRealm(), "Prosperity Throughout the Realm",
-    //     "All players may immediately draw 2 Adventure Cards."));
-    // this.storyCards.add(new EventCard(new KingsCallToArms(), "King's Call To Arms",
-    //     "The highest ranked player(s) must place 1 weapon in the discard pile. If unable to do so, 2 Foe Cards must be discarded."));
-
+    this.storyCards.add(new EventCard(new ProsperityThroughoutTheRealm(), "Prosperity Throughout the Realm",
+        "All players may immediately draw 2 Adventure Cards."));
+    this.storyCards.add(new EventCard(new KingsCallToArms(), "King's Call To Arms",
+        "The highest ranked player(s) must place 1 weapon in the discard pile. If unable to do so, 2 Foe Cards must be discarded."));
+*/
     // initialize quest cards
     // this.storyCards.add(new Quest())
     // this.storyCards.add(new Quest( new JourneyThruForest(this)));
@@ -116,10 +116,10 @@ public class CardObjects {
     }
 
     //this.storyCards.add(new Tournament("some tournament", 1));
-    this.storyCards.add(new Tournament("At Camelot", 3));
+    /*this.storyCards.add(new Tournament("At Camelot", 3));
     this.storyCards.add(new Tournament("At Orkney", 2));
     this.storyCards.add(new Tournament("At Tintagel", 1));
-    this.storyCards.add(new Tournament("At York", 0));
+    this.storyCards.add(new Tournament("At York", 0));*/
 
     Collections.shuffle(this.adventureCards);
     Collections.shuffle(this.storyCards);

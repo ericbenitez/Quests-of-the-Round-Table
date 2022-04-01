@@ -123,7 +123,7 @@ public class GameController {
     // System.out.println("this is the player Id for pick Card" +playerId);
     StoryCard storyCard = this.gameService.getCurrentGame().pickCard();
     this.gameService.setCurrentStoryCard(storyCard);
-    
+    //maybe a timeout because it returns null as currentStorycard...
     Session currSession = new Session();
     currSession.currentActivePlayer = gameService.getCurrentActivePlayer();
     currSession.currentStoryCard = gameService.getCurrentStoryCard(); //returns all the elments of that storyCard
@@ -249,24 +249,36 @@ public String testWinner(ArrayList<Integer> participantsId){
   @SendTo("/topic/setStages") // String [] clientStages
   public Quest setStages(@RequestBody DoubleArrayMessage sponsorStages) {  
     ArrayList<ArrayList<String>> arr = sponsorStages.getCards();
+
     System.out.println(arr);
     gameService.getCurrentGame().getCurrentQuest().setSponsorStages(arr);
+    Test test = gameService.setTestCard(arr); //<----------------make this function which returns a Test; 
+    gameService.getCurrentGame().getCurrentQuest().setTestCard(test);
     return gameService.getCurrentGame().getCurrentQuest();
   }
   
-  // TODO: eric transfer quest
   @MessageMapping("/transferQuest")
   @SendTo("/topic/transferQuest")
-  public void transferQuest(int playerId) {
-    // Round round = this.gameService.getCurrentGame().getCurrentRound();
-    // if (round.getCannotSponsor() < this.gameService.getCurrentGame().getPlayers().size()) {
-    //   round.increaseCannotSponsor();
-    // }
+  public int transferQuest(int playerId) {
+    int currentActivePlayerIndex = this.gameService.getCurrentActivePlayer();
+    Player currentActivePlayer = this.gameService.getCurrentGame().getPlayers().get(currentActivePlayerIndex - 1);
+    // if (currentActivePlayer.getId() != playerId) return -1;
     
-    // int index = gameService.startNextPlayer();
-    // Player player = this.gameService.getCurrentGame().getPlayers().get(index);
+    // if people still left to ask, get next player
+    Quest quest = this.gameService.getCurrentGame().getCurrentQuest();
+    int amountOfPlayers = this.gameService.getCurrentGame().getPlayers().size();
+    int sponsorAttempts = quest.getSponsorAttempts();
+    if (sponsorAttempts < amountOfPlayers) {
+      int value = sponsorAttempts + (currentActivePlayerIndex - 1);
+      int nextPlayerIndex = value > amountOfPlayers ? value - amountOfPlayers: value;
+      quest.incrementSponsorAttempts();
+      return this.gameService.getCurrentGame().getPlayers().get(nextPlayerIndex).getId();
+    }
     
-    // return player.getId();
+    // else finish turn
+    else {
+      return -1;
+    }
   }
 
 
