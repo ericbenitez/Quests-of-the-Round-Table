@@ -370,7 +370,9 @@ public String testWinner(ArrayList<Integer> participantsId){
     
     Quest quest = this.gameService.getCurrentGame().getCurrentQuest();
     quest.setClientStage(playerId, cards);
+
+    //setting the active ally for the player
+    this.gameService.setActiveAlliesFromQuestStage(playerId,cards);
     
-    //https://bushansirgur.in/spring-boot-requestparam-annotation-example/
   }
 }

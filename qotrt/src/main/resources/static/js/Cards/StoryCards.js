@@ -18,6 +18,7 @@ let activeStoryCardType;
        * 
        */
 function displayStoryCard(data) {
+  console.log(data);
   const storyCardDiv = document.getElementById("activeStoryCard")
   storyCardDiv.style.display = "block";
   storyCardDiv.innerText = "";

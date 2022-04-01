@@ -191,14 +191,14 @@ function subscriptions() {
             stompClient.send("/app/calculateStage"); //the response to this will be subscriptions so that everybody gets to see the dying player
             //after this nothing happens so we need the sponsor to click finish quest
             //the surviving player are rewarded with an extra adventure card
-            
+            clearPlayerStageCards();
             if(data.testInPlay){
                 alert("The upcoming stage is a test");
                 //send to server and broadcast it to all players
                 stompClient.send("/app/nextStageIsTest");
                 alert("click finish Turn");
             }
-            alert("Hey Sponsor, click finish quest!");
+            alert("Hey Sponsor, click finish Turn!");
 
 
           }

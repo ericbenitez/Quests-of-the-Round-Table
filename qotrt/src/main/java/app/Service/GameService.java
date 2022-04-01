@@ -359,5 +359,19 @@ public class GameService {
         return winner.getNumShields();
     }
 
+    //adding to the active ally for a player from its stages for a quest
+    public void setActiveAlliesFromQuestStage(int playerId,ArrayList<String> stageCards){
+        Player player = this.currentGame.getPlayerById(playerId);
+        for(int i=0;i<stageCards.size();i++){
+            AdventureCard card = this.currentGame.getCardObjects().getCardByName(stageCards.get(i));
+            if(card instanceof Ally){
+                player.activeAllies.add((Ally) card);
+            }
+        }
+
+    }
+    
+
+
 }
 
