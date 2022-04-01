@@ -186,7 +186,7 @@ public class GameService {
         this.currentActivePlayer = currentActivePlayer;
     }
 
-    //currentActivePlayer is the id of the players
+    //currentActivePlayer is the index of the active player
     public int startNextPlayer() {
         currentActivePlayer+=1;
         if(currentActivePlayer <= currentGame.getPlayers().size()){
@@ -196,6 +196,19 @@ public class GameService {
             return currentActivePlayer;
         }
         return this.currentActivePlayer;
+    }
+    
+    public int getIndexOfPlayer(int playerId) {
+        int index = 0;
+        for (Player player: this.currentGame.getPlayers()) {
+            if (player.getId() == playerId) {
+                return index;
+            }
+            
+            index++;
+        }
+        
+        return -1;
     }
 
 
