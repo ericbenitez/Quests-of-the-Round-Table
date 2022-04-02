@@ -167,6 +167,10 @@ function subscriptions() {
       const data = JSON.parse(response.body);
       //console.log("From pick Card",data); //name: 'Slay the Dragon', drawer: null, storyCardType: 'Quest', totalStages: '3', foeName: 'Dragon', …}
       displayStoryCard(data);
+      
+      if (data.StoryCardType === "Event") {
+        stompClient.send("/app/playEvent")
+      }
     })
 
      //This function should also use session data and send it back.

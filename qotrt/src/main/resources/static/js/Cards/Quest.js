@@ -1,6 +1,8 @@
 let currentQuest = ""; //name of the current quest taking place
 let currentStages = 0; //the number of stages for the current quest
 let foe = "";
+// let battlePointsLimit = 0;
+
 function sponsorQuest() {
     //console.log("here");
     sponsor = true;
@@ -59,6 +61,8 @@ function stageNumCards() {
         alert("There should only be one test card!");
         return;
     }
+    
+    
     let battlePointsForThisStage = 0;
     //removeAllCheckedCards(checkedString);//remove from UI
     

@@ -211,12 +211,15 @@ public class GameService {
         return -1;
     }
 
-
     //~~~~~~~`turn~~~~~~~~~`
     public void setCurrentStoryCard(StoryCard card){
         this.currentStoryCard=card;
         if (card instanceof Tournament){
             tournamentInPlay = true;
+        }
+        
+        if (card instanceof EventCard) {
+            this.eventInPlay = true;
         }
     }
     public StoryCard getCurrentStoryCard(){

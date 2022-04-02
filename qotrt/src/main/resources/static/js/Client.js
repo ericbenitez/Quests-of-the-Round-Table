@@ -118,7 +118,14 @@ function allWeaponCardsUnique(cards) {
   return true;
 }
 
-
+const foes = ["Robber Knight", "Saxons", "Boar", "Thieves", "Green Knight", "Black Knight", "Evil Knight", "Saxon Knight", "Dragon", "Giant", "Mordred"]
+function hasFoes(cards) {
+  for (const card of cards) {
+    if (foes.includes(card)) return true
+  }
+  
+  return false
+}
 
 // if the total battle points >= stage battle points, return true
 // otherwise false
@@ -219,6 +226,11 @@ function placeCardsQuest() {
   if (!allWeaponCardsUnique(getActualCards(checked))) {
     alert("You may not play two Weapon cards of the same type.");
     return;
+  }
+  
+  if (hasFoes(checked)) {
+    alert("You cannot play foes for a quest")
+    return
   }
   
   stompClient.send("/app/setClientStage",{}, JSON.stringify({"playerId":playerId, "cards":checked}));

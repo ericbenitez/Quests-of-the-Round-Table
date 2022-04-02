@@ -28,6 +28,7 @@ import app.Models.General.Card;
 import app.Models.General.Game;
 import app.Models.General.Player;
 import app.Models.General.Session;
+import app.Models.StoryCards.EventCard;
 import app.Models.StoryCards.Quest;
 import app.Models.StoryCards.StoryCard;
 import app.Models.StoryCards.Tournament;
@@ -384,5 +385,11 @@ public String testWinner(ArrayList<Integer> participantsId){
     quest.setClientStage(playerId, cards);
     
     //https://bushansirgur.in/spring-boot-requestparam-annotation-example/
+  }
+  
+  @MessageMapping("/playEvent")
+  public String playEvent() {
+    EventCard storyCard = (EventCard) this.gameService.getCurrentStoryCard();
+    return storyCard.playEvent();
   }
 }
