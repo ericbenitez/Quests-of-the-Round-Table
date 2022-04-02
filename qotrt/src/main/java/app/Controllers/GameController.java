@@ -1,6 +1,7 @@
 package app.Controllers;
 
 import java.util.ArrayList;
+import java.util.Currency;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -145,6 +146,8 @@ public class GameController {
 
   @MessageMapping("updateShields")
   public void updateShields(@RequestBody ShieldMessage shieldInfo) throws Exception {
+    int a = shieldInfo.getPlayerId();
+    int b = shieldInfo.getShields();
     gameService.updateShields(shieldInfo.getPlayerId(), shieldInfo.getShields());
   }
 
@@ -171,12 +174,13 @@ public class GameController {
   public Session finishTurn() {
     
     Session currSession = new Session();
-    
+
+    currSession.currentActivePlayer = gameService.startNextPlayer(); ///increments the player
     currSession.currentStoryCard = gameService.getCurrentStoryCard(); //returns all the elments of that storyCard
-    currSession.questInPlay = gameService.getQuestInPlay(); //bool
-    System.out.println("stage number: " + gameService.getCurrentGame().getCurrentQuest().getCurrentStageNumber());
+    currSession.questInPlay = gameService.getQuestInPlay(); //bool, changes this to false when you complete all stages.
+    currSession.tournamentInPlay=gameService.getTournamentInPlay(); //bool
     
-    currSession.testCard= (currSession.testInPlay) ?  gameService.getCurrentGame().getCurrentQuest().getTestCard() : null;
+   
     //if we round back to the sponsor, the stage goes up
     if(gameService.getQuestInPlay() && gameService.getCurrentActivePlayer()==gameService.getCurrentGame().getCurrentQuest().getSponsor()){
       if(!currSession.testInPlay){
@@ -198,11 +202,26 @@ public class GameController {
       } 
     }
     
-    currSession.currentActivePlayer = gameService.startNextPlayer(); ///increments the player
+    
     currSession.testInPlay = (gameService.getCurrentGame().getCurrentQuest().getQuestIncludesTest() && (gameService.getCurrentGame().getCurrentQuest().getTestInStage() == gameService.getCurrentGame().getCurrentQuest().getCurrentStageNumber()));
-
+    currSession.testCard= (currSession.testInPlay) ?  gameService.getCurrentGame().getCurrentQuest().getTestCard() : null;
     // currSession.sponsorId = gameService.getCurrentGame().getCurrentQuest().getSponsor(); //id of the sponsor
     // currSession.participantsId = gameService.getCurrentGame().getCurrentQuest().getParticipantsId();//id of the sponsor
+
+
+
+    //For Tournaments: 
+    //so when we loop back to the first participant
+    if(gameService.getTournamentInPlay() && gameService.getCurrentActivePlayer()==gameService.getCurrentGame().getCurrentTournament().getFirstParticipantId()){
+      //getAllTournPlayerCards(); //right now this is triggered from the client in Tournament.js
+      System.out.println("The tournament has come to an end!");
+      //probably should set the tournament in play to false
+      gameService.setTournamentInPlay(false);
+      //alert the player to click finish turn,ok
+    }
+    
+
+    currSession.winners = gameService.getWinners();
    
     return currSession;
   }
@@ -255,7 +274,8 @@ public String testWinner(ArrayList<Integer> participantsId){
 
     System.out.println(arr);
     gameService.getCurrentGame().getCurrentQuest().setSponsorStages(arr);
-    Test test = gameService.setTestCard(arr); //<----------------make this function which returns a Test; 
+    Test test = this.gameService.setTestCard(arr); //<----------------make this function which returns a Test; 
+   // System.out.println( "inside the game controller"+test.getName());
     gameService.getCurrentGame().getCurrentQuest().setTestCard(test);
     return gameService.getCurrentGame().getCurrentQuest();
   }

@@ -348,9 +348,11 @@ function removeCardsFromHand(checked) {
 //let checked = getAllChecked();
 let unChecked = getAllUnchecked();
 
-// update the player hand so that it only has the unchecked cards
-playerHand = getActualCards(unChecked);
-removeAllCheckedCards(checked);
+  // update the player hand so that it only has the unchecked cards
+  playerHand = getActualCards(unChecked);
+  removeAllCheckedCards(checked);
+  // reset the display so that checked is now unchecked
+  resetCardsDisplay();
 
 // remove from server
 // basically it removes all checked cards
@@ -385,11 +387,11 @@ const connection = stompClient.subscribe("/user/queue/getCards", (response) => {
 });
 }
 
-function showCurrentStage() {
-// the first one is 0?
-let stageNumber = currentStage + 1;
-alert("stage: " + stageNumber);
-document.getElementById("stage" + stageNumber).style.display = "inline";
+function showCurrentStage(stageNumber) {
+  // the first one is 0?
+  //let stageNumber = currentStage + 1;
+  //alert("stage: " + stageNumber);
+  document.getElementById("stage" + stageNumber).style.display = "inline";
 }
 
 

@@ -244,4 +244,12 @@ public class Player {
     return currentAmour;
   }
 
+  public ArrayList<Ally> getActiveAllies(){
+    return activeAllies;
+  }
+
+  public void addActiveAlly(Ally ally){
+    activeAllies.add(ally);
+  }
+
 }

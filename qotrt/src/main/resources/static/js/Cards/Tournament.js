@@ -70,6 +70,9 @@ function joinTournament(answer){
     if (answer === "yes"){
         addParticipantTournament();
     }
+    if(answer=="no"){
+        alert(" You have decided not to participate in the tournament :( click Finish Turn")
+    }
     
     // move to next player
     // finishTurn();
@@ -82,6 +85,7 @@ function joinTournament(answer){
 function addParticipantTournament(){
     stompClient.send("/app/addParticipantTournament", {}, JSON.stringify({"message": playerId}));
     // we dont need to set participant to true cause it's in the session right?
+    alert("Choose cards for bidding in this tournament")
 }
 
 
@@ -154,6 +158,9 @@ function placeCardsTournament(){
     // add it to the tournament hashmap playerCards, but don't display them until ALL players are ready
     // the server send something to display when all players ready
     stompClient.send("/app/addPlayerCardsTourn", {}, JSON.stringify({"playerId": playerId, "cards": checked}));
+
+    //alert them to click finish turn
+    alert("Thank you for placing your bid, click Finish Turn");
 }
 
 

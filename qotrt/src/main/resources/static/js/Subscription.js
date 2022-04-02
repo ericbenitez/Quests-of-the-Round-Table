@@ -140,8 +140,7 @@ function subscriptions() {
       if (response) game = response;
   
       gameId = game.gameID
-  
-      displayCreateGameResponse(data.body, playerName, parseInt(numOfPlayer));
+      //displayCreateGameResponse(data.body, playerName, parseInt(numOfPlayer));
   
       gameStartedSubscription.unsubscribe();
     });
@@ -192,7 +191,7 @@ function subscriptions() {
   
     stompClient.subscribe("/topic/finishTurn", function (response) { //response = currentActiveplayer 
       let data = JSON.parse(response.body); //the id of the next active player..
-      console.log(data);
+      console.log("Here is the data from the server",data);
       serverData = data;
   
       /**
@@ -204,6 +203,13 @@ function subscriptions() {
        * 
        * 
        */
+
+      // checks if there are any winners
+      if (data.winners.length > 0){
+        alert("The game is over! Congratulations to the winner(s): " + data.winners);
+        return;
+      }
+
       if (data.currentActivePlayer === playerId) {
         //activate their buttons
   
@@ -222,7 +228,7 @@ function subscriptions() {
             stompClient.send("/app/calculateStage"); //the response to this will be subscriptions so that everybody gets to see the dying player
             //after this nothing happens so we need the sponsor to click finish quest
             //the surviving player are rewarded with an extra adventure card
-            clearPlayerStageCards();
+            // clearPlayerStageCards();
             if(data.testInPlay){
                 alert("The upcoming stage is a test");
                 //send to server and broadcast it to all players
@@ -252,6 +258,7 @@ function subscriptions() {
                 //pick cards for this stage
                 //they've already joined the quset, they have to pick cards for the next stage or withdraw
                 alert("Pick cards for stage # ", currentStoryCard.currentStageNumber);
+                showCurrentStage(currentStoryCard.currentStageNumber);  // should work after increment stage is fixed
                 if(data.testInPlay){
                     alert("This is a test");
                     let placeBidButton = document.createElement("button");
@@ -276,9 +283,20 @@ function subscriptions() {
         }
         if (currentStoryCard.storyCardType === "Tournament") {
 
+          //we round back to the first player who first picked the tournament card
+          if(currentStoryCard.firstParticipantId === playerId){
+            alert("the tournament has ended, click finish turn !");
+          }
+          //the first player clicked finish turn after placing their bids
+          //if the participants is not a participant , ask them to join the tournament 
+          if(!currentStoryCard.participants.includes(playerId)){
+            askPlayerJoinTournament();
+          //
+          }
+
     
         }
-        if (currentStoryCard.storyCardType === null) {
+        if (!data.questInPlay && !data.tournamentInPlay &&!data.eventInPlay ) {
             //if the story card type is numm it means they might be the first player
             alert("pick a story card");
         }

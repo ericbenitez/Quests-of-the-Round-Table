@@ -119,13 +119,17 @@ public class GameService {
         if (players.size() < playerId) {
             return false;
         }
-        for (int i = 0; i < players.size(); i++) {
+        /*for (int i = 0; i < players.size(); i++) {
             if (players.get(i).getUniqueId() == playerId) {
                 players.get(i).updateShields(shields);
+                Player haha = players.get(i);
+                System.out.println(haha);
                 return true;
             }
-        }
-        return false;
+        }*/
+        this.currentGame.getPlayerById(playerId).updateShields(shields);
+        Player p = this.currentGame.getPlayerById(playerId);
+        return true;
 
     }
 
@@ -230,7 +234,17 @@ public class GameService {
         this.questInPlay=x;
     }
     public boolean getQuestInPlay(){
-        return this.questInPlay;
+        if(questInPlay){
+            if(currentGame.getCurrentQuest().getCurrentStageNumber() > Integer.parseInt(currentGame.getCurrentQuest().getTotalStages())){
+                setQuestInPlay(false);}
+        }
+        return questInPlay;
+    }
+    public boolean getTournamentInPlay(){
+        return this.tournamentInPlay;
+    }
+    public void setTournamentInPlay(boolean x){
+        this.tournamentInPlay =x;
     }
 
 
@@ -258,8 +272,8 @@ public class GameService {
 
             // sets allies (add to player's ally array)
             if (currentCard instanceof Ally){
-                // player.addActiveAlly(currentCard); uncommment and test after ally array is added
-                // cardsToAdd.remove(cardName);
+                player.addActiveAlly((Ally)currentCard); //uncommment and test after ally array is added
+                cardsToAdd.remove(cardName);
             }
             
         }
@@ -322,11 +336,11 @@ public class GameService {
                     playerTotal += player.getAmour().getBattlePoints();
                 }
 
-                // add active ally cards - uncomment once ally array is added
-                /*for (Ally allyCard : player.getActiveAllies()){
+                // add active ally cards 
+                for (Ally allyCard : player.getActiveAllies()){
                     tempCards.add(allyCard);
                     playerTotal += allyCard.getBattlePoints(this.currentGame.getCurrentTournament().getName(), player.getActiveAllies());
-                }*/
+                }
 
                 // add Rank pts (now we just need to deal with Ally pts)
                 tempCards.add(new Rank(player.getRankString(), player.getRankPts()));
@@ -418,11 +432,28 @@ public class GameService {
                 if(advCard instanceof Test){
                 
                     testCard = (Test) advCard;
+                    //System.out.println(testCard.getName());
+                    return testCard;
 
                 }
             } 
         }
         return testCard;
+    }
+
+
+    // returns an arraylist of playerIds of winners (for the entire game)
+    // when client gets session data, check if there are any winners
+    public ArrayList<Integer> getWinners(){
+        // loops through and checks shields (to win, all they need is 5+ shields)
+        ArrayList<Integer> winners = new ArrayList<>();
+        ArrayList<Player> players = this.currentGame.getPlayers();
+        for (Player player : players){
+            if (player.getNumShields() >= 5){
+                winners.add(player.getId());
+            }
+        }
+        return winners;
     }
 
 }
