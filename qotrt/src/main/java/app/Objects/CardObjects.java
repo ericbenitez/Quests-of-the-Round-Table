@@ -98,6 +98,16 @@ public class CardObjects {
     // this.storyCards.add(new EventCard(new KingsCallToArms(), "King's Call To Arms",
     //     "The highest ranked player(s) must place 1 weapon in the discard pile. If unable to do so, 2 Foe Cards must be discarded."));
 
+    // this.storyCards
+    //     .add(new EventCard(new Pox(), "Pox", "All players except the player drawing this card lose 1 shield."));
+
+    // this.storyCards.add(new EventCard(new Plague(), "Plague",
+    //     "Drawer loses 2 shields if possible."));
+
+    // this.storyCards.add(new EventCard(new ChivalrousDeed(), "Chivalrous Deed",
+    //     "Player(s) with both lowest rank and least amount of shields, receives 3 shields"));
+
+
     // initialize quest cards
     // this.storyCards.add(new Quest())
     // this.storyCards.add(new Quest( new JourneyThruForest(this)));

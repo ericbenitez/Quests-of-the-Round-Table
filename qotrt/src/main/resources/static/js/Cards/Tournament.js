@@ -158,10 +158,28 @@ function placeCardsTournament(){
 
 
 
-
+// it will also display the winner, and award the shields etc
 function displayAllCardsAtOnce(){
+    document.getElementById("tournament").style.display = "flex";
     stompClient.send("/app/getAllTournPlayerCards", {});
     
+}
+
+// will probably add more stuff to disable/enable
+function disableBidding(){
+    let bidButton = document.getElementById("bidReadyButton");
+    bidButton.disabled = true;
+    bidButton.className = "disabledButton";
+}
+
+function enableBidding(){
+    let bidButton = document.getElementById("bidReadyButton");
+    bidButton.disabled = false;
+    bidButton.className = "";
+}
+
+function hideTournamentDisplay(){
+    document.getElementById("tournament").style.display = "none";
 }
 
 

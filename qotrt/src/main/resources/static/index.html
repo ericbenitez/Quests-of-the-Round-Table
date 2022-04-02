@@ -58,6 +58,40 @@
         <div id="quest">Placeholder for sponser</div>
         <div id="stages">Stages </div> <!-- we will have to use js to display/hide whenever needed-->
       </div>
+      <!-- Pop up to display tournament cards, as well as winner(s)/result --> 
+      <div id="tournament">
+        <h1>Tournament</h1>
+        <div id="playerCardsTourn">
+          <div class="tournRow">
+            <div id="Player1Tourn" class="playerTourn">
+              <p>Player 1</p>
+              <div id="player1Cards" class="allCardsT"></div>
+              <div id="player1Total" class="playerTotal">Total:</div>
+            </div>
+            <div id="Player2Tourn" class="playerTourn">
+              <p>Player 2</p>
+              <div id="player2Cards" class="allCardsT"></div>
+              <div id="player2Total" class="playerTotal">Total:</div>
+            </div>
+          </div>
+          <div class="tournRow" >
+            <div id="Player3Tourn" class="playerTourn">
+              <p>Player 3</p>
+              <div id="player3Cards" class="allCardsT">
+              </div>
+              <div id="player3Total" class="playerTotal">Total:</div>
+            </div>
+            <div id="Player4Tourn" class="playerTourn">
+              <p>Player 4</p>
+              <div id="player4Cards" class="allCardsT"></div>
+              <div id="player4Total" class="playerTotal">Total:</div>
+            </div>
+          </div>
+        </div>
+        <div id="tournResults">
+          <h1>Winner</h1>
+        </div>
+      </div>
       <!--current player-->
       <div id="playerView">
         <!--imageArea (purple box)-->
@@ -88,7 +122,7 @@
         <button id="faceUpButton" class="disabledButton">Place Selected Cards Face Up</button>
         <button id="faceDownButton" class="disabledButton">Place Selected Cards Face Down</button>
         <button id="discardCardButton" onclick="removeSelectedCards()">Discard Cards</button>
-        <button id="bidReadyButton" onclick="placeCardsTournament()">Bid</button>
+        <button id="bidReadyButton"  class="disabledButton" onclick="placeCardsTournament()" disabled>Bid</button>
         
       </div>
     </div>
@@ -98,6 +132,7 @@
   <!-- Just for testing -->
   <button id="placeCardsQuest" onclick="placeCardsQuest()">Choose card for stage</button>
   <div id="battlePoints"></div> <!-- To display the total battle points for a player in a stage -->
+ 
   
   <!-- TODO will be called automatically -->
   <!-- <button onclick="clearPlayerStageCards()">Clears player stage cards</button> --> 
@@ -109,6 +144,8 @@
   <button onclick="addParticipantTournament()">Join tournament</button>
   <button onclick="autoAwardSingleParticipant()">Get award single player tournament</button>
   <button onclick="displayAllCardsAtOnce()">Display All at once</button>
+  <button onclick="disableBidding()">disable bidding</button>
+  <button onclick="enableBidding()">enable bidding</button>
 
   
 
@@ -124,40 +161,7 @@
   </div>
 
 
-  <!-- Pop up to display tournament cards, as well as winner(s)/result --> 
-  <div id="tournament">
-    <h1>Tournament</h1>
-    <div id="playerCardsTourn">
-      <div class="tournRow">
-        <div id="Player1Tourn" class="playerTourn">
-          <p>Player 1</p>
-          <div id="player1Cards" class="allCardsT"></div>
-          <div id="player1Total" class="playerTotal">Total:</div>
-        </div>
-        <div id="Player2Tourn" class="playerTourn">
-          <p>Player 2</p>
-          <div id="player2Cards" class="allCardsT"></div>
-          <div id="player2Total" class="playerTotal">Total:</div>
-        </div>
-      </div>
-      <div class="tournRow" >
-        <div id="Player3Tourn" class="playerTourn">
-          <p>Player 3</p>
-          <div id="player3Cards" class="allCardsT">
-          </div>
-          <div id="player3Total" class="playerTotal">Total:</div>
-        </div>
-        <div id="Player4Tourn" class="playerTourn">
-          <p>Player 4</p>
-          <div id="player4Cards" class="allCardsT"></div>
-          <div id="player4Total" class="playerTotal">Total:</div>
-        </div>
-      </div>
-    </div>
-    <div id="tournResults">
-      <h1>Winner</h1>
-    </div>
-  </div>
+  
 
   <script src="./js/Cards/AdventureCards.js"></script>
   <script src="./js/Cards/Event.js"></script>
