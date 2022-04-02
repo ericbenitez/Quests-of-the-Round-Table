@@ -392,6 +392,7 @@ public String testWinner(ArrayList<Integer> participantsId){
   @MessageMapping("/playEvent")
   public String playEvent() {
     EventCard storyCard = (EventCard) this.gameService.getCurrentStoryCard();
-    return storyCard.playEvent();
+    // return storyCard.playEvent();
+    return "";
   }
 }
