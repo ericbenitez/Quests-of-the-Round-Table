@@ -8,8 +8,6 @@ import java.util.HashMap;
 import app.Models.AdventureCards.*;
 import app.Objects.CardObjects;
 
-
-
 public class Quest extends StoryCard {
     protected String name;
     protected int totalStages;
@@ -55,7 +53,7 @@ public class Quest extends StoryCard {
     }
 
     public void incrementCurrentStage() {
-        if(totalStages < currentStage ){
+        if(currentStage < totalStages ){
             currentStage+=1;
         }
         else if(currentStage==totalStages){
@@ -111,10 +109,10 @@ public class Quest extends StoryCard {
      
     }
     //from the game service...
-    public void setTestCard(Test testCard){
-        this.testCard = testCard;
+    public void setTestCard(Test tc){
+        this.testCard = tc;
     }
-
+  
     public void setClientStage(int playerId, ArrayList<String> cards) {
         clientStage.put(playerId, cards);
 
@@ -187,72 +185,72 @@ public class Quest extends StoryCard {
 
 
     public Test getTestCard(){
-        return testCard;
+        return this.testCard;
     }
 }
 
-class JourneyThruForest extends Quest {
-    public JourneyThruForest() {
-        super("Journey Through the Enchanted Forest", 3, "Evil Knight");
-    };
+// class JourneyThruForest extends Quest {
+//     public JourneyThruForest() {
+//         super("Journey Through the Enchanted Forest", 3, "Evil Knight");
+//     };
 
-}
+// }
 
-class SlayTheDragon extends Quest {
-    public SlayTheDragon(String name, int stages, String foe) {
-        super("Slay the Dragon", 3, "Dragon");
-    };
+// class SlayTheDragon extends Quest {
+//     public SlayTheDragon(String name, int stages, String foe) {
+//         super("Slay the Dragon", 3, "Dragon");
+//     };
 
-}
+// }
 
-class VanquishKingArthursEnemies extends Quest {
-    public VanquishKingArthursEnemies() {
-        super("Vanquish King Arthur's Enemies", 3, null);
-    }
-}
+// class VanquishKingArthursEnemies extends Quest {
+//     public VanquishKingArthursEnemies() {
+//         super("Vanquish King Arthur's Enemies", 3, null);
+//     }
+// }
 
-class RepelTheSaxonRaiders extends Quest {
-    public RepelTheSaxonRaiders() {
-        super("Repel the Saxon Raiders", 2, "All");
-    };
-}
+// class RepelTheSaxonRaiders extends Quest {
+//     public RepelTheSaxonRaiders() {
+//         super("Repel the Saxon Raiders", 2, "All");
+//     };
+// }
 
-class BoarHunt extends Quest {
+// class BoarHunt extends Quest {
 
-    public BoarHunt() {
-        super("Boar Hunt", 2, "All Sacons");
-    }
-}
+//     public BoarHunt() {
+//         super("Boar Hunt", 2, "All Sacons");
+//     }
+// }
 
-class SearchForTheQuestingBeast extends Quest {
+// class SearchForTheQuestingBeast extends Quest {
 
-    public SearchForTheQuestingBeast() {
-        super("Search for the Questing Beast", 4, null);
-    }
-}
+//     public SearchForTheQuestingBeast() {
+//         super("Search for the Questing Beast", 4, null);
+//     }
+// }
 
-class DefendTheQueensHonor extends Quest {
+// class DefendTheQueensHonor extends Quest {
 
-    public DefendTheQueensHonor() {
-        super("Defend the Queen's Honor", 4, "All");
-    }
-}
+//     public DefendTheQueensHonor() {
+//         super("Defend the Queen's Honor", 4, "All");
+//     }
+// }
 
-class RescueTheFairMaiden extends Quest {
+// class RescueTheFairMaiden extends Quest {
 
-    public RescueTheFairMaiden() {
-        super("Rescue the Fair Maiden", 3, "Black Knight");
-    }
-}
+//     public RescueTheFairMaiden() {
+//         super("Rescue the Fair Maiden", 3, "Black Knight");
+//     }
+// }
 
-class SearchForTheHolyGrail extends Quest {
-    public SearchForTheHolyGrail() {
-        super("Search for the Holy Grail", 5, "All");
-    }
-}
+// class SearchForTheHolyGrail extends Quest {
+//     public SearchForTheHolyGrail() {
+//         super("Search for the Holy Grail", 5, "All");
+//     }
+// }
 
-class TestOfTheGreenKnight extends Quest {
-    public TestOfTheGreenKnight() {
-        super("Test of the Green Knight", 4, "Green Knight");
-    }
-}
+// class TestOfTheGreenKnight extends Quest {
+//     public TestOfTheGreenKnight() {
+//         super("Test of the Green Knight", 4, "Green Knight");
+//     }
+// }

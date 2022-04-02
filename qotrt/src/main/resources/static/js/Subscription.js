@@ -180,7 +180,7 @@ function subscriptions() {
   
     stompClient.subscribe("/topic/finishTurn", function (response) { //response = currentActiveplayer 
       let data = JSON.parse(response.body); //the id of the next active player..
-      console.log(data);
+      console.log("Here is the data from the server",data);
       serverData = data;
   
       /**
@@ -210,7 +210,7 @@ function subscriptions() {
             stompClient.send("/app/calculateStage"); //the response to this will be subscriptions so that everybody gets to see the dying player
             //after this nothing happens so we need the sponsor to click finish quest
             //the surviving player are rewarded with an extra adventure card
-            clearPlayerStageCards();
+            // clearPlayerStageCards();
             if(data.testInPlay){
                 alert("The upcoming stage is a test");
                 //send to server and broadcast it to all players

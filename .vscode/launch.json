@@ -2,6 +2,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Launch Main",
+      "request": "launch",
+      "mainClass": "app.Models.General.Main",
+      "projectName": "qotrt"
+    },
+    {
+      "type": "java",
       "name": "Launch QOTRTApplication",
       "request": "launch",
       "mainClass": "app.QOTRTApplication",

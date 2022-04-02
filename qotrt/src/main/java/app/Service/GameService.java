@@ -398,6 +398,8 @@ public class GameService {
                 if(advCard instanceof Test){
                 
                     testCard = (Test) advCard;
+                    //System.out.println(testCard.getName());
+                    return testCard;
 
                 }
             } 

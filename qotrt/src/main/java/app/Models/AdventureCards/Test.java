@@ -25,8 +25,8 @@ public class Test extends AdventureCard {
   public int getMinBid(){
     return minBid;
   }
-  public void addBid(ArrayList<String> bids){
-    this.bids = bids;
+  public void addBid(ArrayList<String> playerBids){
+    this.bids = playerBids;
   }
   public int getLastBid(){
     return bids.size();
