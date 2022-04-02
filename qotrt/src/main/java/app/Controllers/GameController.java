@@ -147,6 +147,8 @@ public class GameController {
 
   @MessageMapping("updateShields")
   public void updateShields(@RequestBody ShieldMessage shieldInfo) throws Exception {
+    int a = shieldInfo.getPlayerId();
+    int b = shieldInfo.getShields();
     gameService.updateShields(shieldInfo.getPlayerId(), shieldInfo.getShields());
   }
 
@@ -205,6 +207,8 @@ public class GameController {
 
     // currSession.sponsorId = gameService.getCurrentGame().getCurrentQuest().getSponsor(); //id of the sponsor
     // currSession.participantsId = gameService.getCurrentGame().getCurrentQuest().getParticipantsId();//id of the sponsor
+
+    currSession.winners = gameService.getWinners();
    
     return currSession;
   }

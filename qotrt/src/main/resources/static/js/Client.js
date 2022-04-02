@@ -351,6 +351,8 @@ function removeCardsFromHand(checked) {
   // update the player hand so that it only has the unchecked cards
   playerHand = getActualCards(unChecked);
   removeAllCheckedCards(checked);
+  // reset the display so that checked is now unchecked
+  resetCardsDisplay();
 
   // remove from server
   // basically it removes all checked cards

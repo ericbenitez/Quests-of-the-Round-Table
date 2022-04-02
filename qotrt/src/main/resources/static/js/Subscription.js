@@ -196,6 +196,13 @@ function subscriptions() {
        * 
        * 
        */
+
+      // checks if there are any winners
+      if (data.winners.length > 0){
+        alert("The game is over! Congratulations to the winner(s): " + data.winners);
+        return;
+      }
+
       if (data.currentActivePlayer === playerId) {
         //activate their buttons
   

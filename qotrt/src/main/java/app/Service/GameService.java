@@ -119,13 +119,17 @@ public class GameService {
         if (players.size() < playerId) {
             return false;
         }
-        for (int i = 0; i < players.size(); i++) {
+        /*for (int i = 0; i < players.size(); i++) {
             if (players.get(i).getUniqueId() == playerId) {
                 players.get(i).updateShields(shields);
+                Player haha = players.get(i);
+                System.out.println(haha);
                 return true;
             }
-        }
-        return false;
+        }*/
+        this.currentGame.getPlayerById(playerId).updateShields(shields);
+        Player p = this.currentGame.getPlayerById(playerId);
+        return true;
 
     }
 
@@ -423,6 +427,21 @@ public class GameService {
             } 
         }
         return testCard;
+    }
+
+
+    // returns an arraylist of playerIds of winners (for the entire game)
+    // when client gets session data, check if there are any winners
+    public ArrayList<Integer> getWinners(){
+        // loops through and checks shields (to win, all they need is 5+ shields)
+        ArrayList<Integer> winners = new ArrayList<>();
+        ArrayList<Player> players = this.currentGame.getPlayers();
+        for (Player player : players){
+            if (player.getNumShields() >= 5){
+                winners.add(player.getId());
+            }
+        }
+        return winners;
     }
 
 }
