@@ -262,8 +262,8 @@ public class GameService {
 
             // sets allies (add to player's ally array)
             if (currentCard instanceof Ally){
-                // player.addActiveAlly(currentCard); uncommment and test after ally array is added
-                // cardsToAdd.remove(cardName);
+                player.addActiveAlly((Ally)currentCard); //uncommment and test after ally array is added
+                cardsToAdd.remove(cardName);
             }
             
         }
@@ -326,11 +326,11 @@ public class GameService {
                     playerTotal += player.getAmour().getBattlePoints();
                 }
 
-                // add active ally cards - uncomment once ally array is added
-                /*for (Ally allyCard : player.getActiveAllies()){
+                // add active ally cards 
+                for (Ally allyCard : player.getActiveAllies()){
                     tempCards.add(allyCard);
                     playerTotal += allyCard.getBattlePoints(this.currentGame.getCurrentTournament().getName(), player.getActiveAllies());
-                }*/
+                }
 
                 // add Rank pts (now we just need to deal with Ally pts)
                 tempCards.add(new Rank(player.getRankString(), player.getRankPts()));

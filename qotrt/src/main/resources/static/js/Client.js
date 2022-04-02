@@ -387,10 +387,10 @@ function getPlayerHand() {
   });
 }
 
-function showCurrentStage() {
+function showCurrentStage(stageNumber) {
   // the first one is 0?
-  let stageNumber = currentStage + 1;
-  alert("stage: " + stageNumber);
+  //let stageNumber = currentStage + 1;
+  //alert("stage: " + stageNumber);
   document.getElementById("stage" + stageNumber).style.display = "inline";
 }
 

@@ -133,8 +133,7 @@ function subscriptions() {
       if (response) game = response;
   
       gameId = game.gameID
-  
-      displayCreateGameResponse(data.body, playerName, parseInt(numOfPlayer));
+      //displayCreateGameResponse(data.body, playerName, parseInt(numOfPlayer));
   
       gameStartedSubscription.unsubscribe();
     });
@@ -251,6 +250,7 @@ function subscriptions() {
                 //pick cards for this stage
                 //they've already joined the quset, they have to pick cards for the next stage or withdraw
                 alert("Pick cards for stage # ", currentStoryCard.currentStageNumber);
+                showCurrentStage(currentStoryCard.currentStageNumber);  // should work after increment stage is fixed
                 if(data.testInPlay){
                     alert("This is a test");
                     let placeBidButton = document.createElement("button");
