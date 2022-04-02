@@ -275,9 +275,20 @@ function subscriptions() {
         }
         if (currentStoryCard.storyCardType === "Tournament") {
 
+          //we round back to the first player who first picked the tournament card
+          if(currentStoryCard.firstParticipantId === playerId){
+            alert("the tournament has ended, click finish turn !");
+          }
+          //the first player clicked finish turn after placing their bids
+          //if the participants is not a participant , ask them to join the tournament 
+          if(!currentStoryCard.participants.includes(playerId)){
+            askPlayerJoinTournament();
+          //
+          }
+
     
         }
-        if (currentStoryCard.storyCardType === null) {
+        if (!data.questInPlay && !data.tournamentInPlay &&!data.eventInPlay ) {
             //if the story card type is numm it means they might be the first player
             alert("pick a story card");
         }

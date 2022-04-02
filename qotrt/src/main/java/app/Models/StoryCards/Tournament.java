@@ -14,6 +14,7 @@ public class Tournament extends StoryCard {
   // from tournaments there as well?
   private int originalNumParticipants;
   private HashMap<Integer, ArrayList<String>> playerCards;
+  private int firstParticipantId;
 
   public Tournament(String name, int shields){
     this.name = name;
@@ -35,9 +36,14 @@ public class Tournament extends StoryCard {
   }
 
   public void addParticipant(int playerId){
+    if(participants.size()==0){
+      firstParticipantId = playerId;
+    }
     participants.add(playerId);
   }
-
+  public int getFirstParticipantId(){
+    return firstParticipantId;
+  }
   public ArrayList<Integer> getParticipants(){
     return participants;
   }

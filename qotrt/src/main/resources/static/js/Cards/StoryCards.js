@@ -46,7 +46,8 @@ function displayStoryCard(data) {
     
   }
   }else if (storyCardType === "Tournament"){
-    storyCardDiv.appendChild(document.createTextNode(storyCard.currentStory));
+    //line below gives an error
+    //storyCardDiv.appendChild(document.createTextNode(storyCard.currentStory));
 
     // we can immediately start asking if the drawer would like to join
     drawerTournament = playerId;

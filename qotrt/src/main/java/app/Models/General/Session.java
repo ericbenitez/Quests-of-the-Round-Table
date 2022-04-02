@@ -27,6 +27,9 @@ public class Session {
    public boolean testInPlay; //comes from the Quest.java 
    public Test testCard;
    public ArrayList<Integer> winners;
+   //for tournaments
+   public boolean tournamentInPlay;
+   
 }
    
  
