@@ -16,8 +16,10 @@ public abstract class StoryCard extends Card {
 
     public Player getDrawer() { return this.drawer; }
 
-    public void playEvent(ArrayList<Player> players) {
-    }
+    // public void playEvent(ArrayList<Player> players) {
+        
+    // }
+    
     /**
      * Returns the card's name
      * @return String

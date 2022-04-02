@@ -1,6 +1,8 @@
 let currentQuest = ""; //name of the current quest taking place
 let currentStages = 0; //the number of stages for the current quest
 let foe = "";
+// let battlePointsLimit = 0;
+
 function sponsorQuest() {
     //console.log("here");
     sponsor = true;
@@ -42,7 +44,7 @@ participants = [];
 let maxBattlePoints = [];
 //only one foe per stage(foe can be supplied different weapons tho), only one test per stage & quest
 let myStages = [];
-let testCards = ["Test of the Questing Beast", "Test of temptation", "Test of Valor", "Test of Morgan Le Fey"];
+let testCards = ["Test of the Questing Beast", "Test of Temptation", "Test of Valor", "Test of Morgan Le Fey"];
 function stageNumCards() {
     let checkedString = getAllChecked(); //returns checked cards
     let checked = getActualCards(checkedString);
@@ -51,14 +53,16 @@ function stageNumCards() {
     //place cards
 
     //check for test (it should be a single and only card for that stage)
-    if((checkedString.includes(testCards[0]) && checkedString.length !=1) ||
-    (checkedString.includes(testCards[1]) && checkedString.length !=1) ||
-    (checkedString.includes(testCards[2]) && checkedString.length !=1) ||
-    (checkedString.includes(testCards[3]) && checkedString.length !=1) ){
+    if((checkedString.includes(testCards[0]) && checkedString.length > 1) ||
+    (checkedString.includes(testCards[1]) && checkedString.length > 1) ||
+    (checkedString.includes(testCards[2]) && checkedString.length > 1) ||
+    (checkedString.includes(testCards[3]) && checkedString.length > 1) ){
         //there is a test card but the stage has more than one card
         alert("There should only be one test card!");
         return;
     }
+    
+    
     let battlePointsForThisStage = 0;
     //removeAllCheckedCards(checkedString);//remove from UI
     

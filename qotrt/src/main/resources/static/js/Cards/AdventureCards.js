@@ -157,13 +157,23 @@ function removeAllCheckedCards(checked) {
     }
 }
 
+// ensures checked boxes are unchecked
+function resetCardsDisplay(){
+    let cards = document.getElementById("playerHand").children;
+
+    for (let i = 0; i < cards.length; i++) {
+        cards[i].firstChild.checked = false;
+    }
+}
+
 
 function removeCardFromDisplay(cardName) {
 
     let cards = document.getElementById("playerHand").children;
 
     for (let i = 0; i < cards.length; i++) {
-        if (cards[i].firstChild.name === cardName) {
+        // deletes the checked one, not the first one to occur in hand
+        if (cards[i].firstChild.name === cardName && cards[i].firstChild.checked) {
             cards[i].remove();
             return;
         }

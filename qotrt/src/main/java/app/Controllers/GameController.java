@@ -28,6 +28,7 @@ import app.Models.General.Card;
 import app.Models.General.Game;
 import app.Models.General.Player;
 import app.Models.General.Session;
+import app.Models.StoryCards.EventCard;
 import app.Models.StoryCards.Quest;
 import app.Models.StoryCards.StoryCard;
 import app.Models.StoryCards.Tournament;
@@ -146,6 +147,8 @@ public class GameController {
 
   @MessageMapping("updateShields")
   public void updateShields(@RequestBody ShieldMessage shieldInfo) throws Exception {
+    int a = shieldInfo.getPlayerId();
+    int b = shieldInfo.getShields();
     gameService.updateShields(shieldInfo.getPlayerId(), shieldInfo.getShields());
   }
 
@@ -172,10 +175,12 @@ public class GameController {
   public Session finishTurn() {
     
     Session currSession = new Session();
-    currSession.currentActivePlayer = gameService.startNextPlayer(); ///increments the player
+    
     currSession.currentStoryCard = gameService.getCurrentStoryCard(); //returns all the elments of that storyCard
     currSession.questInPlay = gameService.getQuestInPlay(); //bool
+    System.out.println("stage number: " + gameService.getCurrentGame().getCurrentQuest().getCurrentStageNumber());
     
+    currSession.testCard= (currSession.testInPlay) ?  gameService.getCurrentGame().getCurrentQuest().getTestCard() : null;
     //if we round back to the sponsor, the stage goes up
     if(gameService.getQuestInPlay() && gameService.getCurrentActivePlayer()==gameService.getCurrentGame().getCurrentQuest().getSponsor()){
       if(!currSession.testInPlay){
@@ -196,11 +201,14 @@ public class GameController {
         currSession.currentActivePlayer = gameService.startNextPlayer(); //skip the sponsor
       } 
     }
+    
+    currSession.currentActivePlayer = gameService.startNextPlayer(); ///increments the player
     currSession.testInPlay = (gameService.getCurrentGame().getCurrentQuest().getQuestIncludesTest() && (gameService.getCurrentGame().getCurrentQuest().getTestInStage() == gameService.getCurrentGame().getCurrentQuest().getCurrentStageNumber()));
-    currSession.testCard= (currSession.testInPlay) ?  gameService.getCurrentGame().getCurrentQuest().getTestCard() : null;
 
     // currSession.sponsorId = gameService.getCurrentGame().getCurrentQuest().getSponsor(); //id of the sponsor
     // currSession.participantsId = gameService.getCurrentGame().getCurrentQuest().getParticipantsId();//id of the sponsor
+
+    currSession.winners = gameService.getWinners();
    
     return currSession;
   }
@@ -388,5 +396,12 @@ public String testWinner(ArrayList<Integer> participantsId){
     //setting the active ally for the player
     this.gameService.setActiveAlliesFromQuestStage(playerId,cards);
     
+  }
+  
+  @MessageMapping("/playEvent")
+  public String playEvent() {
+    EventCard storyCard = (EventCard) this.gameService.getCurrentStoryCard();
+    // return storyCard.playEvent();
+    return "";
   }
 }

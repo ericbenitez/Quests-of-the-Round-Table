@@ -13,6 +13,7 @@ import app.Models.General.Game;
 import app.Models.General.Player;
 import app.Models.General.ProgressStatus;
 import app.Models.RankCards.Rank;
+import app.Models.StoryCards.EventCard;
 import app.Models.StoryCards.StoryCard;
 import app.Models.StoryCards.Tournament;
 import app.Objects.CardObjects;
@@ -118,13 +119,17 @@ public class GameService {
         if (players.size() < playerId) {
             return false;
         }
-        for (int i = 0; i < players.size(); i++) {
+        /*for (int i = 0; i < players.size(); i++) {
             if (players.get(i).getUniqueId() == playerId) {
                 players.get(i).updateShields(shields);
+                Player haha = players.get(i);
+                System.out.println(haha);
                 return true;
             }
-        }
-        return false;
+        }*/
+        this.currentGame.getPlayerById(playerId).updateShields(shields);
+        Player p = this.currentGame.getPlayerById(playerId);
+        return true;
 
     }
 
@@ -211,12 +216,15 @@ public class GameService {
         return -1;
     }
 
-
     //~~~~~~~`turn~~~~~~~~~`
     public void setCurrentStoryCard(StoryCard card){
         this.currentStoryCard=card;
         if (card instanceof Tournament){
             tournamentInPlay = true;
+        }
+        
+        if (card instanceof EventCard) {
+            this.eventInPlay = true;
         }
     }
     public StoryCard getCurrentStoryCard(){
@@ -241,14 +249,23 @@ public class GameService {
     }
 
     public boolean addPlayerCardsTourn(int playerId, ArrayList<String> cardsToAdd){
-        // sets amour card if exists
+        
         Player player = this.currentGame.getPlayerById(playerId);
         for (String cardName : cardsToAdd){
+            Card currentCard = this.currentGame.getCardObjects().getCardByName(cardName);
+            // sets amour card if exists
             if (cardName.equals("Amour")){
-                player.setAmour((Amour)this.currentGame.getCardObjects().getCardByName(cardName));
+                player.setAmour((Amour)currentCard);
                 cardsToAdd.remove(cardName);
-                break;
+                continue;
             }
+
+            // sets allies (add to player's ally array)
+            if (currentCard instanceof Ally){
+                player.addActiveAlly((Ally)currentCard); //uncommment and test after ally array is added
+                cardsToAdd.remove(cardName);
+            }
+            
         }
         return this.currentGame.getCurrentTournament().addPlacedCards(playerId, cardsToAdd);
     }
@@ -308,6 +325,13 @@ public class GameService {
                     tempCards.add(player.getAmour());
                     playerTotal += player.getAmour().getBattlePoints();
                 }
+
+                // add active ally cards 
+                for (Ally allyCard : player.getActiveAllies()){
+                    tempCards.add(allyCard);
+                    playerTotal += allyCard.getBattlePoints(this.currentGame.getCurrentTournament().getName(), player.getActiveAllies());
+                }
+
                 // add Rank pts (now we just need to deal with Ally pts)
                 tempCards.add(new Rank(player.getRankString(), player.getRankPts()));
                 playerTotal += player.getRankPts();
@@ -405,6 +429,21 @@ public class GameService {
             } 
         }
         return testCard;
+    }
+
+
+    // returns an arraylist of playerIds of winners (for the entire game)
+    // when client gets session data, check if there are any winners
+    public ArrayList<Integer> getWinners(){
+        // loops through and checks shields (to win, all they need is 5+ shields)
+        ArrayList<Integer> winners = new ArrayList<>();
+        ArrayList<Player> players = this.currentGame.getPlayers();
+        for (Player player : players){
+            if (player.getNumShields() >= 5){
+                winners.add(player.getId());
+            }
+        }
+        return winners;
     }
 
 }
