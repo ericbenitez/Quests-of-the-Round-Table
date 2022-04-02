@@ -1,7 +1,7 @@
 let currentQuest = ""; //name of the current quest taking place
 let currentStages = 0; //the number of stages for the current quest
 let foe = "";
-// let battlePointsLimit = 0;
+let battlePointsLimit = 0;
 
 function sponsorQuest() {
     //console.log("here");
@@ -62,6 +62,30 @@ function stageNumCards() {
         return;
     }
     
+    let amountOfBattlePoints = 0
+    let amountOfFoes = 0
+    for (const cardName in checkedString) {
+        const card = CardObjects[cardName]
+        if (card) {
+            if (card.battlePoints) amountOfBattlePoints += card.battlePoints
+            if (card.minBattlePoints) amountOfBattlePoints += card.minBattlePoints
+            if (card.cardType == "Foe") amountOfFoes++;
+            // TODO: figure out max battlepoints with curren tquest
+            // TODO
+        }
+    }
+    
+    if (amountOfBattlePoints <= battlePointsLimit) {
+        alert("Not enough battle points, enter more or transfer the quest!")
+        return
+    }
+    
+    if (amountOfFoes > 1) {
+        alert("You cannot have more than 1 foe per stage")
+        return
+    }
+    
+    battlePointsLimit = amountOfBattlePoints;
     
     let battlePointsForThisStage = 0;
     //removeAllCheckedCards(checkedString);//remove from UI

@@ -1,6 +1,5 @@
 package app.Controllers;
 
-import java.time.format.TextStyle;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,17 +12,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import app.Controllers.dto.ArrayMessage;
 import app.Controllers.dto.CardsMessage;
 import app.Controllers.dto.DoubleArrayMessage;
-import app.Controllers.dto.ArrayMessage;
-
 import app.Controllers.dto.Message;
 import app.Controllers.dto.ShieldMessage;
-import app.Models.AdventureCards.*;
 import app.Models.AdventureCards.AdventureCard;
+import app.Models.AdventureCards.Test;
 import app.Models.General.Card;
 import app.Models.General.Game;
 import app.Models.General.Player;
@@ -127,6 +124,7 @@ public class GameController {
     //maybe a timeout because it returns null as currentStorycard...
     Session currSession = new Session();
     currSession.currentActivePlayer = gameService.getCurrentActivePlayer();
+    System.out.println(storyCard.getName());
     currSession.currentStoryCard = gameService.getCurrentStoryCard(); //returns all the elments of that storyCard
     currSession.questInPlay = gameService.getQuestInPlay(); //bool 
     currSession.testInPlay = false;
@@ -394,9 +392,13 @@ public String testWinner(ArrayList<Integer> participantsId){
   }
   
   @MessageMapping("/playEvent")
+  @SendTo("/topic/playEvent")
   public String playEvent() {
     EventCard storyCard = (EventCard) this.gameService.getCurrentStoryCard();
-    // return storyCard.playEvent();
-    return "";
+    
+    ArrayList<Player> players = this.gameService.getCurrentGame().getPlayers();
+    Player drawer = players.get(this.gameService.getCurrentActivePlayer());
+    
+    return storyCard.playEvent(players, drawer);
   }
 }

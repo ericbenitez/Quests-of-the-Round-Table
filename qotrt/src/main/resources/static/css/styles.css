@@ -178,3 +178,7 @@ button {
 .allCardsT{
     text-align: left;
 }
+
+#eventMessage {
+    font-size: 10px;
+}

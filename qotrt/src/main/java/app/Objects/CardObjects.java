@@ -75,14 +75,14 @@ public class CardObjects {
       this.adventureCards.add(new Amour("Amour", "", 10, 1));
     }
 
-    // this.storyCards.add(new EventCard(new KingsRecognition(), "King's Recognition",
-    //     "The next player(s) to complete a Quest will receive 2 extra shields."));
-    // for (int i = 0; i < 2; i++) {
-    //   this.storyCards.add(new EventCard(new QueensFavor(), "Queens Favour",
-    //       "The lowest ranked player(s) immediately receives 2 Adventure Cards."));
-    //   this.storyCards.add(new EventCard(new CourtCalledToCamelot(), "Court Called To Camelot",
-    //       "All Allies in play must be discarded."));
-    // }
+    this.storyCards.add(new EventCard(new KingsRecognition(), "King's Recognition",
+        "The next player(s) to complete a Quest will receive 2 extra shields."));
+    for (int i = 0; i < 2; i++) {
+      this.storyCards.add(new EventCard(new QueensFavor(), "Queens Favour",
+          "The lowest ranked player(s) immediately receives 2 Adventure Cards."));
+      this.storyCards.add(new EventCard(new CourtCalledToCamelot(), "Court Called To Camelot",
+          "All Allies in play must be discarded."));
+    }
 
     // this.storyCards
     //     .add(new EventCard(new Pox(), "Pox", "All players except the player drawing this card lose 1 shield."));

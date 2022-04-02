@@ -7,7 +7,7 @@ import app.Models.General.*;
 
 public class ChivalrousDeed implements EventBehaviour {
 
-    public void playEvent(ArrayList<Player> players, Player drawer) {
+    public String playEvent(ArrayList<Player> players, Player drawer) {
 
         Player minRanked = players.get(0);
 
@@ -42,7 +42,7 @@ public class ChivalrousDeed implements EventBehaviour {
             minShielded.updateShields(3);
             minRanked.updateShields(3);
         }
-
+        
+        return "Player(s) with both lowest rank and least amount of shields, received 3 shields)";
     }
-
 }
