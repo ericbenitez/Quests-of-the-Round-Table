@@ -13,6 +13,7 @@ import app.Models.General.Game;
 import app.Models.General.Player;
 import app.Models.General.ProgressStatus;
 import app.Models.RankCards.Rank;
+import app.Models.StoryCards.EventCard;
 import app.Models.StoryCards.StoryCard;
 import app.Models.StoryCards.Tournament;
 import app.Objects.CardObjects;

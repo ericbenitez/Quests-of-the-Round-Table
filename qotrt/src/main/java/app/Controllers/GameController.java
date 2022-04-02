@@ -173,10 +173,11 @@ public class GameController {
   public Session finishTurn() {
     
     Session currSession = new Session();
-    currSession.currentActivePlayer = gameService.startNextPlayer(); ///increments the player
+    
     currSession.currentStoryCard = gameService.getCurrentStoryCard(); //returns all the elments of that storyCard
     currSession.questInPlay = gameService.getQuestInPlay(); //bool
-    currSession.testInPlay = (gameService.getCurrentGame().getCurrentQuest().getQuestIncludesTest() && (gameService.getCurrentGame().getCurrentQuest().getTestInStage() == gameService.getCurrentGame().getCurrentQuest().getCurrentStageNumber()));
+    System.out.println("stage number: " + gameService.getCurrentGame().getCurrentQuest().getCurrentStageNumber());
+    
     currSession.testCard= (currSession.testInPlay) ?  gameService.getCurrentGame().getCurrentQuest().getTestCard() : null;
     //if we round back to the sponsor, the stage goes up
     if(gameService.getQuestInPlay() && gameService.getCurrentActivePlayer()==gameService.getCurrentGame().getCurrentQuest().getSponsor()){
@@ -198,6 +199,9 @@ public class GameController {
         currSession.currentActivePlayer = gameService.startNextPlayer(); //skip the sponsor
       } 
     }
+    
+    currSession.currentActivePlayer = gameService.startNextPlayer(); ///increments the player
+    currSession.testInPlay = (gameService.getCurrentGame().getCurrentQuest().getQuestIncludesTest() && (gameService.getCurrentGame().getCurrentQuest().getTestInStage() == gameService.getCurrentGame().getCurrentQuest().getCurrentStageNumber()));
 
     // currSession.sponsorId = gameService.getCurrentGame().getCurrentQuest().getSponsor(); //id of the sponsor
     // currSession.participantsId = gameService.getCurrentGame().getCurrentQuest().getParticipantsId();//id of the sponsor
