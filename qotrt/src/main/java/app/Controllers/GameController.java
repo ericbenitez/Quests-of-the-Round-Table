@@ -175,12 +175,13 @@ public class GameController {
   public Session finishTurn() {
     
     Session currSession = new Session();
-    
+
+    currSession.currentActivePlayer = gameService.startNextPlayer(); ///increments the player
     currSession.currentStoryCard = gameService.getCurrentStoryCard(); //returns all the elments of that storyCard
     currSession.questInPlay = gameService.getQuestInPlay(); //bool
-    System.out.println("stage number: " + gameService.getCurrentGame().getCurrentQuest().getCurrentStageNumber());
     
-    currSession.testCard= (currSession.testInPlay) ?  gameService.getCurrentGame().getCurrentQuest().getTestCard() : null;
+    
+   
     //if we round back to the sponsor, the stage goes up
     if(gameService.getQuestInPlay() && gameService.getCurrentActivePlayer()==gameService.getCurrentGame().getCurrentQuest().getSponsor()){
       if(!currSession.testInPlay){
@@ -202,9 +203,9 @@ public class GameController {
       } 
     }
     
-    currSession.currentActivePlayer = gameService.startNextPlayer(); ///increments the player
+    
     currSession.testInPlay = (gameService.getCurrentGame().getCurrentQuest().getQuestIncludesTest() && (gameService.getCurrentGame().getCurrentQuest().getTestInStage() == gameService.getCurrentGame().getCurrentQuest().getCurrentStageNumber()));
-
+    currSession.testCard= (currSession.testInPlay) ?  gameService.getCurrentGame().getCurrentQuest().getTestCard() : null;
     // currSession.sponsorId = gameService.getCurrentGame().getCurrentQuest().getSponsor(); //id of the sponsor
     // currSession.participantsId = gameService.getCurrentGame().getCurrentQuest().getParticipantsId();//id of the sponsor
 
@@ -262,7 +263,7 @@ public String testWinner(ArrayList<Integer> participantsId){
     System.out.println(arr);
     gameService.getCurrentGame().getCurrentQuest().setSponsorStages(arr);
     Test test = this.gameService.setTestCard(arr); //<----------------make this function which returns a Test; 
-    System.out.println( "inside the game controller"+test.getName());
+   // System.out.println( "inside the game controller"+test.getName());
     gameService.getCurrentGame().getCurrentQuest().setTestCard(test);
     return gameService.getCurrentGame().getCurrentQuest();
   }
