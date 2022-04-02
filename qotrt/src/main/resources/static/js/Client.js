@@ -266,19 +266,19 @@ alert("Click complete turn if you're done setting your cards for stage " + curre
 // input: list of card names
 // output: list of object objects with the corresponding given names
 function getActualCards(cardNames) {
-let cards = [];
-for (let i = 0; i < cardNames.length; i++) {
-  for (let j = 0; j < playerHand.length; j++) {
-    if (playerHand[j].name == cardNames[i]) {
-      console.log("card name: " + cardNames[i]);
-      console.log("playerHand[j].name " + playerHand[j].name);
-      console.log(" ");
-      cards.push(playerHand[j]);
-      break;
+  let cards = [];
+  for (let i = 0; i < cardNames.length; i++) {
+    for (let j = 0; j < playerHand.length; j++) {
+      if (playerHand[j].name == cardNames[i]) {
+        console.log("card name: " + cardNames[i]);
+        console.log("playerHand[j].name " + playerHand[j].name);
+        console.log(" ");
+        cards.push(playerHand[j]);
+        break;
+      }
     }
   }
-}
-return cards;
+  return cards;
 }
 
 

@@ -43,7 +43,7 @@ class Amour extends AdventureCard {
   }
 }
 
-const CardObjects = {
+const somecards = {
   "Sir Gawain": new Ally("Sir Gawain", 10, -1),
   "King Pellinore": new Ally("King Pellinore", 10, -1),
   "Sir Percival": new Ally("Sir Percival", 5, -1),

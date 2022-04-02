@@ -62,28 +62,28 @@ function stageNumCards() {
         return;
     }
     
-    let amountOfBattlePoints = 0
-    let amountOfFoes = 0
-    for (const cardName in checkedString) {
-        const card = CardObjects[cardName]
-        if (card) {
-            if (card.battlePoints) amountOfBattlePoints += card.battlePoints
-            if (card.minBattlePoints) amountOfBattlePoints += card.minBattlePoints
-            if (card.cardType == "Foe") amountOfFoes++;
-            // TODO: figure out max battlepoints with curren tquest
-            // TODO
-        }
-    }
+    let amountOfBattlePoints = 0;
+    let amountOfFoes = 0;
+    console.log(playerHand)
     
-    if (amountOfBattlePoints <= battlePointsLimit) {
-        alert("Not enough battle points, enter more or transfer the quest!")
-        return
-    }
+    // for (let i = 0; i < checkedString.length; i++) {
+    //     const card = checked[i];
+    //     if (card.battlePoints) amountOfBattlePoints += card.battlePoints
+    //     if (card.minBattlePoints) amountOfBattlePoints += card.minBattlePoints
+    //     if (card.cardType == "Foe") amountOfFoes++;
+    //     // TODO: figure out max battlepoints with curren tquest
+    //     // TODO
+    // }
     
-    if (amountOfFoes > 1) {
-        alert("You cannot have more than 1 foe per stage")
-        return
-    }
+    // if (amountOfBattlePoints <= battlePointsLimit) {
+    //     alert("Not enough battle points, enter more or transfer the quest!")
+    //     return
+    // }
+    
+    // if (amountOfFoes > 1) {
+    //     alert("You cannot have more than 1 foe per stage")
+    //     return
+    // }
     
     battlePointsLimit = amountOfBattlePoints;
     
@@ -181,7 +181,7 @@ function placeTestBid(){
         if(checkedString.length >= testCard.minBid ){
             //send their bid to the server
             stompClient.send("/app/placeTestBid", {}, JSON.stringify({
-                'message': checkedString.length + ""
+                'bids': checkedString
             }));
         }
         else{
@@ -190,7 +190,7 @@ function placeTestBid(){
     }
     else if(testCard.bids.length > 0){
         const lastBid = testCard.lastBid;
-        if(checkedString.length >= lastBid ){
+        if(checkedString.length > lastBid ){
             //send to server
             stompClient.send("/app/placeTestBid", {}, JSON.stringify({ 'bids': checkedString }))
         }

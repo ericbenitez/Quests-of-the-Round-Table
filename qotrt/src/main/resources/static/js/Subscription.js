@@ -286,6 +286,8 @@ function subscriptions() {
           //we round back to the first player who first picked the tournament card
           if(currentStoryCard.firstParticipantId === playerId){
             alert("the tournament has ended, click finish turn !");
+            displayAllCardsAtOnce();
+            document.getElementById("tournament").style.display = "inline";
           }
           //the first player clicked finish turn after placing their bids
           //if the participants is not a participant , ask them to join the tournament 

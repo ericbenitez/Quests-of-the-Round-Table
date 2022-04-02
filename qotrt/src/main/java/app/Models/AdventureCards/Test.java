@@ -3,10 +3,10 @@ import java.util.ArrayList;
 
 
 public class Test extends AdventureCard {
-  int minBid;
+  protected int minBid;
   // Game game;
-  ArrayList<String> bids = new ArrayList<String>();
-  int lastBid;
+  protected ArrayList<String> bids = new ArrayList<String>();
+  // protected int lastBid = 0;
 
   //two constructors, one without the min Bid which will set it to a default value of 0
   public Test(String name){

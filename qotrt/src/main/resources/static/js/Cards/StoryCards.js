@@ -52,7 +52,7 @@ function displayStoryCard(data) {
     // we can immediately start asking if the drawer would like to join
     drawerTournament = playerId;
     if (playerId === data.currentActivePlayer){
-      startTournament(storyCard);
+      // startTournament(storyCard);
       askPlayerJoinTournament();
     }
     

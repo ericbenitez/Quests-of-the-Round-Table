@@ -26,8 +26,11 @@ public class CardObjects {
     for (int i = 0; i < 16; i++) {
       this.adventureCards.add(new Weapon("Sword", 10));
     }
-    for (int i = 0; i < 6; i++) {
-      this.adventureCards.add(new Weapon("Dagger", 5));
+    
+    // TODO: change to 6 frequency
+    // TODO: change to 5 battlepoints
+    for (int i = 0; i < 15; i++) {
+      this.adventureCards.add(new Weapon("Dagger", 50));
     }
     for (int i = 0; i < 2; i++) {
       this.adventureCards.add(new Weapon("Excalibur", 30));
@@ -39,7 +42,8 @@ public class CardObjects {
       this.adventureCards.add(new Weapon("Battle-ax", 15));
     }
 
-    for (int i = 0; i < 2; i++) {
+    // TODO: change to 2 frequency
+    for (int i = 0; i < 15; i++) {
       this.adventureCards.add(new Test("Test of the Questing Beast"));
       this.adventureCards.add(new Test("Test of Temptation"));
       this.adventureCards.add(new Test("Test of Valor"));
@@ -75,14 +79,14 @@ public class CardObjects {
       this.adventureCards.add(new Amour("Amour", "", 10, 1));
     }
 
-    this.storyCards.add(new EventCard(new KingsRecognition(), "King's Recognition",
-        "The next player(s) to complete a Quest will receive 2 extra shields."));
-    for (int i = 0; i < 2; i++) {
-      this.storyCards.add(new EventCard(new QueensFavor(), "Queens Favour",
-          "The lowest ranked player(s) immediately receives 2 Adventure Cards."));
-      this.storyCards.add(new EventCard(new CourtCalledToCamelot(), "Court Called To Camelot",
-          "All Allies in play must be discarded."));
-    }
+    // this.storyCards.add(new EventCard(new KingsRecognition(), "King's Recognition",
+    //     "The next player(s) to complete a Quest will receive 2 extra shields."));
+    // for (int i = 0; i < 2; i++) {
+    //   this.storyCards.add(new EventCard(new QueensFavor(), "Queens Favour",
+    //       "The lowest ranked player(s) immediately receives 2 Adventure Cards."));
+    //   this.storyCards.add(new EventCard(new CourtCalledToCamelot(), "Court Called To Camelot",
+    //       "All Allies in play must be discarded."));
+    // }
 
     // this.storyCards
     //     .add(new EventCard(new Pox(), "Pox", "All players except the player drawing this card lose 1 shield."));
@@ -119,13 +123,13 @@ public class CardObjects {
     // this.storyCards.add(new Quest("Test of the Green Knight", 4, "Green Knight"));
     // this.storyCards.add(new Quest("Journey Through the Enchanted Forest",3,"Evil Knight"));
 
-  //  for (int i = 0; i < 2; ++i) {
-  //     this.storyCards.add(new Quest("Vanquish King Arthur's Enemies", 3, null));
-  //    this.storyCards.add(new Quest("Boar Hunt", 2, "Boar"));
-  //    this.storyCards.add(new Quest("Repel the Saxon Raiders", 2, "All"));
-  //   }
+    for (int i = 0; i < 2; ++i) {
+      // this.storyCards.add(new Quest("Vanquish King Arthur's Enemies", 3, null));
+      // this.storyCards.add(new Quest("Boar Hunt", 2, "Boar"));
+      // this.storyCards.add(new Quest("Repel the Saxon Raiders", 2, "All"));
+    }
 
-    //this.storyCards.add(new Tournament("some tournament", 1));
+    this.storyCards.add(new Tournament("some tournament", 1));
     this.storyCards.add(new Tournament("At Camelot", 3));
     this.storyCards.add(new Tournament("At Orkney", 2));
     this.storyCards.add(new Tournament("At Tintagel", 1));

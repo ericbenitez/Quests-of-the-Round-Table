@@ -190,6 +190,7 @@ public class GameController {
         gameService.getCurrentGame().getCurrentQuest().incrementCurrentStage();
         currSession.testInPlay = false;
       }
+      // withdraw from quest if you dont want to keep bidding in the test
       if(currSession.testInPlay && gameService.getCurrentGame().getCurrentQuest().getParticipantsId().size()==1) { //the winner
         //some function to announce the winner and then takes cards of the test winner (last bid in test.bids is the number of cards we remove from the winner)
         testWinner(gameService.getCurrentGame().getCurrentQuest().getParticipantsId());
@@ -202,9 +203,10 @@ public class GameController {
       } 
     }
     
-    
-    currSession.testInPlay = (gameService.getCurrentGame().getCurrentQuest().getQuestIncludesTest() && (gameService.getCurrentGame().getCurrentQuest().getTestInStage() == gameService.getCurrentGame().getCurrentQuest().getCurrentStageNumber()));
-    currSession.testCard= (currSession.testInPlay) ?  gameService.getCurrentGame().getCurrentQuest().getTestCard() : null;
+    if (gameService.getQuestInPlay()) {
+      currSession.testInPlay = (gameService.getCurrentGame().getCurrentQuest().getQuestIncludesTest() && (gameService.getCurrentGame().getCurrentQuest().getTestInStage() == gameService.getCurrentGame().getCurrentQuest().getCurrentStageNumber()));
+      currSession.testCard= (currSession.testInPlay) ?  gameService.getCurrentGame().getCurrentQuest().getTestCard() : null;
+    }
     // currSession.sponsorId = gameService.getCurrentGame().getCurrentQuest().getSponsor(); //id of the sponsor
     // currSession.participantsId = gameService.getCurrentGame().getCurrentQuest().getParticipantsId();//id of the sponsor
 
@@ -248,9 +250,10 @@ public String testWinner(ArrayList<Integer> participantsId){
   
 
   @MessageMapping("/placeTestBid")
-  @SendTo("/topic/finishTurn")
-  public Session placeTestBid(@RequestBody ArrayMessage bid) {    
-    gameService.getCurrentGame().getCurrentQuest().getTestCard().addBid(bid.getCards());
+  @SendTo("/topic/finishTurn") // {"message": "3"}
+  public Session placeTestBid(@RequestBody ArrayMessage bids) {    
+    gameService.getCurrentGame().getCurrentQuest().getTestCard().addBid(bids.getBids());
+    System.out.println("Current active player: " + gameService.getCurrentActivePlayer());
     Session currSession = new Session();
     currSession.currentActivePlayer = gameService.startNextPlayer(); ///increments the player
     //skip the sponsor
@@ -261,6 +264,8 @@ public String testWinner(ArrayList<Integer> participantsId){
     currSession.questInPlay = gameService.getQuestInPlay(); //bool
     currSession.testInPlay = (gameService.getCurrentGame().getCurrentQuest().getQuestIncludesTest() && (gameService.getCurrentGame().getCurrentQuest().getTestInStage() == gameService.getCurrentGame().getCurrentQuest().getCurrentStageNumber()));
     currSession.testCard= (currSession.testInPlay) ?  gameService.getCurrentGame().getCurrentQuest().getTestCard() : null;
+    currSession.winners = gameService.getWinners();
+    
     return currSession;
   }
   
