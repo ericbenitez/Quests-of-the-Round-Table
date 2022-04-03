@@ -29,6 +29,7 @@ public class Session {
    public ArrayList<Integer> winners;
    //for tournaments
    public boolean tournamentInPlay;
+   public boolean tieBreakerPlayed; // if the tie breaker round has been played yet (if true => end tournament)
    
 }
    

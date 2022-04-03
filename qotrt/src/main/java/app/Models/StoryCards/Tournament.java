@@ -15,6 +15,9 @@ public class Tournament extends StoryCard {
   private int originalNumParticipants;
   private HashMap<Integer, ArrayList<String>> playerCards;
   private int firstParticipantId;
+  private int lastParticipantId;
+  private boolean tieOccurred; // a tie occurred
+  private boolean tieBreakerPlayed; // a tie HAS been played already
 
   public Tournament(String name, int shields){
     this.name = name;
@@ -23,6 +26,8 @@ public class Tournament extends StoryCard {
     this.participants = new ArrayList<>();
     this.originalNumParticipants = 0;
     this.playerCards = new HashMap<>();
+    this.tieOccurred = false;
+    this.tieBreakerPlayed = false;
   }
 
 
@@ -99,6 +104,7 @@ public class Tournament extends StoryCard {
     // check if everyone is ready
     if (allReady()){
       setOriginalNumParticipants(playerCards.keySet().size());
+      lastParticipantId = playerId;
       // in the session, the client side can see if everyone is ready, 
                             // if so display all the cards, and send request to calc+display winner(s), or maybe 
                             // if client sees everyone is ready, it sends a request to calc winner(s), and when we get that back, we can display cards + winner etc
@@ -118,10 +124,25 @@ public class Tournament extends StoryCard {
     return true;
   }
 
-  
+  public boolean getTieBreakerPlayed(){
+      return tieBreakerPlayed;
+  }
 
+  public void playingTieBreaker(){
+      tieBreakerPlayed = true;
+  }
 
+  public boolean getTieOccured(){
+      return tieOccurred;
+  }
 
+  public void setTieOccurred(Boolean tieValue){
+      this.tieOccurred = tieValue;
+  }
+
+  public int getLastParticipantId(){
+      return lastParticipantId;
+  }
   
 
 }

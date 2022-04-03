@@ -213,12 +213,29 @@ public class GameController {
 
 
     //For Tournaments: 
+    
+    // last participant
+    //if (gameService.getTournamentInPlay() && gameService.getCurrentActivePlayer() == gameService.getCurrentGame().getCurrentTournament().getLastParticipantId()){
+
+    //}
+
     //so when we loop back to the first participant
     if(gameService.getTournamentInPlay() && gameService.getCurrentActivePlayer()==gameService.getCurrentGame().getCurrentTournament().getFirstParticipantId()){
       //getAllTournPlayerCards(); //right now this is triggered from the client in Tournament.js
       System.out.println("The tournament has come to an end!");
       //probably should set the tournament in play to false
-      gameService.setTournamentInPlay(false);
+        
+      // If there's a tie, but the tie breaker round has not been played yet
+      if (this.gameService.getCurrentGame().getCurrentTournament().getTieOccured() && !(this.gameService.getCurrentGame().getCurrentTournament().getTieBreakerPlayed())){
+        currSession.tieBreakerPlayed = true;
+        System.out.println("hello, im right here buf"); 
+        // this.gameService.getCurrentGame().getCurrentTournament().playingTieBreaker(); // sets tiebreakerplayed = true
+      }
+      if (this.gameService.getCurrentGame().getCurrentTournament().getTieBreakerPlayed()){
+        gameService.setTournamentInPlay(false);
+      }
+        
+      
       //alert the player to click finish turn,ok
     }
     

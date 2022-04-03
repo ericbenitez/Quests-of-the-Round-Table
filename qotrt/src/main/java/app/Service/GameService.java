@@ -259,6 +259,8 @@ public class GameService {
     }
 
     public boolean addPlayerCardsTourn(int playerId, ArrayList<String> cardsToAdd){
+
+        ArrayList<String> weapons = new ArrayList<>();
         
         Player player = this.currentGame.getPlayerById(playerId);
         for (String cardName : cardsToAdd){
@@ -266,18 +268,21 @@ public class GameService {
             // sets amour card if exists
             if (cardName.equals("Amour")){
                 player.setAmour((Amour)currentCard);
-                cardsToAdd.remove(cardName);
+                //cardsToAdd.remove(cardName);
                 continue;
             }
 
             // sets allies (add to player's ally array)
-            if (currentCard instanceof Ally){
+            else if (currentCard instanceof Ally){
                 player.addActiveAlly((Ally)currentCard); //uncommment and test after ally array is added
-                cardsToAdd.remove(cardName);
+                //cardsToAdd.remove(cardName);
+            }
+            else {
+                weapons.add(cardName);
             }
             
         }
-        return this.currentGame.getCurrentTournament().addPlacedCards(playerId, cardsToAdd);
+        return this.currentGame.getCurrentTournament().addPlacedCards(playerId, weapons);
     }
 
     // discard cards (all but ally) after the tournament is complete 
@@ -291,9 +296,9 @@ public class GameService {
                 player.discardCard(player.getAmour().getName());
                 player.setAmour(null);
             }
-         
-            tournamentInPlay = false;
+            
         }
+        tournamentInPlay = false;
     }
 
 
@@ -365,6 +370,14 @@ public class GameService {
         // maybe reset for potential tiebreaker round here
         this.currentGame.getCurrentTournament().resetRound(winners);
 
+        // if theres a tie
+        System.out.println("winners: " + winners);
+        System.out.println("winner size: " + winners.size());
+        if (winners.size() > 1){
+            this.currentGame.getCurrentTournament().setTieOccurred(true);
+            System.out.println(this.currentGame.getCurrentTournament().getTieOccured() + " -- ");
+        }
+        
         return temp;
     }
     

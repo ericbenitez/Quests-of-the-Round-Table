@@ -36,6 +36,8 @@ function subscriptions() {
   // subscribe to get tournamnet cards displayed, as well as tournament results
   const singlePLayerSub = stompClient.subscribe('/topic/getAllTournPlayerCards', function (response) {
     // clear it first = need to do this later
+    document.getElementById("tournament").style.display = "flex";
+
     let data = JSON.parse(response.body);
     let playerPts = {};
     for (let i = 0; i < data.length; i++){
@@ -58,7 +60,7 @@ function subscriptions() {
     
     alert("allWinners: " + allWinners);
     if (allWinners.length == 1){
-      alert("winner length = 1");
+      //alert("winner length = 1");
       if (playerId == allWinners[0]){
         awardSingleWinner(allWinners[0]);
         alert("YOU WON SOME SHIELDS BRUH");
@@ -67,6 +69,10 @@ function subscriptions() {
       if (!tieBreakerPlayed){
         alert("There's a tie -- play the tie breaker round!");
         tieBreakerPlayed = true;
+        tieOccurred = true;
+        if (playerId == firstTournamentParticipantID){
+            alert("Place cards for the almighty tie breaker round!");
+        }
       }else {
         for (let i = 0; i < allWinners.length; i++){
           if (allWinners[i] == playerId){
@@ -286,15 +292,23 @@ function subscriptions() {
 
           //we round back to the first player who first picked the tournament card
           if(currentStoryCard.firstParticipantId === playerId){
-            alert("the tournament has ended, click finish turn !");
+            //alert("the tournament has ended, click finish turn !");
+            firstTournamentParticipantID = playerId
+            if (tieBreakerPlayed){
+                tieBreakerPlayed = false;
+                tieOccurred = false;
+            }
             displayAllCardsAtOnce();
-            document.getElementById("tournament").style.display = "inline";
+  
           }
           //the first player clicked finish turn after placing their bids
           //if the participants is not a participant , ask them to join the tournament 
-          if(!currentStoryCard.participants.includes(playerId)){
+          if(!currentStoryCard.participants.includes(playerId) && !data.tieBreakerPlayed && data.tournamentInPlay){
+            // this is being called when I dont want it to
             askPlayerJoinTournament();
           //
+          }else if (currentStoryCard.participants.includes(playerId) && tieBreakerPlayed){
+              alert("Place cards for the almighty tie breaker round!");
           }
 
     

@@ -45,6 +45,7 @@ let drawerTournament = 0;
 */
 // array of actual cards (name, battlepts) that player placed
 let tournamentCards = [];
+firstTournamentParticipantID = -1;
 
 
 // just an alert, probably wont need it once turn is incorporated
@@ -167,7 +168,6 @@ function placeCardsTournament(){
 
 // it will also display the winner, and award the shields etc
 function displayAllCardsAtOnce(){
-    document.getElementById("tournament").style.display = "flex";
     stompClient.send("/app/getAllTournPlayerCards", {});
     
 }
