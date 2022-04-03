@@ -245,6 +245,7 @@ function subscriptions() {
             if (!currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber === 1) {
             //ask them to join
                 alert("click join quest");
+                showCurrentStage(currentStoryCard.currentStageNumber); // needs testing
             }
             if (currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber <= currentStoryCard.totalStages) {
                 //pick cards for this stage
