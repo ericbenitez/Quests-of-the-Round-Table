@@ -7,9 +7,9 @@ import app.Models.Enums.Rank;
 public class QueensFavor implements EventBehaviour {
 
   // The lowest ranked player(s) immediately receives 2 Aventure Cards
-  public void playEvent(ArrayList<Player> players, Player Drawer) {
+  public String playEvent(ArrayList<Player> players, Player Drawer) {
     if (players.size() < 1) {
-      return;
+      return "The lowest ranked player(s) immediately receives 2 Adventure Cards";
     }
     Rank minRank = getMinRank(players);
     for (Player player : players) {
@@ -17,6 +17,8 @@ public class QueensFavor implements EventBehaviour {
         player.drawCards(2);
       }
     }
+    
+    return "The lowest ranked player(s) immediately receives 2 Adventure Cards";
   }
 
   // gets the mininum Rank given an array of players

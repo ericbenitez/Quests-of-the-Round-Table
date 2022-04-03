@@ -6,6 +6,6 @@ import app.Models.General.*;
 
 public interface EventBehaviour {
 
-    void playEvent(ArrayList<Player> players, Player drawer);
+    String playEvent(ArrayList<Player> players, Player drawer);
   
 }

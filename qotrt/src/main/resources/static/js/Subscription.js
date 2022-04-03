@@ -1,5 +1,12 @@
 
 function subscriptions() {
+  const playEventSubscription = stompClient.subscribe("/topic/playEvent", (data) => {
+    const message = JSON.parse(data.body)
+    
+    const eventMessage = document.getElementById("eventMessage")
+    eventMessage.innerHTML = ""
+    eventMessage.appendChild(document.createTextNode(message))
+  })
   
   const transferQuestSubscription = stompClient.subscribe("/topic/transferQuest", (data) => {
     if (data.body * 1 === -1) {
@@ -163,8 +170,9 @@ function subscriptions() {
   
     //This function should also use session data and send it back.
     stompClient.subscribe("/topic/pickCard", function (response) {
+      // console.log("picked card")
       const data = JSON.parse(response.body);
-      //console.log("From pick Card",data); //name: 'Slay the Dragon', drawer: null, storyCardType: 'Quest', totalStages: '3', foeName: 'Dragon', …}
+      console.log("From pick Card",data); //name: 'Slay the Dragon', drawer: null, storyCardType: 'Quest', totalStages: '3', foeName: 'Dragon', …}
       displayStoryCard(data);
       
       if (data.StoryCardType === "Event") {
@@ -279,6 +287,8 @@ function subscriptions() {
           //we round back to the first player who first picked the tournament card
           if(currentStoryCard.firstParticipantId === playerId){
             alert("the tournament has ended, click finish turn !");
+            displayAllCardsAtOnce();
+            document.getElementById("tournament").style.display = "inline";
           }
           //the first player clicked finish turn after placing their bids
           //if the participants is not a participant , ask them to join the tournament 

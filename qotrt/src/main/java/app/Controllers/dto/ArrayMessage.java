@@ -6,10 +6,10 @@ import java.util.ArrayList;
 
 @Data
 public class ArrayMessage {
-    ArrayList<String> cards;
+    ArrayList<String> bids;
 
-    public ArrayList<String> getCards() {
-        return cards;
+    public ArrayList<String> getBids() {
+        return this.bids;
     }
 
 }

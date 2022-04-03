@@ -8,7 +8,7 @@ import app.Models.General.Player;
 public class KingsCallToArms implements EventBehaviour {
 
   @Override
-  public void playEvent(ArrayList<Player> players, Player drawer) {
+  public String playEvent(ArrayList<Player> players, Player drawer) {
     Rank highestRankValue = Rank.Squire;
     
     for (Player player: players) {
@@ -25,5 +25,7 @@ public class KingsCallToArms implements EventBehaviour {
         // The highest ranked player must place 1 weapon in the discard pile, if unable discard 2 foe cards
       }
     }
+    
+    return "The highest ranked player(s) must place 1 weapon in the discard pile. Otherwise, 2 foe cards must be discarded";
   }
 }
