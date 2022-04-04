@@ -54,8 +54,11 @@ function validInputString(input) {
   return true;
 }
 
-function finishTurn() {
+function finishTurn(btn) {
   //moves on to the next player..
   stompClient.send("/app/finishTurn");
+
+  //after one click the finish turn disables
+  disableFinishTurnAfterClick(btn);
   
 }

@@ -16,13 +16,16 @@ function subscriptions() {
     eventMessage.appendChild(document.createTextNode(`Event: ${data.message}`))
   })
 
-  const transferQuestSubscription = stompClient.subscribe("/topic/transferQuest", (data) => {
-    if (data.body * 1 === -1) {
+  const transferQuestSubscription = stompClient.subscribe("/topic/transferQuest", (response) => {
+    if (response.body * 1 === -1 && playerId === serverData.currentActivePlayer) {
       finishTurn()
       return
     }
 
-    serverData.currentActivePlayer = data.body * 1
+    // current active player after a transfer
+    serverData.currentActivePlayer = response.body * 1
+    
+    // if its us...
     if (playerId === serverData.currentActivePlayer) {
       const isSponsoring = confirm("Do you want to sponsor?");
       if (isSponsoring) {
@@ -251,104 +254,107 @@ function subscriptions() {
       // enableGameButtons();
       let currentStoryCard = data.currentStoryCard;
       if (currentStoryCard != null){
-
-      if (currentStoryCard.storyCardType === "Quest") {
-        //If the current story card type is quest, it could mean a few things
-        //they're the sponsor, and it has looped back to them, the stage is complete
-        if (currentStoryCard.sponsor === playerId && (currentStoryCard.currentStageNumber <= (currentStoryCard.totalStages * 1))) {
-          //check winner for data.currentstages
-          //CLEAR THE HASHMAP FOR CLIENT STAGE
-          //checkWinner(currentStoryCard.clientStages, currentStoryCard.stages); //this function does the functionality of sending the appropriate reward
-          //and moving the turn
-          // request for winner
-          stompClient.send("/app/calculateStage"); //the response to this will be subscriptions so that everybody gets to see the dying player
-          //after this nothing happens so we need the sponsor to click finish quest
-          //the surviving player are rewarded with an extra adventure card
-          // clearPlayerStageCards();
-          if (data.testInPlay) {
-            alert("The upcoming stage is a test");
-            //send to server and broadcast it to all players
-            stompClient.send("/app/nextStageIsTest");
-            alert("click finish Turn");
-          }
-          alert("Hey Sponsor, click finish Turn!");
-
-
-        }
-        //they're the sponsor and this is the last and total stage
-        if (currentStoryCard.sponsor === playerId && currentStoryCard.currentStageNumber > currentStoryCard.totalStages) {
-          //check the winners again and reward them
-          //for the sponsor, it should check how many total cards they used in all of the stages + total stages
-          //for example, alert(pick 6 cards for sponsoring the quest);
-          //send something to the server, stomp.client(/app/setStoryCardToNull );
-
-          alert("The Quest is complete! Giving you as the sponsor adventure cards!");
-          //send some server things to clear the current quest
-          stompClient.send("/app/rewardSponsor");
-
-        }
-        //another scenario is that the player is not the sponsor.
-        if (currentStoryCard.sponsor != playerId) {
-          if (!currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber === 1) {
-            //ask them to join
-            alert("click join quest");
-            showCurrentStage(currentStoryCard.currentStageNumber); // needs testing
-          }
-          if (currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber <= currentStoryCard.totalStages) {
-            //pick cards for this stage
-            //they've already joined the quset, they have to pick cards for the next stage or withdraw
-            alert("Pick cards for stage # ", currentStoryCard.currentStageNumber);
-            showCurrentStage(currentStoryCard.currentStageNumber);  // should work after increment stage is fixed
+      if (currentStoryCard) {
+        if (currentStoryCard.storyCardType === "Quest") {
+          //If the current story card type is quest, it could mean a few things
+          //they're the sponsor, and it has looped back to them, the stage is complete
+          if (currentStoryCard.sponsor === playerId && (currentStoryCard.currentStageNumber <= (currentStoryCard.totalStages * 1))) {
+            //check winner for data.currentstages
+            //CLEAR THE HASHMAP FOR CLIENT STAGE
+            //checkWinner(currentStoryCard.clientStages, currentStoryCard.stages); //this function does the functionality of sending the appropriate reward
+            //and moving the turn
+            // request for winner
+            stompClient.send("/app/calculateStage"); //the response to this will be subscriptions so that everybody gets to see the dying player
+            //after this nothing happens so we need the sponsor to click finish quest
+            //the surviving player are rewarded with an extra adventure card
+            // clearPlayerStageCards();
             if (data.testInPlay) {
-              alert("This is a test");
-              let placeBidButton = document.createElement("button");
-              var t = document.createTextNode("Place Bid (Test)");
-              placeBidButton.appendChild(t);
-              placeBidButton.setAttribute("onclick", "placeTestBid()");
-              placeBidButton.setAttribute("id", "placeTestBid")
-              document.getElementById("placeCardButtons").appendChild(placeBidButton);
+              alert("The upcoming stage is a test");
+              //send to server and broadcast it to all players
+              stompClient.send("/app/nextStageIsTest");
+              alert("click finish Turn");
             }
-            //place bid function through a button which takes in the server Data;
+            alert("Hey Sponsor, click finish Turn!");
+  
+  
           }
-          if (!currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber != 1) {
-            //this player refused to join the quest;
-            //finishTurn();//increment the currentActivePlayer and move to the next player
-            alert("you decided not to Join the Quest! So we're skipping you're turn :P");
-            finishTurn();
+          //they're the sponsor and this is the last and total stage
+          if (currentStoryCard.sponsor === playerId && currentStoryCard.currentStageNumber > currentStoryCard.totalStages) {
+            //check the winners again and reward them
+            //for the sponsor, it should check how many total cards they used in all of the stages + total stages
+            //for example, alert(pick 6 cards for sponsoring the quest);
+            //send something to the server, stomp.client(/app/setStoryCardToNull );
+  
+            alert("The Quest is complete! Giving you as the sponsor adventure cards!");
+            //send some server things to clear the current quest
+            stompClient.send("/app/rewardSponsor");
+            getPlayerHand();
+  
+          }
+          //another scenario is that the player is not the sponsor.
+          if (currentStoryCard.sponsor != playerId) {
+            if (!currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber === 1) {
+              //ask them to join
+              alert("click join quest");
+              showCurrentStage(currentStoryCard.currentStageNumber); // needs testing
+            }
+            if (currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber <= currentStoryCard.totalStages) {
+              //pick cards for this stage
+              //they've already joined the quset, they have to pick cards for the next stage or withdraw
+              alert("Pick cards for stage # ", currentStoryCard.currentStageNumber);
+              showCurrentStage(currentStoryCard.currentStageNumber);  // should work after increment stage is fixed
+              if (data.testInPlay) {
+                alert("This is a test");
+                let placeBidButton = document.createElement("button");
+                var t = document.createTextNode("Place Bid (Test)");
+                placeBidButton.appendChild(t);
+                placeBidButton.setAttribute("onclick", "placeTestBid()");
+                placeBidButton.setAttribute("id", "placeTestBid")
+                document.getElementById("placeCardButtons").appendChild(placeBidButton);
+              }
+              //place bid function through a button which takes in the server Data;
+            }
+            if (!currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber != 1) {
+              //this player refused to join the quest;
+              //finishTurn();//increment the currentActivePlayer and move to the next player
+              alert("you decided not to Join the Quest! So we're skipping you're turn :P");
+              finishTurn();
+            }
           }
         }
-      }
-      if (currentStoryCard.storyCardType === "Event") {
-
-
-      }
-      if (currentStoryCard.storyCardType === "Tournament" && data.tournamentInPlay) {
-        //we round back to the first player who first picked the tournament card
-        if (currentStoryCard.firstParticipantId === playerId) {
-            alert("we back haha");
-          //alert("the tournament has ended, click finish turn !");
-          firstTournamentParticipantID = playerId;
-
-          displayAllCardsAtOnce();
-
+        if (currentStoryCard.storyCardType === "Event") {
+  
+  
         }
-        //the first player clicked finish turn after placing their bids
-        //if the participants is not a participant , ask them to join the tournament 
-        if (!currentStoryCard.participants.includes(playerId) && !data.tieBreakerPlayed && data.tournamentInPlay) {
-          askPlayerJoinTournament();
-
-        } else if (currentStoryCard.participants.includes(playerId)) {
-          if (tieOccurred && !tieBreakerPlayed) {
-            alert("Place cards for the almighty tie breaker round!");
-            //
-            tieBreakerPlayed = true;
+        if (currentStoryCard.storyCardType === "Tournament" && data.tournamentInPlay) {
+  
+          //we round back to the first player who first picked the tournament card
+          if (currentStoryCard.firstParticipantId === playerId) {
+            //alert("the tournament has ended, click finish turn !");
+            firstTournamentParticipantID = playerId
+  
+            displayAllCardsAtOnce();
+  
           }
-
+          //the first player clicked finish turn after placing their bids
+          //if the participants is not a participant , ask them to join the tournament 
+          if (!currentStoryCard.participants.includes(playerId) && !data.tieBreakerPlayed && data.tournamentInPlay) {
+            askPlayerJoinTournament();
+  
+          } else if (currentStoryCard.participants.includes(playerId)) {
+            if (tieOccurred && !tieBreakerPlayed) {
+              alert("Place cards for the almighty tie breaker round!");
+              //
+              tieBreakerPlayed = true;
+            }
+  
+          }
+  
+  
         }
-
-
       }
     }
+    
       if (!data.questInPlay && !data.tournamentInPlay && !data.eventInPlay) {
         //if the story card type is numm it means they might be the first player
         alert("pick a story card");
@@ -356,6 +362,7 @@ function subscriptions() {
       }
 
     }
+    
     else if (data.currentActivePlayer != playerId) {
       //disable their buttons!
       //disableButtons();

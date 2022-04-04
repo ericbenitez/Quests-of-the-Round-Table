@@ -82,17 +82,17 @@ stompClient.send("/app/pickCard", {});
 }
 
 function joinGame() {
-if (playerName !== "") return
-playerName = document.getElementById("player-name").value.trim();
+  if (playerName !== "") return
+  playerName = document.getElementById("player-name").value.trim();
 
-if (!validInputString(playerName)) {
-  alert("Please enter a name.");
-  return;
-}
-subscriptions();
+  if (!validInputString(playerName)) {
+    alert("Please enter a name.");
+    return;
+  }
+  subscriptions();
 
-// send request to server to join
-stompClient.send("/app/playerJoining", {}, playerName);
+  // send request to server to join
+  stompClient.send("/app/playerJoining", {}, playerName);
 }
 
 
@@ -219,7 +219,7 @@ shields += numOfShields;
 
 //~~~~~~~~~~~~~~this dunction should be in quest.js~~~~~~~~~~~~~~~
 
-function placeCardsQuest() {
+function placeCardsQuest(btn) {
 // players are allowed to choose no cards, so we don't disable the button
 checked = getAllChecked();
 
@@ -259,7 +259,7 @@ div.appendChild(document.createElement("br"));
 cardAtPlay.appendChild(div);
 document.getElementById("cardsDown-" + playerId).addEventListener("click", turnCardsOver);
 alert("Click complete turn if you're done setting your cards for stage " + currentStage);
-
+disableStageCardsAfterClick(btn);
 }
 
 

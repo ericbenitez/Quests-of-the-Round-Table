@@ -172,6 +172,12 @@ public class GameController {
   @MessageMapping("/finishTurn")
   @SendTo("/topic/finishTurn")
   public Session finishTurn() {
+    if (gameService.getCurrentGame().getCurrentQuest() != null) {
+      if (gameService.getCurrentGame().getCurrentQuest().getSponsorAttempts() >= gameService.getCurrentGame().getPlayers().size()) {
+        gameService.setCurrentStoryCard(null);
+      }
+    }
+    
     
     Session currSession = new Session();
 
@@ -180,7 +186,6 @@ public class GameController {
     currSession.questInPlay = gameService.getQuestInPlay(); //bool, changes this to false when you complete all stages.
     currSession.tournamentInPlay=gameService.getTournamentInPlay(); //bool
     
-   
     //if we round back to the sponsor, the stage goes up
     if(gameService.getQuestInPlay() && gameService.getCurrentActivePlayer()==gameService.getCurrentGame().getCurrentQuest().getSponsor()){
       if(!currSession.testInPlay){
@@ -346,7 +351,7 @@ public String testWinner(ArrayList<Integer> participantsId){
   @MessageMapping("/transferQuest")
   @SendTo("/topic/transferQuest")
   public int transferQuest(int playerId) {
-    int currentActivePlayerIndex = this.gameService.getCurrentActivePlayer();
+    int currentActivePlayerIndex = this.gameService.getCurrentActivePlayer() - 1;
     // Player currentActivePlayer = this.gameService.getCurrentGame().getPlayers().get(currentActivePlayerIndex - 1);
     // if (currentActivePlayer.getId() != playerId) return -1;
     
@@ -355,8 +360,8 @@ public String testWinner(ArrayList<Integer> participantsId){
     int amountOfPlayers = this.gameService.getCurrentGame().getPlayers().size();
     int sponsorAttempts = quest.getSponsorAttempts();
     if (sponsorAttempts < amountOfPlayers) {
-      int value = sponsorAttempts + (currentActivePlayerIndex - 1);
-      int nextPlayerIndex = value >= amountOfPlayers ? value - amountOfPlayers: value;
+      int indexPlusAttempts = currentActivePlayerIndex + sponsorAttempts;
+      int nextPlayerIndex = indexPlusAttempts >= amountOfPlayers ? indexPlusAttempts - amountOfPlayers: indexPlusAttempts;
       quest.incrementSponsorAttempts();
       return this.gameService.getCurrentGame().getPlayers().get(nextPlayerIndex).getId(); // next person
     }
