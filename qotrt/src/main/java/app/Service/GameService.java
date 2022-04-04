@@ -282,7 +282,11 @@ public class GameService {
             }
             
         }
-        return this.currentGame.getCurrentTournament().addPlacedCards(playerId, weapons);
+        boolean returnVal = this.currentGame.getCurrentTournament().addPlacedCards(playerId, weapons);
+        if (returnVal){
+            setTieResult();
+        }
+        return true;
     }
 
     // discard cards (all but ally) after the tournament is complete 
@@ -314,6 +318,65 @@ public class GameService {
                 } 
             }
         }
+    }
+
+
+    public void setTieResult(){
+        ArrayList<ArrayList<Card>> temp = new ArrayList<>();
+        int maxPts = 0;
+        ArrayList<Integer> winners = new ArrayList<>();
+
+        for (int i = 1; i < this.currentGame.getPlayers().size()+1; i++){
+            ArrayList<Card> tempCards = new ArrayList<>();
+            Player player = this.currentGame.getPlayerById(i);
+            int playerTotal = 0;
+
+            ArrayList<String> currCards = this.currentGame.getCurrentTournament().getPlayerCards(i);
+            if (currCards != null){
+                for (String cardName : currCards ){
+                    tempCards.add(this.currentGame.getCardObjects().getCardByName(cardName));
+                    playerTotal += this.currentGame.getCardObjects().getBattlePtsByName(cardName);
+                }
+                // add amour card
+                if (player.getAmour() != null){
+                    tempCards.add(player.getAmour());
+                    playerTotal += player.getAmour().getBattlePoints();
+                }
+
+                // add active ally cards 
+                for (Ally allyCard : player.getActiveAllies()){
+                    tempCards.add(allyCard);
+                    playerTotal += allyCard.getBattlePoints(this.currentGame.getCurrentTournament().getName(), player.getActiveAllies());
+                }
+
+                // add Rank pts (now we just need to deal with Ally pts)
+                tempCards.add(new Rank(player.getRankString(), player.getRankPts()));
+                playerTotal += player.getRankPts();
+                temp.add(tempCards);    
+            }else {
+                temp.add(null);
+            }
+            if (playerTotal > maxPts){
+                winners.clear();
+                winners.add(i);
+                maxPts = playerTotal;
+            }else if (playerTotal == maxPts){
+                winners.add(i);
+            }
+
+        }
+
+        // if theres a tie
+        System.out.println("winners: " + winners);
+        System.out.println("winner size: " + winners.size());
+        if (winners.size() > 1){
+            this.currentGame.getCurrentTournament().setTieOccurred(true);
+            System.out.println(this.currentGame.getCurrentTournament().getTieOccured() + " -- ");
+        }else{
+            this.currentGame.getCurrentTournament().setTieOccurred(false);
+        }
+        
+        
     }
 
 
@@ -467,6 +530,12 @@ public class GameService {
             }
         }
         return winners;
+    }
+
+
+    // ------------------------------ Tournament Turns -------------------------------
+    public int incrementRound(){
+        return this.currentGame.getCurrentTournament().incrementRound();
     }
 
 }

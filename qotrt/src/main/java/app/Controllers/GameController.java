@@ -218,26 +218,60 @@ public class GameController {
     //if (gameService.getTournamentInPlay() && gameService.getCurrentActivePlayer() == gameService.getCurrentGame().getCurrentTournament().getLastParticipantId()){
 
     //}
+    if (gameService.getTournamentInPlay()){
+        Tournament currentTournament = gameService.getCurrentGame().getCurrentTournament();
 
-    //so when we loop back to the first participant
-    if(gameService.getTournamentInPlay() && gameService.getCurrentActivePlayer()==gameService.getCurrentGame().getCurrentTournament().getFirstParticipantId()){
-      //getAllTournPlayerCards(); //right now this is triggered from the client in Tournament.js
-      System.out.println("The tournament has come to an end!");
-      //probably should set the tournament in play to false
-        
-      // If there's a tie, but the tie breaker round has not been played yet
-      if (this.gameService.getCurrentGame().getCurrentTournament().getTieOccured() && !(this.gameService.getCurrentGame().getCurrentTournament().getTieBreakerPlayed())){
-        currSession.tieBreakerPlayed = true;
-        System.out.println("hello, im right here buf"); 
-        // this.gameService.getCurrentGame().getCurrentTournament().playingTieBreaker(); // sets tiebreakerplayed = true
-      }
-      if (this.gameService.getCurrentGame().getCurrentTournament().getTieBreakerPlayed()){
-        gameService.setTournamentInPlay(false);
-      }
-        
-      
-      //alert the player to click finish turn,ok
+        //so when we loop back to the first participant
+        if(gameService.getTournamentInPlay() && gameService.getCurrentActivePlayer()==currentTournament.getFirstParticipantId()){
+            //getAllTournPlayerCards(); //right now this is triggered from the client in Tournament.js
+            System.out.println("The tournament has come to an end!");
+            //probably should set the tournament in play to false
+            int currentRound = gameService.incrementRound();
+
+
+            // first round played, and no tie => end of tournament
+            if (currentRound == 1 && !currentTournament.getTieOccured()){
+                System.out.println("gee: " + currentTournament.getTieOccured());
+                gameService.setTournamentInPlay(false);
+                currSession.tieBreakerPlayed = true;
+                gameService.setCurrentStoryCard(null);
+
+            }
+            
+            // first round played and tie occurred (so tie breaker round not yet played)
+            else if (currentRound == 1 && currentTournament.getTieOccured() && !currentTournament.getTieBreakerPlayed()){
+                currentTournament.setTieOccurred(false);
+                currSession.tieBreakerPlayed = true;
+            }
+
+            // tie breaker round played
+            // end tournamnet here
+            else if (currentRound == 2){
+                gameService.setTournamentInPlay(false);
+                currSession.tieBreakerPlayed = false;
+                currentTournament.setTieOccurred(false);
+                currentTournament.setTieBreakerPlayed(false);
+                gameService.setCurrentStoryCard(null);
+            }
+
+
+
+            // If there's a tie, but the tie breaker round has not been played yet
+           /* if (this.gameService.getCurrentGame().getCurrentTournament().getTieOccured() && !(this.gameService.getCurrentGame().getCurrentTournament().getTieBreakerPlayed())){
+            currSession.tieBreakerPlayed = true;
+            System.out.println("hello, im right here buf"); 
+            // this.gameService.getCurrentGame().getCurrentTournament().playingTieBreaker(); // sets tiebreakerplayed = true
+            }
+            if (this.gameService.getCurrentGame().getCurrentTournament().getTieBreakerPlayed() || this.gameService.getCurrentGame().getCurrentTournament().getTieOccured() == false){
+            gameService.setTournamentInPlay(false);
+            }*/
+            
+            
+            //alert the player to click finish turn,ok
+        }
     }
+
+    
     
 
     currSession.winners = gameService.getWinners();
