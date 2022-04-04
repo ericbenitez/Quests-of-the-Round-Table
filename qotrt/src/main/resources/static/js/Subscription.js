@@ -1,11 +1,11 @@
 
 function subscriptions() {
-  const playEventSubscription = stompClient.subscribe("/topic/playEvent", (data) => {
-    const message = JSON.parse(data.body)
+  const playEventSubscription = stompClient.subscribe("/topic/playEvent", (response) => {
+    const data = JSON.parse(response.body)
     
     const eventMessage = document.getElementById("eventMessage")
     eventMessage.innerHTML = ""
-    eventMessage.appendChild(document.createTextNode(message))
+    eventMessage.appendChild(document.createTextNode(`Event: ${data.message}`))
   })
   
   const transferQuestSubscription = stompClient.subscribe("/topic/transferQuest", (data) => {
@@ -157,6 +157,7 @@ function subscriptions() {
       setTimeout(() => { stompClient.send("/app/ready", {}, ""); }, 2000);
       initializeAdv();
   
+      
       joinGameSubscription.unsubscribe();
     })
   
@@ -174,10 +175,6 @@ function subscriptions() {
       const data = JSON.parse(response.body);
       console.log("From pick Card",data); //name: 'Slay the Dragon', drawer: null, storyCardType: 'Quest', totalStages: '3', foeName: 'Dragon', …}
       displayStoryCard(data);
-      
-      if (data.StoryCardType === "Event") {
-        stompClient.send("/app/playEvent")
-      }
     })
 
      //This function should also use session data and send it back.
@@ -193,6 +190,10 @@ function subscriptions() {
       let data = JSON.parse(response.body); //the id of the next active player..
       console.log("Here is the data from the server",data);
       serverData = data;
+      
+      // clear event card display
+      const eventMessage = document.getElementById("eventMessage");
+      eventMessage.innerHTML = "";
   
       /**
        * {"currentActivePlayer":2,

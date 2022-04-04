@@ -2,6 +2,9 @@ package app.Models.StoryCards;
 
 import java.util.ArrayList;
 
+import app.Models.AdventureCards.AdventureCard;
+import app.Models.AdventureCards.Weapon;
+import app.Models.Enums.AdventureCardType;
 import app.Models.Enums.Rank;
 import app.Models.General.Player;
 
@@ -11,6 +14,7 @@ public class KingsCallToArms implements EventBehaviour {
   public String playEvent(ArrayList<Player> players, Player drawer) {
     Rank highestRankValue = Rank.Squire;
     
+    // calculate the highest rank value
     for (Player player: players) {
       if (player.getRankInt().compareTo(highestRankValue) == 1) {
         highestRankValue = player.getRankInt();
@@ -19,13 +23,28 @@ public class KingsCallToArms implements EventBehaviour {
     
     for (Player player: players) {
       if (player.getRankInt() == highestRankValue) {
-        player.drawCards(2);
+        Weapon weapon = null;
+        for (AdventureCard card: player.getCards()) {
+          if (card.getAdventureCardType() == AdventureCardType.Weapon) {
+            weapon = (Weapon) card;
+            break;
+          }
+        }
         
-        // TODO player input to select weapon card/foe cards
-        // The highest ranked player must place 1 weapon in the discard pile, if unable discard 2 foe cards
+        if (weapon == null) {
+          int amountOfFoes = 0;
+          for (AdventureCard card: player.getCards()) {
+            if (amountOfFoes >= 2) break;
+            
+            if (card.getAdventureCardType() == AdventureCardType.Foe) {
+              player.discardCard(card.getName());
+              amountOfFoes++;
+            }
+          }
+        }
       }
     }
     
-    return "The highest ranked player(s) must place 1 weapon in the discard pile. Otherwise, 2 foe cards must be discarded";
+    return "The highest ranked player(s) placed 1 weapon in the discard pile. Otherwise, 2 foe cards were discarded";
   }
 }

@@ -19,7 +19,7 @@ public class EventCard extends StoryCard {
     this.eventBehaviour = e;
   }
   
-  public String playEvent(ArrayList<Player> players, Player drawer) {
-		return eventBehaviour.playEvent(players, drawer);
-	}
+  public EventBehaviour getEventBehaviour() {
+    return this.eventBehaviour;
+  }
 }

@@ -1,4 +1,7 @@
 package app.Models.AdventureCards;
+
+import app.Models.Enums.AdventureCardType;
+
 public class Amour extends AdventureCard {
   
   int battlePoints;
@@ -9,6 +12,7 @@ public class Amour extends AdventureCard {
     this.description = description;
     this.battlePoints = battlePoints;
     this.bids = bids;
+    this.adventureCardType = AdventureCardType.Amour;
   }
 
   public int getBattlePoints(){

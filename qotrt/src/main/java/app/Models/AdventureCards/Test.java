@@ -1,6 +1,8 @@
 package app.Models.AdventureCards;
 import java.util.ArrayList;
 
+import app.Models.Enums.AdventureCardType;
+
 
 public class Test extends AdventureCard {
   protected int minBid;
@@ -13,6 +15,7 @@ public class Test extends AdventureCard {
     this.name = name;
     this.description = "";
     this.minBid = 0;
+    this.adventureCardType = AdventureCardType.Test;
   }
 
  
@@ -20,6 +23,7 @@ public class Test extends AdventureCard {
     this.name = name;
     this.description = "";
     this.minBid = minBid;
+    this.adventureCardType = AdventureCardType.Test;
   }
   
   public int getMinBid(){

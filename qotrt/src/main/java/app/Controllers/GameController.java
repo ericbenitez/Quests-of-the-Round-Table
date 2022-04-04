@@ -1,7 +1,7 @@
 package app.Controllers;
 
 import java.util.ArrayList;
-import java.util.Currency;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +23,7 @@ import app.Controllers.dto.ShieldMessage;
 import app.Models.AdventureCards.AdventureCard;
 import app.Models.AdventureCards.Test;
 import app.Models.General.Card;
+import app.Models.General.FilteredPlayer;
 import app.Models.General.Game;
 import app.Models.General.Player;
 import app.Models.General.Session;
@@ -146,8 +147,6 @@ public class GameController {
 
   @MessageMapping("updateShields")
   public void updateShields(@RequestBody ShieldMessage shieldInfo) throws Exception {
-    int a = shieldInfo.getPlayerId();
-    int b = shieldInfo.getShields();
     gameService.updateShields(shieldInfo.getPlayerId(), shieldInfo.getShields());
   }
 
@@ -289,7 +288,7 @@ public String testWinner(ArrayList<Integer> participantsId){
   @SendTo("/topic/transferQuest")
   public int transferQuest(int playerId) {
     int currentActivePlayerIndex = this.gameService.getCurrentActivePlayer();
-    Player currentActivePlayer = this.gameService.getCurrentGame().getPlayers().get(currentActivePlayerIndex - 1);
+    // Player currentActivePlayer = this.gameService.getCurrentGame().getPlayers().get(currentActivePlayerIndex - 1);
     // if (currentActivePlayer.getId() != playerId) return -1;
     
     // if people still left to ask, get next player
@@ -418,12 +417,29 @@ public String testWinner(ArrayList<Integer> participantsId){
   
   @MessageMapping("/playEvent")
   @SendTo("/topic/playEvent")
-  public String playEvent() {
+  public HashMap<String, Object> playEvent() {
     EventCard storyCard = (EventCard) this.gameService.getCurrentStoryCard();
-    
+    String message;
+    HashMap<String, Object> data = new HashMap<>();
     ArrayList<Player> players = this.gameService.getCurrentGame().getPlayers();
-    Player drawer = players.get(this.gameService.getCurrentActivePlayer());
+    Player drawer = this.gameService.getCurrentGame().getPlayerById(this.gameService.getCurrentActivePlayer());
     
-    return storyCard.playEvent(players, drawer);
+    if (storyCard.getName().equals("King's Recognition")) {
+      this.gameService.getCurrentGame().setKingsRecognition(storyCard);
+      message = "The next player(s) to complete a Quest will receive 2 extra shields";
+    } else {
+      message = storyCard.getEventBehaviour().playEvent(players, drawer);      
+    }
+    
+    // iterate through players, and make a list of filtered players
+    ArrayList<FilteredPlayer> filteredPlayers = new ArrayList<>();
+    for (Player player: players) {
+      filteredPlayers.add(new FilteredPlayer(player.getName(), player.getId(), player.getCards(), player.getNumShields()));
+    }
+    
+    data.put("players", filteredPlayers);
+    data.put("message", message);
+    
+    return data;
   }
 }

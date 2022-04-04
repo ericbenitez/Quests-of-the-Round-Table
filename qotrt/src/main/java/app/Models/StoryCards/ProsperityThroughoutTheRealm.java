@@ -12,6 +12,6 @@ public class ProsperityThroughoutTheRealm implements EventBehaviour {
       player.drawCards(2);
     }
     
-    return "All players may immediately draw 2 Adventure cards";
+    return "All players drew 2 Adventure cards";
   }
 }

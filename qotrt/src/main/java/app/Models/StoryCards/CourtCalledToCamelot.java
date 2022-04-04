@@ -25,6 +25,6 @@ public class CourtCalledToCamelot implements EventBehaviour {
       
     }
     
-    return "All Allies in play must be discarded";
+    return "All Allies in play were discarded";
   }
 }

@@ -64,26 +64,39 @@ function stageNumCards() {
     
     let amountOfBattlePoints = 0;
     let amountOfFoes = 0;
+    let amountOfTests = 0;
     console.log(playerHand)
     
-    // for (let i = 0; i < checkedString.length; i++) {
-    //     const card = checked[i];
-    //     if (card.battlePoints) amountOfBattlePoints += card.battlePoints
-    //     if (card.minBattlePoints) amountOfBattlePoints += card.minBattlePoints
-    //     if (card.cardType == "Foe") amountOfFoes++;
-    //     // TODO: figure out max battlepoints with curren tquest
-    //     // TODO
-    // }
     
-    // if (amountOfBattlePoints <= battlePointsLimit) {
-    //     alert("Not enough battle points, enter more or transfer the quest!")
-    //     return
-    // }
+    for (const cardName of checkedString) {
+        const index = checkedString.indexOf(cardName)
+        checkedString.splice(index, 1)
+        
+        if (checkedString.includes(cardName)) {
+            alert("No repeating cards")
+            return
+        }
+        
+        const card = CardObjects[cardName];
+        if (card.battlePoints) amountOfBattlePoints += card.battlePoints
+        if (card.minBattlePoints) amountOfBattlePoints += card.minBattlePoints
+        if (card.cardType == "Foe") amountOfFoes++;
+    }
     
-    // if (amountOfFoes > 1) {
-    //     alert("You cannot have more than 1 foe per stage")
-    //     return
-    // }
+    if (amountOfBattlePoints <= battlePointsLimit) {
+        alert("Not enough battle points, enter more or transfer the quest!")
+        return
+    }
+    
+    if (amountOfFoes == 0 && amountOfTests == 0) {
+        alert("You need at least 1 foe or 1 test in this stage!")
+        return
+    }
+    
+    if (amountOfFoes > 1) {
+        alert("You cannot have more than 1 foe per stage")
+        return
+    }
     
     battlePointsLimit = amountOfBattlePoints;
     
