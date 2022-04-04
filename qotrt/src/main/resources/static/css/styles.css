@@ -53,6 +53,14 @@ button {
     margin: 5rem;
 }
 
+.disableStoryCard{
+    pointer-events: none;
+}
+
+.enabledStoryCard{
+    pointer-events: auto;
+}
+
 #adventureCards{
     height: 100px;
     width:50px;
