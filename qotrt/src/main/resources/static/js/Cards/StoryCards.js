@@ -43,8 +43,8 @@ function displayStoryCard(data) {
       if (!isSponsoring) {
           alert("I see that you don't want to sponsor, press the Transfer Quest button")
       }
-    
   }
+  
   }else if (storyCardType === "Tournament"){
     //line below gives an error
     //storyCardDiv.appendChild(document.createTextNode(storyCard.currentStory));
@@ -59,7 +59,7 @@ function displayStoryCard(data) {
   }
 
 
-  else if (storyCardType === "Event"){
-    alert("Click on Perform Event!")
+  else if (data.currentStoryCard.storyCardType === "Event" && data.currentActivePlayer === playerId) {
+    stompClient.send("/app/playEvent")
   }
 }

@@ -181,4 +181,6 @@ button {
 
 #eventMessage {
     font-size: 10px;
+    color: aliceblue;
+    text-align: center;
 }

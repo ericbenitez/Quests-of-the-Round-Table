@@ -13,8 +13,6 @@ public class Pox implements EventBehaviour {
                 players.get(i).updateShields(-1);
             }
         }   
-        return "All players except the player drawing this card lose 1 shield";
+        return "All players except the player drawing this card lost 1 shield";
     }
-
-  
 }

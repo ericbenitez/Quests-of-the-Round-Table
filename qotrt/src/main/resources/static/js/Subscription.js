@@ -1,11 +1,11 @@
 
 function subscriptions() {
-  const playEventSubscription = stompClient.subscribe("/topic/playEvent", (data) => {
-    const message = JSON.parse(data.body)
+  const playEventSubscription = stompClient.subscribe("/topic/playEvent", (response) => {
+    const data = JSON.parse(response.body)
     
     const eventMessage = document.getElementById("eventMessage")
     eventMessage.innerHTML = ""
-    eventMessage.appendChild(document.createTextNode(message))
+    eventMessage.appendChild(document.createTextNode(`Event: ${data.message}`))
   })
   
   const transferQuestSubscription = stompClient.subscribe("/topic/transferQuest", (data) => {
@@ -68,10 +68,10 @@ function subscriptions() {
     }else {
       if (!tieBreakerPlayed){
         alert("There's a tie -- play the tie breaker round!");
-        tieBreakerPlayed = true;
         tieOccurred = true;
         if (playerId == firstTournamentParticipantID){
-            alert("Place cards for the almighty tie breaker round!");
+            alert("Place cards for the sigh almighty tie breaker round!");
+            tieBreakerPlayed = true;
         }
       }else {
         for (let i = 0; i < allWinners.length; i++){
@@ -163,6 +163,7 @@ function subscriptions() {
       setTimeout(() => { stompClient.send("/app/ready", {}, ""); }, 2000);
       initializeAdv();
   
+      
       joinGameSubscription.unsubscribe();
     })
   
@@ -180,10 +181,6 @@ function subscriptions() {
       const data = JSON.parse(response.body);
       console.log("From pick Card",data); //name: 'Slay the Dragon', drawer: null, storyCardType: 'Quest', totalStages: '3', foeName: 'Dragon', …}
       displayStoryCard(data);
-      
-      if (data.StoryCardType === "Event") {
-        stompClient.send("/app/playEvent")
-      }
     })
 
      //This function should also use session data and send it back.
@@ -199,6 +196,10 @@ function subscriptions() {
       let data = JSON.parse(response.body); //the id of the next active player..
       console.log("Here is the data from the server",data);
       serverData = data;
+      
+      // clear event card display
+      const eventMessage = document.getElementById("eventMessage");
+      eventMessage.innerHTML = "";
   
       /**
        * {"currentActivePlayer":2,
@@ -222,27 +223,7 @@ function subscriptions() {
         // this needs work vv
        // enableGameButtons();
         let currentStoryCard = data.currentStoryCard;
-        if (currentStoryCard.storyCardType === "Quest") {
-          //If the current story card type is quest, it could mean a few things
-          //they're the sponsor, and it has looped back to them, the stage is complete
-          if (currentStoryCard.sponsor === playerId && (currentStoryCard.currentStageNumber <= (currentStoryCard.totalStages * 1))) {
-            //check winner for data.currentstages
-            //CLEAR THE HASHMAP FOR CLIENT STAGE
-            //checkWinner(currentStoryCard.clientStages, currentStoryCard.stages); //this function does the functionality of sending the appropriate reward
-            //and moving the turn
-            // request for winner
-            stompClient.send("/app/calculateStage"); //the response to this will be subscriptions so that everybody gets to see the dying player
-            //after this nothing happens so we need the sponsor to click finish quest
-            //the surviving player are rewarded with an extra adventure card
-            // clearPlayerStageCards();
-            if(data.testInPlay){
-                alert("The upcoming stage is a test");
-                //send to server and broadcast it to all players
-                stompClient.send("/app/nextStageIsTest");
-                alert("click finish Turn");
-            }
-            alert("Hey Sponsor, click finish Turn!");
-
+        if (currentStoryCard != null){
 
           }
           //they're the sponsor and this is the last and total stage
@@ -270,13 +251,10 @@ function subscriptions() {
                 alert("Pick cards for stage # ", currentStoryCard.currentStageNumber);
                 showCurrentStage(currentStoryCard.currentStageNumber);  // should work after increment stage is fixed
                 if(data.testInPlay){
-                    alert("This is a test");
-                    let placeBidButton = document.createElement("button");
-                    var t = document.createTextNode("Place Bid (Test)");
-                    placeBidButton.appendChild(t);
-                    placeBidButton.setAttribute("onclick", "placeTestBid()");
-                    placeBidButton.setAttribute("id", "placeTestBid")
-                    document.getElementById("placeCardButtons").appendChild(placeBidButton);
+                    alert("The upcoming stage is a test");
+                    //send to server and broadcast it to all players
+                    stompClient.send("/app/nextStageIsTest");
+                    alert("click finish Turn");
                 }
                 //place bid function through a button which takes in the server Data;
           }
@@ -294,31 +272,84 @@ function subscriptions() {
         }
         if (currentStoryCard.storyCardType === "Tournament") {
 
-          //we round back to the first player who first picked the tournament card
-          if(currentStoryCard.firstParticipantId === playerId){
-            //alert("the tournament has ended, click finish turn !");
-            firstTournamentParticipantID = playerId
-            if (tieBreakerPlayed){
-                tieBreakerPlayed = false;
-                tieOccurred = false;
             }
-            displayAllCardsAtOnce();
-  
-          }
-          //the first player clicked finish turn after placing their bids
-          //if the participants is not a participant , ask them to join the tournament 
-          if(!currentStoryCard.participants.includes(playerId) && !data.tieBreakerPlayed && data.tournamentInPlay){
-            // this is being called when I dont want it to
-            askPlayerJoinTournament();
-          //
-          }else if (currentStoryCard.participants.includes(playerId) && tieBreakerPlayed){
-              alert("Place cards for the almighty tie breaker round!");
-          }
+            //they're the sponsor and this is the last and total stage
+            if (currentStoryCard.sponsor === playerId && currentStoryCard.currentStageNumber > currentStoryCard.totalStages) {
+                //check the winners again and reward them
+                //for the sponsor, it should check how many total cards they used in all of the stages + total stages
+                //for example, alert(pick 6 cards for sponsoring the quest);
+                //send something to the server, stomp.client(/app/setStoryCardToNull );
+                alert("The Quest is complete!");
+                //send some server things to clear the current quest
+            }
+            //another scenario is that the player is not the sponsor.
+            if (currentStoryCard.sponsor != playerId) {
+                if (!currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber === 1) {
+                //ask them to join
+                    alert("click join quest");
+                    showCurrentStage(currentStoryCard.currentStageNumber); // needs testing
+                }
+                if (currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber <= currentStoryCard.totalStages) {
+                    //pick cards for this stage
+                    //they've already joined the quset, they have to pick cards for the next stage or withdraw
+                    alert("Pick cards for stage # ", currentStoryCard.currentStageNumber);
+                    showCurrentStage(currentStoryCard.currentStageNumber);  // should work after increment stage is fixed
+                    if(data.testInPlay){
+                        alert("This is a test");
+                        let placeBidButton = document.createElement("button");
+                        var t = document.createTextNode("Place Bid (Test)");
+                        placeBidButton.appendChild(t);
+                        placeBidButton.setAttribute("onclick", "placeTestBid()");
+                        placeBidButton.setAttribute("id", "placeTestBid")
+                        document.getElementById("placeCardButtons").appendChild(placeBidButton);
+                    }
+                    //place bid function through a button which takes in the server Data;
+            }
+            if (!currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber != 1) {
+                //this player refused to join the quest;
+                //finishTurn();//increment the currentActivePlayer and move to the next player
+                alert("here 3")
+                }
+            }
+            }
+            if (currentStoryCard.storyCardType === "Event") {
+                
+        
+            }
+            if (currentStoryCard.storyCardType === "Tournament") {
 
+            //we round back to the first player who first picked the tournament card
+            if(currentStoryCard.firstParticipantId === playerId){
+                //alert("the tournament has ended, click finish turn !");
+                firstTournamentParticipantID = playerId
+                //if (tieBreakerPlayed){
+                //    tieBreakerPlayed = false;
+                //    tieOccurred = false;
+                //}
+                displayAllCardsAtOnce();
     
+            }
+            //the first player clicked finish turn after placing their bids
+            //if the participants is not a participant , ask them to join the tournament 
+            if(!currentStoryCard.participants.includes(playerId) && !data.tieBreakerPlayed && data.tournamentInPlay){
+                askPlayerJoinTournament();
+            
+            }else if (currentStoryCard.participants.includes(playerId)){
+                // this is being called when I dont want it to
+                if (tieOccurred && !tieBreakerPlayed){
+                    alert("Place cards for the almighty tie breaker round!");
+                    tieBreakerPlayed = true;
+                }
+                
+            }
+
+        
+            }
         }
-        if (!data.questInPlay && !data.tournamentInPlay &&!data.eventInPlay ) {
+        if (!data.questInPlay && !data.tournamentInPlay &&!data.eventInPlay) {
             //if the story card type is numm it means they might be the first player
+            tieBreakerPlayed = false;
+            tieOccurred = false;
             alert("pick a story card");
         }
   

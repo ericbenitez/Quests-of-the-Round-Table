@@ -28,6 +28,7 @@ public class Game implements Mediator { // Main = Game
   EventCard currentEvent;
 
   CardObjects cardObjects;
+  private EventCard kingsRecognitionActive = null;   
 
   @Autowired
   public Game() {
@@ -149,13 +150,22 @@ public class Game implements Mediator { // Main = Game
     }
 
     ArrayList<String> survivors = new ArrayList<>();
+    ArrayList<Player> survivorPlayers = new ArrayList<>();
 
     rewardSurvivors(currentQuest.getParticipantsId()); //if they made it out alive of a stage
     for (Integer playerId : currentQuest.getParticipantsId()){
       String playerName = this.getPlayerById(playerId).getName();
+      survivorPlayers.add(this.getPlayerById(playerId));
       survivors.add(playerName);
     }
     
+<<<<<<< HEAD
+=======
+    if (this.kingsRecognitionActive != null) {
+      this.kingsRecognitionActive.getEventBehaviour().playEvent(survivorPlayers, null);
+      this.kingsRecognitionActive = null;
+    }
+>>>>>>> 3fa9d00535624281618e543b52fe05bddbac2e74
     
     return survivors; // the peeps who survived
   }
@@ -391,6 +401,14 @@ public class Game implements Mediator { // Main = Game
 
   public EventCard getCurrentEvent(EventCard event) {
     return currentEvent;
+  }
+
+  public boolean isKingsRecognitionActive() {
+    return this.kingsRecognitionActive == null;
+  }
+
+  public void setKingsRecognition(EventCard kingsRecognition) {
+      this.kingsRecognitionActive = kingsRecognition;
   }
 
 }

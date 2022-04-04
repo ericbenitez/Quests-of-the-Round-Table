@@ -2,6 +2,8 @@ package app.Models.AdventureCards;
 
 import java.util.ArrayList;
 
+import app.Models.Enums.AdventureCardType;
+
 public class Ally extends AdventureCard {
   int battlePoints;
   int bids;
@@ -12,6 +14,7 @@ public class Ally extends AdventureCard {
     this.description = "";
     this.battlePoints = battlePts;
     this.bids = bids;
+    this.adventureCardType = AdventureCardType.Ally;
   }
 
   public int getBattlePoints() {
