@@ -159,13 +159,10 @@ public class Game implements Mediator { // Main = Game
       survivors.add(playerName);
     }
     
-<<<<<<< HEAD
-=======
     if (this.kingsRecognitionActive != null) {
       this.kingsRecognitionActive.getEventBehaviour().playEvent(survivorPlayers, null);
       this.kingsRecognitionActive = null;
     }
->>>>>>> 3fa9d00535624281618e543b52fe05bddbac2e74
     
     return survivors; // the peeps who survived
   }
