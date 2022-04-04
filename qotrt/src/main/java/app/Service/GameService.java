@@ -237,7 +237,8 @@ public class GameService {
     public boolean getQuestInPlay(){
         if(questInPlay){
             if(currentGame.getCurrentQuest().getCurrentStageNumber() > Integer.parseInt(currentGame.getCurrentQuest().getTotalStages())){
-                setQuestInPlay(false);}
+                setQuestInPlay(false);
+            }
         }
         return questInPlay;
     }
