@@ -27,6 +27,12 @@ public class Foe extends AdventureCard {
   public int getBattlePoints(){
     return minBattlePoints;
   }
+  public int getMaxBattlePoints(){
+    return maxBattlePoints;
+  }
+  public String getName(){
+    return name;
+  }
 //The sponsor is calling this function... not sure when tho 
   //Quest has the name of the foe then it's max points
   /*public int getBattlePoints(String name){

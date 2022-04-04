@@ -186,11 +186,13 @@ public class GameController {
       if(!currSession.testInPlay){
         gameService.getCurrentGame().getCurrentQuest().incrementCurrentStage();
       } 
+      //withdraw from the quest
       if(currSession.testInPlay && gameService.getCurrentGame().getCurrentQuest().getParticipantsId().size()==0) {//everyone dropped out with no bids
         gameService.getCurrentGame().getCurrentQuest().incrementCurrentStage();
         currSession.testInPlay = false;
       }
       // withdraw from quest if you dont want to keep bidding in the test
+      //
       if(currSession.testInPlay && gameService.getCurrentGame().getCurrentQuest().getParticipantsId().size()==1) { //the winner
         //some function to announce the winner and then takes cards of the test winner (last bid in test.bids is the number of cards we remove from the winner)
         testWinner(gameService.getCurrentGame().getCurrentQuest().getParticipantsId());
@@ -285,7 +287,12 @@ public String testWinner(ArrayList<Integer> participantsId){
     
     return currSession;
   }
-  
+
+  @MessageMapping("/rewardSponsor")
+  public void rewardSponsor(){
+    gameService.getCurrentGame().rewardSponsor(gameService.getCurrentActivePlayer());
+  }
+
 
   
   // [[stage 1 cards], [stage 2 cards]] .. ["sfs","grgw","rger"]

@@ -68,9 +68,60 @@ public class Game implements Mediator { // Main = Game
 
     // calculate sponsor battlepoints for stage
     for (String nameOfCard : currentSponsorStage) {
-      AdventureCard advCard = this.cardObjects.getCardByName(nameOfCard);
-      int battlePoints = advCard.getBattlePoints();
-      sponsorBattlePoints += battlePoints;
+      //Special Cards with Max Battle Points:
+      if(currentQuest.getName().equals("Journey Through the Enchanted Forest")){
+        if(nameOfCard.equals("Evil Knight")){
+          AdventureCard advCard = this.cardObjects.getCardByName(nameOfCard);
+          Foe foeCard = (Foe) advCard;
+          int battlePoints = foeCard.getMaxBattlePoints();
+          sponsorBattlePoints += battlePoints;
+        }
+      }
+      if(currentQuest.getName().equals("Slay the Dragon")){
+        if(nameOfCard.equals("Dragon")){
+          AdventureCard advCard = this.cardObjects.getCardByName(nameOfCard);
+          Foe foeCard = (Foe) advCard;
+          int battlePoints = foeCard.getMaxBattlePoints();
+          sponsorBattlePoints += battlePoints;
+        }
+      }
+      if(currentQuest.getName().equals("Repel the Saxon Raiders")){
+        if(nameOfCard.equals("Saxon Knight")||nameOfCard.equals("Saxons")){
+          AdventureCard advCard = this.cardObjects.getCardByName(nameOfCard);
+          Foe foeCard = (Foe) advCard;
+          int battlePoints = foeCard.getMaxBattlePoints();
+          sponsorBattlePoints += battlePoints;
+        }
+      }
+      if(currentQuest.getName().equals("Boar Hunt")){
+        if(nameOfCard.equals("Boar")){
+          AdventureCard advCard = this.cardObjects.getCardByName(nameOfCard);
+          Foe foeCard = (Foe) advCard;
+          int battlePoints = foeCard.getMaxBattlePoints();
+          sponsorBattlePoints += battlePoints;
+        }
+      }
+      if(currentQuest.getName().equals("Rescue the Fair Maiden")){
+        if(nameOfCard.equals("Black Knight")){
+          AdventureCard advCard = this.cardObjects.getCardByName(nameOfCard);
+          Foe foeCard = (Foe) advCard;
+          int battlePoints = foeCard.getMaxBattlePoints();
+          sponsorBattlePoints += battlePoints;
+        }
+      }
+       if(currentQuest.getName().equals("Test of the Green Knight")){
+        if(nameOfCard.equals("Green Knight")){
+          AdventureCard advCard = this.cardObjects.getCardByName(nameOfCard);
+          Foe foeCard = (Foe) advCard;
+          int battlePoints = foeCard.getMaxBattlePoints();
+          sponsorBattlePoints += battlePoints;
+        }
+      }
+      else{
+        AdventureCard advCard = this.cardObjects.getCardByName(nameOfCard);
+        int battlePoints = advCard.getBattlePoints();
+        sponsorBattlePoints += battlePoints;
+      }
     }
 
     for (Map.Entry<Integer, ArrayList<String>> entry : clientStage.entrySet()) {
@@ -99,12 +150,26 @@ public class Game implements Mediator { // Main = Game
 
     ArrayList<String> survivors = new ArrayList<>();
 
+    rewardSurvivors(currentQuest.getParticipantsId()); //if they made it out alive of a stage
     for (Integer playerId : currentQuest.getParticipantsId()){
       String playerName = this.getPlayerById(playerId).getName();
       survivors.add(playerName);
     }
     
+    
     return survivors; // the peeps who survived
+  }
+
+  public void rewardSurvivors(ArrayList<Integer> survivors){
+    for(int id : survivors){
+      Player p = this.getPlayerById(id);
+      p.drawCards(1);
+    }
+  }
+
+  //TO DO: Fareha 
+  public void rewardSponsor(Integer playerId){
+    Integer numOfAdvCards;  
   }
 
   // Helper function - Given a playerId, calculates and returns the battle pts for the allies in play

@@ -183,6 +183,8 @@ function placeTestBid(){
             stompClient.send("/app/placeTestBid", {}, JSON.stringify({
                 'bids': checkedString
             }));
+            var buttonTestBid = document.getElementById("placeTestBid");
+            buttonTestBid.parentNode.removeChild(buttonTestbid);
         }
         else{
             alert("Your bid is less than the min bid! Try again or withdraw quest!");
@@ -193,6 +195,8 @@ function placeTestBid(){
         if(checkedString.length > lastBid ){
             //send to server
             stompClient.send("/app/placeTestBid", {}, JSON.stringify({ 'bids': checkedString }))
+            var buttonTestBid = document.getElementById("placeTestBid");
+            buttonTestBid.parentNode.removeChild(buttonTestbid);
         }
 
         else{

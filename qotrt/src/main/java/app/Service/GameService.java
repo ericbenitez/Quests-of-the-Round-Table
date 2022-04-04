@@ -227,6 +227,7 @@ public class GameService {
             this.eventInPlay = true;
         }
     }
+    
     public StoryCard getCurrentStoryCard(){
         return this.currentStoryCard;
     }

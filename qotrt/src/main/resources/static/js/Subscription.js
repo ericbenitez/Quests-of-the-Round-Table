@@ -251,8 +251,11 @@ function subscriptions() {
             //for the sponsor, it should check how many total cards they used in all of the stages + total stages
             //for example, alert(pick 6 cards for sponsoring the quest);
             //send something to the server, stomp.client(/app/setStoryCardToNull );
-            alert("The Quest is complete!");
+
+            alert("The Quest is complete! Giving you as the sponsor adventure cards!");
             //send some server things to clear the current quest
+            stompClient.send("/app/rewardSponsor");
+            
           }
           //another scenario is that the player is not the sponsor.
           if (currentStoryCard.sponsor != playerId) {
@@ -280,7 +283,8 @@ function subscriptions() {
           if (!currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber != 1) {
             //this player refused to join the quest;
             //finishTurn();//increment the currentActivePlayer and move to the next player
-            alert("here 3")
+            alert("you decided not to Join the Quest! So we're skipping you're turn :P");
+            finishTurn();
              }
          }
         }
