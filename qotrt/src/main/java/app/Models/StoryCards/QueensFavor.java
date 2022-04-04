@@ -7,6 +7,7 @@ import app.Models.Enums.Rank;
 public class QueensFavor implements EventBehaviour {
 
   // The lowest ranked player(s) immediately receives 2 Aventure Cards
+  @Override
   public String playEvent(ArrayList<Player> players, Player Drawer) {
     if (players.size() < 1) {
       return "The lowest ranked player(s) received 2 Adventure Cards";

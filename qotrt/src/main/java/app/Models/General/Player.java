@@ -108,6 +108,11 @@ public class Player {
 
   public boolean updateShields(int amount) {
     this.numShields += amount;
+    
+    if (this.numShields < 0) {
+      this.numShields = 0;
+    }
+    
     return true;
   }
 

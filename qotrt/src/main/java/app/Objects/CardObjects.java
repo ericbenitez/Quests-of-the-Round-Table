@@ -102,9 +102,6 @@ public class CardObjects {
     // // this.storyCards.add(new EventCard(new KingsCallToArms(), "King's Call To Arms",
     // //     "The highest ranked player(s) must place 1 weapon in the discard pile. If unable to do so, 2 Foe Cards must be discarded."));
 
-    // this.storyCards
-    //     .add(new EventCard(new Pox(), "Pox", "All players except the player drawing this card lose 1 shield."));
-
     // this.storyCards.add(new EventCard(new Plague(), "Plague",
     //     "Drawer loses 2 shields if possible."));
 
@@ -113,9 +110,6 @@ public class CardObjects {
 
 
     // initialize quest cards
-    // this.storyCards.add(new Quest())
-    // this.storyCards.add(new Quest( new JourneyThruForest(this)));
-    // this.storyCards.add(new Quest(this));
     // this.storyCards.add(new Quest("Defend the Queen's Honor", 4, "All"));
     // this.storyCards.add(new Quest("Slay the Dragon", 3, "Dragon"));
     // this.storyCards.add(new Quest("Rescue the Fair Maiden", 3, "Black Knight"));

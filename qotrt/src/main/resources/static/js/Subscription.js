@@ -14,8 +14,8 @@ function subscriptions() {
       return
     }
 
-    currentActivePlayer = data.body * 1
-    if (playerId === currentActivePlayer) {
+    serverData.currentActivePlayer = data.body * 1
+    if (playerId === serverData.currentActivePlayer) {
       const isSponsoring = confirm("Do you want to sponsor?");
       if (isSponsoring) {
         alert("Cool, you can press on the button Sponsor Quest button!")
@@ -168,6 +168,21 @@ function subscriptions() {
 
   // subscribe to "wait for server to tell client to start"
   stompClient.subscribe("/topic/startTurn", (response) => { // does not get called
+    serverData.currentActivePlayer = response.body * 1;
+    
+    // hide new game container
+    const newGameContainer = document.getElementById("new-game-container")
+    newGameContainer.style.display = "none"
+    
+    const newPlayerJoin = document.getElementById("new-player-join")
+    newPlayerJoin.style.display = "none"
+    
+    // enable game area
+    const gameArea = document.getElementById("gameArea")
+    gameArea.style.display = "flex"
+    
+    // disable buttons
+    
     console.log("This is after initilizing", response.body);
     if (response.body * 1 !== 0 && response.body * 1 === playerId) {
       alert("Pick a Story Card");

@@ -78,9 +78,12 @@ function stageNumCards() {
         }
         
         const card = CardObjects[cardName];
-        if (card.battlePoints) amountOfBattlePoints += card.battlePoints
-        if (card.minBattlePoints) amountOfBattlePoints += card.minBattlePoints
-        if (card.cardType == "Foe") amountOfFoes++;
+        
+        if (card) {
+            if (card.battlePoints) amountOfBattlePoints += card.battlePoints
+            if (card.minBattlePoints) amountOfBattlePoints += card.minBattlePoints
+            if (card.cardType == "Foe") amountOfFoes++;
+        }
     }
     
     if (amountOfBattlePoints <= battlePointsLimit) {
@@ -168,7 +171,7 @@ function withdrawQuest() {
 }
 
 function transferQuest() {
-    if (currentActivePlayer === playerId) {
+    if (serverData.currentActivePlayer === playerId) {
         stompClient.send("/app/transferQuest", {}, playerId)
     }
 }

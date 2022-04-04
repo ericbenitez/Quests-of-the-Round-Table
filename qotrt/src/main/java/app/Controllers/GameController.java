@@ -98,7 +98,8 @@ public class GameController {
   @SendTo("/topic/startTurn")
   public int ready() {
     if(this.gameService.getCurrentGame().getPlayers().size() == this.gameService.getCurrentGame().getNumOfPlayers()){
-      return this.gameService.getCurrentActivePlayer();}
+      return this.gameService.getCurrentActivePlayer();
+    }
     return 0;
   }
 
@@ -355,9 +356,9 @@ public String testWinner(ArrayList<Integer> participantsId){
     int sponsorAttempts = quest.getSponsorAttempts();
     if (sponsorAttempts < amountOfPlayers) {
       int value = sponsorAttempts + (currentActivePlayerIndex - 1);
-      int nextPlayerIndex = value > amountOfPlayers ? value - amountOfPlayers: value;
+      int nextPlayerIndex = value >= amountOfPlayers ? value - amountOfPlayers: value;
       quest.incrementSponsorAttempts();
-      return this.gameService.getCurrentGame().getPlayers().get(nextPlayerIndex).getId();
+      return this.gameService.getCurrentGame().getPlayers().get(nextPlayerIndex).getId(); // next person
     }
     
     // else finish turn

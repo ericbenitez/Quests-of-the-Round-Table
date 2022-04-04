@@ -30,10 +30,11 @@
     <button id="create-game-button" onclick="createGame()">Create Game</button>
   </div>
 
-  <br>
-  <br>
+  
 
-  <div>
+  <div id="new-player-join">
+    <br>
+    <br>
     <p>Hello there! Please enter your name to join: </p>
     <input type="text" id="player-name">
     <button id="join-button" onclick="joinGame()">Join Game</button>
@@ -114,6 +115,7 @@
           <button id="dealAdventureCard">Deal </buttoin>
           <!--Sponsor deals one adventure card to participating player-->
           <button onclick="finishTurn()" id="finishTurn">Finish Turn </button>
+          <button id="placeCardsQuest" onclick="placeCardsQuest()">Choose card for stage</button>
         </div>
       </div>
     </div>
@@ -135,9 +137,7 @@
 
 
   <!-- Just for testing -->
-  <button id="placeCardsQuest" onclick="placeCardsQuest()">Choose card for stage</button>
   <div id="battlePoints"></div> <!-- To display the total battle points for a player in a stage -->
-  <button id="awardShieldToWin" onclick="updateShields(5)">Award 5 shields (testing winning)</button>
  
   
   <!-- TODO will be called automatically -->
