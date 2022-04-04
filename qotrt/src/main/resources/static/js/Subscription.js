@@ -274,6 +274,7 @@ function subscriptions() {
             alert("The Quest is complete! Giving you as the sponsor adventure cards!");
             //send some server things to clear the current quest
             stompClient.send("/app/rewardSponsor");
+            getPlayerHand();
   
           }
           //another scenario is that the player is not the sponsor.

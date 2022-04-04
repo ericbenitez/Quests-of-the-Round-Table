@@ -3,7 +3,7 @@ let currentStages = 0; //the number of stages for the current quest
 let foe = "";
 let battlePointsLimit = 0;
 
-function sponsorQuest() {
+function sponsorQuest(btn) {
     //console.log("here");
     sponsor = true;
     stompClient.send("/app/sponsorQuest", {});
@@ -17,6 +17,7 @@ function sponsorQuest() {
         setStages(currentQuest, currentStages, foe);
 
     });
+    disableSponsorQuestAfterClick(btn);
 }
 
 let count = 1;
@@ -127,9 +128,6 @@ function stageNumCards() {
 function advCardsForSponsor() {
     alert("pick this many adventure cards" + selectedCards);
 }
-
-
-
 
 
 

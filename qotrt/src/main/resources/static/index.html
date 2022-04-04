@@ -105,7 +105,7 @@
         <div id="decisionButtons">
           <!-- <button id="initCardButton" onclick='initializeAdv()'>Initialize cards</button> -->
           <button id="hand">Show Hand</button>
-          <button id="sponserQuest" onclick="sponsorQuest()">Sponsor Quest</button>
+          <button id="sponserQuest" onclick="sponsorQuest(this)">Sponsor Quest</button>
           <!--only available to click when they're not sponsporing a quest-->
           <button id="joinQuest" onclick="joinQuest()">Join Quest</button>
           <button id="withdrawQuest" onclick="withdrawQuest()">Withdraw Quest</button>
@@ -114,8 +114,8 @@
           <!--Broadcasts the message to other players-->
           <button id="dealAdventureCard">Deal </buttoin>
           <!--Sponsor deals one adventure card to participating player-->
-          <button onclick="finishTurn()" id="finishTurn">Finish Turn </button>
-          <button id="placeCardsQuest" onclick="placeCardsQuest()">Choose card for stage</button>
+          <button onclick="finishTurn(this)" id="finishTurn">Finish Turn </button>
+          <button id="placeCardsQuest" onclick="placeCardsQuest(this)">Choose card for stage</button>
         </div>
       </div>
     </div>
