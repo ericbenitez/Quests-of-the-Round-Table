@@ -26,8 +26,7 @@ public class GameService {
     private boolean tournamentInPlay = false;
     private boolean eventInPlay = false;
     private StoryCard currentStoryCard ;
-    private CardObjects cards;
-    
+    private CardObjects cards; 
 
     /***********Create Game Function **************
      * 
@@ -178,6 +177,7 @@ public class GameService {
         
         // return amount;
     }
+    
 
     /**
      * Returns the index of the current active player (not player id)
@@ -227,6 +227,7 @@ public class GameService {
             this.eventInPlay = true;
         }
     }
+    
     public StoryCard getCurrentStoryCard(){
         return this.currentStoryCard;
     }

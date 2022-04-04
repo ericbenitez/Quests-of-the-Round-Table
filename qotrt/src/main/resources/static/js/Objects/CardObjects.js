@@ -6,7 +6,7 @@ class AdventureCard {
 
 class Ally extends AdventureCard {
   constructor(name, battlePoints, bids) {
-    this.name = name;
+    super(name)
     this.battlePoints = battlePoints;
     this.bids = bids;
     
@@ -16,7 +16,7 @@ class Ally extends AdventureCard {
 
 class Weapon extends AdventureCard {
   constructor(name, battlePoints) {
-    this.name = name;
+    super(name)
     this.battlePoints = battlePoints;
     
     this.cardType = "Weapon";
@@ -25,7 +25,7 @@ class Weapon extends AdventureCard {
 
 class Foe extends AdventureCard {
   constructor(name, minBattlePoints, maxBattlePoints) {
-    this.name = name;
+    super(name)
     this.minBattlePoints = minBattlePoints;
     this.maxBattlePoints = maxBattlePoints;
     
@@ -35,7 +35,7 @@ class Foe extends AdventureCard {
 
 class Amour extends AdventureCard {
   constructor() {
-    this.name = "Amour";
+    super("Amour")
     this.battlePoints = 10;
     this.bids = 1;
     
@@ -43,7 +43,7 @@ class Amour extends AdventureCard {
   }
 }
 
-const somecards = {
+const CardObjects = {
   "Sir Gawain": new Ally("Sir Gawain", 10, -1),
   "King Pellinore": new Ally("King Pellinore", 10, -1),
   "Sir Percival": new Ally("Sir Percival", 5, -1),

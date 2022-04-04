@@ -1,7 +1,7 @@
 package app.Controllers;
 
 import java.util.ArrayList;
-import java.util.Currency;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +23,7 @@ import app.Controllers.dto.ShieldMessage;
 import app.Models.AdventureCards.AdventureCard;
 import app.Models.AdventureCards.Test;
 import app.Models.General.Card;
+import app.Models.General.FilteredPlayer;
 import app.Models.General.Game;
 import app.Models.General.Player;
 import app.Models.General.Session;
@@ -97,7 +98,8 @@ public class GameController {
   @SendTo("/topic/startTurn")
   public int ready() {
     if(this.gameService.getCurrentGame().getPlayers().size() == this.gameService.getCurrentGame().getNumOfPlayers()){
-      return this.gameService.getCurrentActivePlayer();}
+      return this.gameService.getCurrentActivePlayer();
+    }
     return 0;
   }
 
@@ -146,8 +148,6 @@ public class GameController {
 
   @MessageMapping("updateShields")
   public void updateShields(@RequestBody ShieldMessage shieldInfo) throws Exception {
-    int a = shieldInfo.getPlayerId();
-    int b = shieldInfo.getShields();
     gameService.updateShields(shieldInfo.getPlayerId(), shieldInfo.getShields());
   }
 
@@ -186,11 +186,13 @@ public class GameController {
       if(!currSession.testInPlay){
         gameService.getCurrentGame().getCurrentQuest().incrementCurrentStage();
       } 
+      //withdraw from the quest
       if(currSession.testInPlay && gameService.getCurrentGame().getCurrentQuest().getParticipantsId().size()==0) {//everyone dropped out with no bids
         gameService.getCurrentGame().getCurrentQuest().incrementCurrentStage();
         currSession.testInPlay = false;
       }
       // withdraw from quest if you dont want to keep bidding in the test
+      //
       if(currSession.testInPlay && gameService.getCurrentGame().getCurrentQuest().getParticipantsId().size()==1) { //the winner
         //some function to announce the winner and then takes cards of the test winner (last bid in test.bids is the number of cards we remove from the winner)
         testWinner(gameService.getCurrentGame().getCurrentQuest().getParticipantsId());
@@ -319,7 +321,12 @@ public String testWinner(ArrayList<Integer> participantsId){
     
     return currSession;
   }
-  
+
+  @MessageMapping("/rewardSponsor")
+  public void rewardSponsor(){
+    gameService.getCurrentGame().rewardSponsor(gameService.getCurrentActivePlayer());
+  }
+
 
   
   // [[stage 1 cards], [stage 2 cards]] .. ["sfs","grgw","rger"]
@@ -340,7 +347,7 @@ public String testWinner(ArrayList<Integer> participantsId){
   @SendTo("/topic/transferQuest")
   public int transferQuest(int playerId) {
     int currentActivePlayerIndex = this.gameService.getCurrentActivePlayer();
-    Player currentActivePlayer = this.gameService.getCurrentGame().getPlayers().get(currentActivePlayerIndex - 1);
+    // Player currentActivePlayer = this.gameService.getCurrentGame().getPlayers().get(currentActivePlayerIndex - 1);
     // if (currentActivePlayer.getId() != playerId) return -1;
     
     // if people still left to ask, get next player
@@ -349,9 +356,9 @@ public String testWinner(ArrayList<Integer> participantsId){
     int sponsorAttempts = quest.getSponsorAttempts();
     if (sponsorAttempts < amountOfPlayers) {
       int value = sponsorAttempts + (currentActivePlayerIndex - 1);
-      int nextPlayerIndex = value > amountOfPlayers ? value - amountOfPlayers: value;
+      int nextPlayerIndex = value >= amountOfPlayers ? value - amountOfPlayers: value;
       quest.incrementSponsorAttempts();
-      return this.gameService.getCurrentGame().getPlayers().get(nextPlayerIndex).getId();
+      return this.gameService.getCurrentGame().getPlayers().get(nextPlayerIndex).getId(); // next person
     }
     
     // else finish turn
@@ -469,12 +476,29 @@ public String testWinner(ArrayList<Integer> participantsId){
   
   @MessageMapping("/playEvent")
   @SendTo("/topic/playEvent")
-  public String playEvent() {
+  public HashMap<String, Object> playEvent() {
     EventCard storyCard = (EventCard) this.gameService.getCurrentStoryCard();
-    
+    String message;
+    HashMap<String, Object> data = new HashMap<>();
     ArrayList<Player> players = this.gameService.getCurrentGame().getPlayers();
-    Player drawer = players.get(this.gameService.getCurrentActivePlayer());
+    Player drawer = this.gameService.getCurrentGame().getPlayerById(this.gameService.getCurrentActivePlayer());
     
-    return storyCard.playEvent(players, drawer);
+    if (storyCard.getName().equals("King's Recognition")) {
+      this.gameService.getCurrentGame().setKingsRecognition(storyCard);
+      message = "The next player(s) to complete a Quest will receive 2 extra shields";
+    } else {
+      message = storyCard.getEventBehaviour().playEvent(players, drawer);      
+    }
+    
+    // iterate through players, and make a list of filtered players
+    ArrayList<FilteredPlayer> filteredPlayers = new ArrayList<>();
+    for (Player player: players) {
+      filteredPlayers.add(new FilteredPlayer(player.getName(), player.getId(), player.getCards(), player.getNumShields()));
+    }
+    
+    data.put("players", filteredPlayers);
+    data.put("message", message);
+    
+    return data;
   }
 }

@@ -8,9 +8,10 @@ public class KingsRecognition implements EventBehaviour {
 
   @Override
   public String playEvent(ArrayList<Player> players, Player drawer) {
-    //  TODO Auto-generated method stub
-     //drawer.getGame().requests.add("King's Recognition");
-     
-     return "The next player(s) to complete a Quest will receive 2 extra shields";
+    for (Player player: players) {
+      player.updateShields(2);
+    }
+    
+    return "The next player(s) to complete a Quest will receive 2 extra shields";
   }
 }

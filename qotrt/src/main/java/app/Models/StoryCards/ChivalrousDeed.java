@@ -43,6 +43,6 @@ public class ChivalrousDeed implements EventBehaviour {
             minRanked.updateShields(3);
         }
         
-        return "Player(s) with both lowest rank and least amount of shields, received 3 shields)";
+        return "Player(s) with both lowest rank and least amount of shields, received 3 shields";
     }
 }
