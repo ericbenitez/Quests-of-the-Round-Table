@@ -1,5 +1,13 @@
 
 function subscriptions() {
+
+    stompClient.subscribe("/topic/clearTournament", function (response) {
+        tieBreakerPlayed = false;
+        tieOccurred = false;
+        alert("recieved clearing tonod");
+        hideTournamentDisplay();
+    });
+
   const playEventSubscription = stompClient.subscribe("/topic/playEvent", (response) => {
     const data = JSON.parse(response.body)
 
@@ -39,6 +47,11 @@ function subscriptions() {
     document.getElementById("tournament").style.display = "flex";
 
     let data = JSON.parse(response.body);
+    if (data.length == 0){
+        singlePlayerTournament();
+        return;
+    }
+    
     let playerPts = {};
     for (let i = 0; i < data.length; i++) {
       let id = i + 1;
@@ -67,7 +80,7 @@ function subscriptions() {
       }
     } else {
       if (!tieBreakerPlayed) {
-        alert("There's a tie -- play the tie breaker round!");
+        //alert("There's a tie -- play the tie breaker round!");
         tieOccurred = true;
         if (playerId == firstTournamentParticipantID) {
           alert("Place cards for the sigh almighty tie breaker round!");
@@ -237,6 +250,7 @@ function subscriptions() {
       // this needs work vv
       // enableGameButtons();
       let currentStoryCard = data.currentStoryCard;
+      if (currentStoryCard != null){
 
       if (currentStoryCard.storyCardType === "Quest") {
         //If the current story card type is quest, it could mean a few things
@@ -309,11 +323,11 @@ function subscriptions() {
 
       }
       if (currentStoryCard.storyCardType === "Tournament" && data.tournamentInPlay) {
-
         //we round back to the first player who first picked the tournament card
         if (currentStoryCard.firstParticipantId === playerId) {
+            alert("we back haha");
           //alert("the tournament has ended, click finish turn !");
-          firstTournamentParticipantID = playerId
+          firstTournamentParticipantID = playerId;
 
           displayAllCardsAtOnce();
 
@@ -334,10 +348,11 @@ function subscriptions() {
 
 
       }
-
+    }
       if (!data.questInPlay && !data.tournamentInPlay && !data.eventInPlay) {
         //if the story card type is numm it means they might be the first player
         alert("pick a story card");
+        stompClient.send("/app/clearTournament", {});
       }
 
     }

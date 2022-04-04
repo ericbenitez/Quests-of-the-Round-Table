@@ -255,6 +255,16 @@ public class GameService {
         return numOfPlayers;
     }
 
+    public int getSinglePlayerIdTourn(){
+        Tournament t = this.currentGame.getCurrentTournament();
+        if (t.getParticipantSize() == 1){
+            // return player id for single player tournament
+            return t.getParticipants().get(0);
+        }
+        // return -1 if there are more than one player
+        return -1;
+    }
+
     public int getAutoAwardSinglePlayer(){
         return this.currentGame.getCurrentTournament().getAutoAwardSinglePlayer();
     }
@@ -388,6 +398,11 @@ public class GameService {
         int maxPts = 0;
         ArrayList<Integer> winners = new ArrayList<>();
 
+        // if there is only one player, return null
+        if (this.currentGame.getCurrentTournament().getParticipantSize() <= 1){
+            return null;
+        }
+
         for (int i = 1; i < this.currentGame.getPlayers().size()+1; i++){
             ArrayList<Card> tempCards = new ArrayList<>();
             Player player = this.currentGame.getPlayerById(i);
@@ -483,6 +498,18 @@ public class GameService {
         }
 
         return winner.getNumShields();
+    }
+
+    public int awardSingleGameWinnerAuto(){
+        Tournament t = this.currentGame.getCurrentTournament();
+        if (t.getParticipantSize() > 0){
+            int winnerId = t.getParticipants().get(0);
+            Player winner = this.currentGame.getPlayerById(winnerId);
+            winner.updateShields(t.getAutoAwardSinglePlayer());
+            return winner.getNumShields();
+        }
+        return 0;
+        
     }
 
     //adding to the active ally for a player from its stages for a quest

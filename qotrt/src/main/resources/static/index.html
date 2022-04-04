@@ -94,8 +94,9 @@
             </div>
           </div>
         </div>
+        <h1>Winner</h1>
         <div id="tournResults">
-          <h1>Winner</h1>
+          
         </div>
       </div>
       <!--current player-->
@@ -129,7 +130,7 @@
         <button id="faceUpButton" class="disabledButton">Place Selected Cards Face Up</button>
         <button id="faceDownButton" class="disabledButton">Place Selected Cards Face Down</button>
         <button id="discardCardButton" onclick="removeSelectedCards()">Discard Cards</button>
-        <button id="bidReadyButton"  class="disabledButton" onclick="placeCardsTournament()" disabled>Bid</button>
+        <button id="bidReadyButton" onclick="placeCardsTournament()">Bid</button>
         
       </div>
     </div>
@@ -154,6 +155,8 @@
     </div>
     
   </div>
+
+  <button onclick="clearTournamentDataDisplay()">clearTournamentDataDisplay</button>
 
 
   
