@@ -81,7 +81,9 @@ public class Game implements Mediator { // Main = Game
       // higher than sponsor
       for (String cardName : cards) {
         AdventureCard card = this.cardObjects.getCardByName(cardName);
-        playerBattlePoints += card.getBattlePoints();
+        if (!(card instanceof Ally)){
+            playerBattlePoints += card.getBattlePoints();
+        }
       }
 
       Player currentPlayer = this.getPlayerById(playerId);
