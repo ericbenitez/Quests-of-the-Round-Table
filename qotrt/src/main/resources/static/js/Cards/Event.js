@@ -1,27 +1,27 @@
 
-function disabledAdvCard(){
+function disableAdvCard() {
     document.getElementById("adventureCards").style.pointerEvents = "none";
 }
 
-function enableAdvCard(){
+function enableAdvCard() {
     document.getElementById("adventureCards").style.pointerEvents = "auto";
 }
 
-function disableTransferQuestButton(){
+function disableTransferQuestButton() {
     document.getElementById("transferQuest").disabled = true;
 }
 
-function enableTransferQuestButton(){
+function enableTransferQuestButton() {
     document.getElementById("transferQuest").disabled = false;
 }
 
-function disableBidding(){
+function disableBidding() {
     let bidButton = document.getElementById("bidReadyButton");
     bidButton.disabled = true;
     bidButton.className = "disabledButton";
 }
 
-function enableBidding(){
+function enableBidding() {
     let bidButton = document.getElementById("bidReadyButton");
     bidButton.disabled = false;
     bidButton.className = "";
@@ -30,11 +30,11 @@ function disableFinishTurnAfterClick(btn) {
     document.getElementById(btn.id).disabled = true;
 }
 
-function disableFinishTurn(){
+function disableFinishTurn() {
     document.getElementById("finishTurn").disabled = true;
 }
 
-function enableFinishTurn(){
+function enableFinishTurn() {
     document.getElementById("finishTurn").disabled = false;
 }
 
@@ -44,11 +44,11 @@ function disableSponsorQuestAfterClick(btn) {
     document.getElementById(btn.id).disabled = true;
 }
 
-function disableSponsorQuest(){
+function disableSponsorQuest() {
     document.getElementById("sponserQuest").disabled = true;
 }
 
-function enableSponsorQuest(){
+function enableSponsorQuest() {
     document.getElementById("sponserQuest").disabled = false;
 }
 
@@ -58,11 +58,97 @@ function disableStageCardsAfterClick(btn) {
     document.getElementById(btn.id).disabled = true;
 }
 
-function disableStageCards(){
+function disableStageCards() {
     document.getElementById("placeCardsQuest").disabled = true;
 }
 
-function enableStageCards(){
+function enableStageCards() {
     document.getElementById("placeCardsQuest").disabled = false;
 }
 
+function disablePickStoryCard() {
+    document.getElementById("storyCards").style.pointerEvents = "none";
+}
+
+function enablePickStoryCard() {
+    document.getElementById("storyCards").style.pointerEvents = "auto";
+}
+
+//Join Quest
+function disableJoinQuest() {
+    document.getElementById("joinQuest").disabled = true;
+}
+
+function enableJoinQuest() {
+    document.getElementById("joinQuest").disabled = false;
+}
+
+function disableButtons() {
+    disableBidding();
+    disableFinishTurn();
+    disableJoinQuest();
+    disablePickStoryCard();
+    disableSponsorQuest();
+    disableStageCards();
+    disableTransferQuestButton();
+    disableAdvCard();
+}
+
+function newRound() {
+    enableFinishTurn();
+    enablePickStoryCard();
+    disableJoinQuest();
+    disableStageCards();
+    disableBidding()
+    disableAdvCard();
+    disableTransferQuestButton();
+    disableSponsorQuest();
+}
+
+function tournamentParticBtns() {
+    enableFinishTurn();
+    disablePickStoryCard();
+    disableJoinQuest();
+    disableStageCards();
+    enableBidding();
+    disableTransferQuestButton();
+    disableSponsorQuest();
+    enableAdvCard();
+}
+
+//these people have already joined the quest, n
+function questParticBtns() {
+    enableJoinQuest();
+    enableFinishTurn();
+    enableStageCards();
+    disableSponsorQuest();
+    disableTransferQuestButton();
+    disablePickStoryCard();
+    enableAdvCard();
+}
+
+function eventParticBtns() {
+
+}
+
+function newQuestJoiners() {
+    enableJoinQuest();
+    enableFinishTurn();
+    enableStageCards();
+    disableSponsorQuest();
+    disableTransferQuestButton();
+    disablePickStoryCard();
+    enableAdvCard();
+    disableBidding();
+}
+
+function alreadyASponsor() {
+    enableFinishTurn();
+    disablePickStoryCard();
+    disableJoinQuest();
+    disableStageCards();
+    disableBidding()
+    disableTransferQuestButton();
+    disableSponsorQuest();
+    enableAdvCard();
+}

@@ -35,6 +35,14 @@ function displayStoryCard(data) {
   storyCardDiv.appendChild(document.createTextNode(storyCardType));
 
   if(storyCardType==="Quest"){
+    //Enable the Sponsor Quest Button 
+    enableSponsorQuest();
+    enableTransferQuestButton();
+    disablePickStoryCard();
+    disableJoinQuest();
+    disableStageCards()
+    disableBidding()
+    enableAdvCard();
     if (playerId === data.currentActivePlayer) {
       const isSponsoring = confirm("Do you want to sponsor?");
       if (isSponsoring) {
@@ -48,7 +56,14 @@ function displayStoryCard(data) {
   }else if (storyCardType === "Tournament"){
     //line below gives an error
     //storyCardDiv.appendChild(document.createTextNode(storyCard.currentStory));
-
+    enableBidding();
+    enableFinishTurn();
+	  disablePickStoryCard();
+    disableJoinQuest();
+    disableStageCards();    
+    disableTransferQuestButton();
+    disableSponsorQuest();
+    enableAdvCard();
     // we can immediately start asking if the drawer would like to join
     drawerTournament = playerId;
     if (playerId === data.currentActivePlayer){

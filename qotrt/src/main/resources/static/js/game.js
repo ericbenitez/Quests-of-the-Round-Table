@@ -60,5 +60,6 @@ function finishTurn(btn) {
 
   //after one click the finish turn disables
   disableFinishTurnAfterClick(btn);
+  disablePickStoryCard();
   
 }

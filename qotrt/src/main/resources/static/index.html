@@ -105,7 +105,6 @@
         <div id="shields"> You have 0 shields.</div>
         <div id="decisionButtons">
           <!-- <button id="initCardButton" onclick='initializeAdv()'>Initialize cards</button> -->
-          <button id="hand">Show Hand</button>
           <button id="sponserQuest" onclick="sponsorQuest(this)">Sponsor Quest</button>
           <!--only available to click when they're not sponsporing a quest-->
           <button id="joinQuest" onclick="joinQuest()">Join Quest</button>
@@ -113,7 +112,6 @@
           <button id="transferQuest" onclick="transferQuest()">Transfer Quest</button>
           <!--goes to the player on the left-->
           <!--Broadcasts the message to other players-->
-          <button id="dealAdventureCard">Deal </buttoin>
           <!--Sponsor deals one adventure card to participating player-->
           <button onclick="finishTurn(this)" id="finishTurn">Finish Turn </button>
           <button id="placeCardsQuest" onclick="placeCardsQuest(this)">Choose card for stage</button>
@@ -127,8 +125,6 @@
 
       </div>
       <div id="placeCardButtons">
-        <button id="faceUpButton" class="disabledButton">Place Selected Cards Face Up</button>
-        <button id="faceDownButton" class="disabledButton">Place Selected Cards Face Down</button>
         <button id="discardCardButton" onclick="removeSelectedCards()">Discard Cards</button>
         <button id="bidReadyButton" onclick="placeCardsTournament()">Bid</button>
         
@@ -156,7 +152,6 @@
     
   </div>
 
-  <button onclick="clearTournamentDataDisplay()">clearTournamentDataDisplay</button>
 
 
   

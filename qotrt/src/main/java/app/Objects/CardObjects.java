@@ -27,8 +27,9 @@ public class CardObjects {
       this.adventureCards.add(new Weapon("Sword", 10));
     }
     
-    for (int i = 0; i < 6; i++) {
-      this.adventureCards.add(new Weapon("Dagger", 5));
+    // TODO: 6, 5
+    for (int i = 0; i < 15; i++) {
+      this.adventureCards.add(new Weapon("Dagger", 50));
     }
     for (int i = 0; i < 2; i++) {
       this.adventureCards.add(new Weapon("Excalibur", 30));
@@ -59,7 +60,9 @@ public class CardObjects {
       if (i < 5) {
         this.adventureCards.add(new Foe("Saxons", 10, 20));
       }
-      if (i < 4) {
+      
+      // TODO: change to 4
+      if (i < 15) {
         this.adventureCards.add(new Foe("Mordred", 30));
         this.adventureCards.add(new Foe("Boar", 5, 15));
       }
@@ -118,27 +121,27 @@ public class CardObjects {
 
     for (int i = 0; i < 2; ++i) {
       // this.storyCards.add(new Quest("Vanquish King Arthur's Enemies", 3, null));
-      // this.storyCards.add(new Quest("Boar Hunt", 2, "Boar"));
-      // this.storyCards.add(new Quest("Repel the Saxon Raiders", 2, "All"));
+      this.storyCards.add(new Quest("Boar Hunt", 2, "Boar"));
+      this.storyCards.add(new Quest("Repel the Saxon Raiders", 2, "All"));
     }
 
-     this.storyCards.add(new Tournament("some tournament", 1));
-     //this.storyCards.add(new Tournament("At Camelot", 3));
-     this.storyCards.add(new Tournament("At Orkney", 2));
-     this.storyCards.add(new Tournament("At Tintagel", 1));
-     this.storyCards.add(new Tournament("At York", 0));
+    // this.storyCards.add(new Tournament("some tournament", 1));
+    // this.storyCards.add(new Tournament("At Camelot", 3));
+    // this.storyCards.add(new Tournament("At Orkney", 2));
+    // this.storyCards.add(new Tournament("At Tintagel", 1));
+    // this.storyCards.add(new Tournament("At York", 0));
 
-    for (int i = 0; i < 10; i++) {
-      this.storyCards.add(new EventCard(new Plague(), "Plague",
-      "Drawer loses 2 shields if possible."));
+    // for (int i = 0; i < 10; i++) {
+    //   this.storyCards.add(new EventCard(new Plague(), "Plague",
+    //   "Drawer loses 2 shields if possible."));
 
-      this.storyCards.add(new EventCard(new ChivalrousDeed(), "Chivalrous Deed",
-          "Player(s) with both lowest rank and least amount of shields, receives 3 shields"));
+    //   this.storyCards.add(new EventCard(new ChivalrousDeed(), "Chivalrous Deed",
+    //       "Player(s) with both lowest rank and least amount of shields, receives 3 shields"));
       
-      this.storyCards
-      .add(new EventCard(new Pox(), "Pox", "All players except the player drawing this card lose 1 shield."));
+    //   this.storyCards
+    //   .add(new EventCard(new Pox(), "Pox", "All players except the player drawing this card lose 1 shield."));
   
-    }
+    // }
     Collections.shuffle(this.adventureCards);
     Collections.shuffle(this.storyCards);
   }

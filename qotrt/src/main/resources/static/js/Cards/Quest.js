@@ -6,6 +6,7 @@ let battlePointsLimit = 0;
 function sponsorQuest(btn) {
     //console.log("here");
     sponsor = true;
+    disableTransferQuestButton();
     stompClient.send("/app/sponsorQuest", {});
     stompClient.subscribe('/topic/sponsorQuest', function (response) {
         var data = JSON.parse(response.body);
@@ -57,69 +58,69 @@ function stageNumCards() {
     //place cards
 
     //check for test (it should be a single and only card for that stage)
-    if((checkedString.includes(testCards[0]) && checkedString.length > 1) ||
-    (checkedString.includes(testCards[1]) && checkedString.length > 1) ||
-    (checkedString.includes(testCards[2]) && checkedString.length > 1) ||
-    (checkedString.includes(testCards[3]) && checkedString.length > 1) ){
+    if ((checkedString.includes(testCards[0]) && checkedString.length > 1) ||
+        (checkedString.includes(testCards[1]) && checkedString.length > 1) ||
+        (checkedString.includes(testCards[2]) && checkedString.length > 1) ||
+        (checkedString.includes(testCards[3]) && checkedString.length > 1)) {
         //there is a test card but the stage has more than one card
         alert("There should only be one test card!");
         return;
     }
-    
+
     let amountOfBattlePoints = 0;
     let amountOfFoes = 0;
     let amountOfTests = 0;
-    
+
     console.log(playerHand)
     const processedNames = [];
-    
+
     // calculate battlepoints for stage (sponsor), and compare it to previous stage (only foes to account for)
     for (const cardName of checkedString) {
         if (processedNames.includes(cardName)) {
             alert("No repeating cards")
             return
         }
-        
+
         processedNames.push(cardName)
-        
+
         const card = CardObjects[cardName];
-        
+
         if (card) {
             if (card.hasOwnProperty("battlePoints")) amountOfBattlePoints += card.battlePoints
-            
+
             if (card.hasOwnProperty("minBattlePoints")) {
                 switch (currentQuest) {
                     case "Journey Through the Enchanted Forest":
-                        amountOfBattlePoints += (card.name == "Evil Knight") ? card.maxBattlePoints: card.minBattlePoints
+                        amountOfBattlePoints += (card.name == "Evil Knight") ? card.maxBattlePoints : card.minBattlePoints
                         break;
-                    
+
                     case "Repel the Saxon Raiders":
-                        amountOfBattlePoints += (card.name == "Saxon Knight" || card.name == "Saxons") ? card.maxBattlePoints: card.minBattlePoints
+                        amountOfBattlePoints += (card.name == "Saxon Knight" || card.name == "Saxons") ? card.maxBattlePoints : card.minBattlePoints
                         break;
-                        
+
                     case "Boar Hunt":
-                        amountOfBattlePoints += (card.name == "Boar") ? card.maxBattlePoints: card.minBattlePoints
+                        amountOfBattlePoints += (card.name == "Boar") ? card.maxBattlePoints : card.minBattlePoints
                         break;
-                    
+
                     case "Slay the Dragon":
-                        amountOfBattlePoints += (card.name == "Dragon") ? card.maxBattlePoints: card.minBattlePoints
+                        amountOfBattlePoints += (card.name == "Dragon") ? card.maxBattlePoints : card.minBattlePoints
                         break;
-                    
+
                     case "Rescue the Fair Maiden":
-                        amountOfBattlePoints += (card.name == "Black Knight") ? card.maxBattlePoints: card.minBattlePoints
+                        amountOfBattlePoints += (card.name == "Black Knight") ? card.maxBattlePoints : card.minBattlePoints
                         break;
-                        
+
                     case "Test of the Green Knight":
-                        amountOfBattlePoints += (card.name == "Green Knight") ? card.maxBattlePoints: card.minBattlePoints
+                        amountOfBattlePoints += (card.name == "Green Knight") ? card.maxBattlePoints : card.minBattlePoints
                         break;
-                    
+
                     default:
                         break;
                 }
             }
             // if (card.hasOwnProperty("minBattlePoints")) amountOfBattlePoints += card.minBattlePoints
             if (card.cardType == "Foe") amountOfFoes++;
-            
+
             if (card.cardType == "Test") {
                 if (globalAmountOfTests >= 1) {
                     alert("You can only have 1 test when sponsoring the quest!")
@@ -130,39 +131,39 @@ function stageNumCards() {
             }
         }
     }
-    
+
     if (amountOfBattlePoints <= battlePointsLimit && amountOfTests == 0) {
         alert("Not enough battle points, enter more or transfer the quest!")
-        
+
         return
     }
-    
+
     if (amountOfFoes == 0 && amountOfTests == 0) {
         alert("You need at least 1 foe or 1 test in this stage!")
         return
     }
-    
+
     if (amountOfFoes > 1) {
         alert("You cannot have more than 1 foe per stage")
         return
     }
-    
+
     globalAmountOfTests += amountOfTests;
     globalAmountOfFoes += amountOfFoes;
-    
+
     if (count + 1 > currentStages) {
         if (globalAmountOfFoes == 0) {
             alert("You need at least one foe in the quest!")
             return
         }
     }
-    
-    
+
+    console.log("Battlepoints for this stage: " + amountOfBattlePoints)
     battlePointsLimit = amountOfBattlePoints;
-    
+
     let battlePointsForThisStage = 0;
     //removeAllCheckedCards(checkedString);//remove from UI
-    
+
     removeCardsFromHand(checkedString); //remove them from hand (server) + UI
     myStages.push(checkedString); //["hello","hi","he"]
     // myStages.push("/");
@@ -215,6 +216,7 @@ function withdrawQuest() {
     document.getElementById("joinQuest").style.display = "inline";
     document.getElementById("withdrawQuest").style.display = "none";
     // should I disable the joinQuest button until the quest is over?
+    disableJoinQuest();
 
     stageCards = [];
 
@@ -244,33 +246,33 @@ function disableJoinQuest() {
 }
 
 
-function placeTestBid(){
+function placeTestBid() {
     let testCard = serverData.testCard;
     let checkedString = getAllChecked(); //returns checked cards
-    if(testCard.lastBid==0){ //meaning this player is about to make the first bid so it should be greater than min Bid
-        if(checkedString.length >= testCard.minBid ){
+    if (testCard.lastBid == 0) { //meaning this player is about to make the first bid so it should be greater than min Bid
+        if (checkedString.length >= testCard.minBid) {
             //send their bid to the server
             stompClient.send("/app/placeTestBid", {}, JSON.stringify({
                 'bids': checkedString
             }));
             var buttonTestBid = document.getElementById("placeTestBid");
-            buttonTestBid.parentNode.removeChild(buttonTestbid);
+            buttonTestBid.parentNode.removeChild(buttonTestBid);
         }
-        else{
+        else {
             alert("Your bid is less than the min bid! Try again or withdraw quest!");
         }
     }
-    else if(testCard.bids.length > 0){
+    else if (testCard.bids.length > 0) {
         const lastBid = testCard.lastBid;
-        if(checkedString.length > lastBid ){
+        if (checkedString.length > lastBid) {
             //send to server
             stompClient.send("/app/placeTestBid", {}, JSON.stringify({ 'bids': checkedString }))
             var buttonTestBid = document.getElementById("placeTestBid");
             buttonTestBid.parentNode.removeChild(buttonTestbid);
         }
 
-        else{
-            alert("The last bid was "+lastBid+" you need to increase your bid! If you can't, click withdraw quest!");
+        else {
+            alert("The last bid was " + lastBid + " you need to increase your bid! If you can't, click withdraw quest!");
         }
 
     }

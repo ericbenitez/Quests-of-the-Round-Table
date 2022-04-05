@@ -77,11 +77,11 @@ function addACardDisplay(cardName, divName, haveCheckBox) {
 
     // update div and add it
 
-    if (haveCheckBox){
+    if (haveCheckBox) {
         div.appendChild(checkBox);
     }
     div.appendChild(label);
-    if (!haveCheckBox){div.appendChild(document.createElement("br"));}
+    if (!haveCheckBox) { div.appendChild(document.createElement("br")); }
     cards.appendChild(div);
 
 }
@@ -158,7 +158,7 @@ function removeAllCheckedCards(checked) {
 }
 
 // ensures checked boxes are unchecked
-function resetCardsDisplay(){
+function resetCardsDisplay() {
     let cards = document.getElementById("playerHand").children;
 
     for (let i = 0; i < cards.length; i++) {
@@ -182,13 +182,13 @@ function removeCardFromDisplay(cardName) {
 }
 
 
-function clearPlayerHandDisplay(){
+function clearPlayerHandDisplay() {
     console.log("here");
     let playerHandDiv = document.getElementById("playerHand");
     while (playerHandDiv.firstChild) {
-    playerHandDiv.removeChild(playerHandDiv.firstChild);
-    console.log("removed");
-  }
+        playerHandDiv.removeChild(playerHandDiv.firstChild);
+        console.log("removed");
+    }
 }
 
 
@@ -200,10 +200,12 @@ function placeCards(cardsPlaced) {
     document.getElementById("stages").appendChild(playerStageCards);
 
     for (let i = 0; i < cardsPlaced.length; i++) {
-        if (i < cardsPlaced.length -1 ){
-        addACardDisplay(cardsPlaced[i].name + "," , "placeCardsDiv", false);}
-        else{
-        addACardDisplay(cardsPlaced[i].name, "placeCardsDiv", false);}
+        if (i < cardsPlaced.length - 1) {
+            addACardDisplay(cardsPlaced[i].name + ",", "placeCardsDiv", false);
+        }
+        else {
+            addACardDisplay(cardsPlaced[i].name, "placeCardsDiv", false);
+        }
 
     }
 
@@ -213,7 +215,7 @@ function placeCards(cardsPlaced) {
 // Clears the cards that the players placed (for a stage)
 // this doesn't remove sponsor stuff, just in case it's needed
 // so maybe call this function every time a stage is over
-function clearPlayerStageCards(){
+function clearPlayerStageCards() {
     document.getElementById("placeCardsDiv").remove();
 }
 
@@ -248,12 +250,12 @@ function getAdventureCards() {
         let data = JSON.parse(response.body);
 
         // for testing purposes
-       /* if (playerHand.size < 12) {
-            playerHand.push(data); //{name: "blab", ba..}
-        }
-        if (playerHand.size >= 12) {
-            alert("You already have 12 adventure cards in your hand, discard some to get more!");
-        }*/
+        /* if (playerHand.size < 12) {
+             playerHand.push(data); //{name: "blab", ba..}
+         }
+         if (playerHand.size >= 12) {
+             alert("You already have 12 adventure cards in your hand, discard some to get more!");
+         }*/
 
         //console.log(data);
         let hand = document.getElementById("playerHand");
@@ -279,7 +281,7 @@ function getAdventureCards() {
         // adding to the hand even if > 12 to allow player to pick and choose
         playerHand.push(data);
 
-        if (playerHand.length > 12){
+        if (playerHand.length > 12) {
             let difference = playerHand.length - 12;
             alert("You may only have a max of 12 cards. Please discard at least " + difference + " card(s).");
             // disable all buttons until player has valid amount of cards
@@ -294,11 +296,10 @@ function getAdventureCards() {
 
 // disbles everything except for discard card button
 // intended to be used to force player to discard cards so that they have <= 12 cards
-function disableGameButtons(){
+function disableGameButtons() {
     document.getElementById("adventureCards").style.pointerEvents = "none";
     document.getElementById("storyCards").style.pointerEvents = "none";
 
-    document.getElementById("hand").disabled = true;
     document.getElementById("sponserQuest").disabled = true;
     document.getElementById("joinQuest").disabled = true;
     document.getElementById("withdrawQuest").disabled = true;
@@ -310,11 +311,10 @@ function disableGameButtons(){
 
 
 // enable the game buttons (used after player has the valid number of cards)
-function enableGameButtons(){
+function enableGameButtons() {
     document.getElementById("adventureCards").style.pointerEvents = "auto";
     document.getElementById("storyCards").style.pointerEvents = "auto";
 
-    document.getElementById("hand").disabled = false;
     document.getElementById("sponserQuest").disabled = false;
     document.getElementById("joinQuest").disabled = false;
     document.getElementById("withdrawQuest").disabled = false;
