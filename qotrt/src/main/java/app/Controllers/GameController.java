@@ -472,6 +472,15 @@ public String testWinner(ArrayList<Integer> participantsId){
       // empty for now. Just need to clear the tournament display for everyone
   }
 
+  @MessageMapping("/checkGameExist")
+  @SendToUser("/queue/checkGameExist")
+  public int checkGameExist(){
+      System.out.println("game: " + this.gameService.getCurrentGame());
+      if (this.gameService.getCurrentGame() != null){
+          return 1;
+      }
+      return 0;
+  }
 
   
   @MessageMapping("/calculateStage")

@@ -1,6 +1,7 @@
 
 function subscriptions() {
 
+ 
   stompClient.subscribe("/topic/clearTournament", function (response) {
     tieBreakerPlayed = false;
     tieOccurred = false;
@@ -172,7 +173,7 @@ function subscriptions() {
   const gameStartedSubscription = stompClient.subscribe('/topic/game/started', function (response) {
     let data = JSON.parse(response.body);
     if (response) game = response;
-
+    
     gameId = game.gameID
     //displayCreateGameResponse(data.body, playerName, parseInt(numOfPlayer));
 
@@ -186,6 +187,7 @@ function subscriptions() {
     const data = JSON.parse(response.body);
     playerId = data.body;
     showResponse(data, playerName);
+    showPlayerInfoDisplay();
 
     // setTimeout(() => { alert("Click on initialize cards to begin the game"); }, 2000);
     setTimeout(() => { stompClient.send("/app/ready", {}, ""); }, 2000);
@@ -208,6 +210,8 @@ function subscriptions() {
     // enable game area
     const gameArea = document.getElementById("gameArea")
     gameArea.style.display = "flex"
+    
+    
 
     // disable buttons
 
@@ -254,8 +258,12 @@ function subscriptions() {
      */
 
     // checks if there are any winners
-    if (data.winners.length > 0) {
+    if (data.winners.length > 0) { 
       alert("The game is over! Congratulations to the winner(s): " + data.winners);
+      for (let i = 0; i < winners.length; i++){
+        updateRankToKnight();
+      }
+      // update the rank display
       return;
     }
 

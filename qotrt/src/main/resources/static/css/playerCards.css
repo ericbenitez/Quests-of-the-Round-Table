@@ -89,3 +89,12 @@
 #cardsTitle {
     font-size: large;
 }
+
+.rankCard {
+    width: 80px;
+    height: 100px;
+}
+
+#knight {
+    display: none;
+}

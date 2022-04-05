@@ -98,6 +98,22 @@ function joinGame() {
 
 function setupWindow() {
   //window.addEventListener("load", displayAllCards(theCards));
+  
+  setTimeout(() => { checkGameForJoinDisplay() }, 600);
+}
+
+function checkGameForJoinDisplay() {
+    stompClient.send("/app/checkGameExist", {});
+    const checkGame = stompClient.subscribe("/user/queue/checkGameExist", function (response) {
+        let data = JSON.parse(response.body);
+        if (data == 1){
+          showJoinGame();
+          checkGame.unsubscribe();
+        }
+        
+        
+    });  
+  
 }
 
 
@@ -416,3 +432,18 @@ function updateShieldDisplay() {
 
 }
 
+function updateRankToKnight(){
+    document.getElementById("squire").style.display = "none";
+    document.getElementById("knight").style.display = "block";
+    let rankInfo = document.getElementById("playerInfoRank");
+    rankInfo.removeChild(rankInfo.firstChild);
+    rankInfo.appendChild(document.createTextNode("Rank: Knight = 10 Battle Points"));
+}
+
+function showPlayerInfoDisplay(){
+    let prettyName = playerName[0].toUpperCase();
+    prettyName += playerName.slice(1);
+    document.getElementById("playerInfoName").appendChild(document.createTextNode(prettyName));
+    document.getElementById("playerInfoNumber").appendChild(document.createTextNode("Player Number: " + playerId));
+    document.getElementById("playerInfoRank").appendChild(document.createTextNode("Rank: Squire = 5 Battle Points"));
+}

@@ -121,12 +121,12 @@ public class CardObjects {
 
     for (int i = 0; i < 2; ++i) {
       // this.storyCards.add(new Quest("Vanquish King Arthur's Enemies", 3, null));
-      this.storyCards.add(new Quest("Boar Hunt", 2, "Boar"));
-      this.storyCards.add(new Quest("Repel the Saxon Raiders", 2, "All"));
+      //this.storyCards.add(new Quest("Boar Hunt", 2, "Boar"));
+      //this.storyCards.add(new Quest("Repel the Saxon Raiders", 2, "All"));
     }
 
     // this.storyCards.add(new Tournament("some tournament", 1));
-    // this.storyCards.add(new Tournament("At Camelot", 3));
+     this.storyCards.add(new Tournament("At Camelot", 3));
     // this.storyCards.add(new Tournament("At Orkney", 2));
     // this.storyCards.add(new Tournament("At Tintagel", 1));
     // this.storyCards.add(new Tournament("At York", 0));
