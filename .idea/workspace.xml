@@ -7,8 +7,11 @@
     <list default="true" id="d0c03061-7b1e-4005-97e5-ca68a2317e3f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Controllers/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Controllers/GameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/Tournament.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/Tournament.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Objects/CardObjects.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Objects/CardObjects.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Cards/Event.js" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Cards/Event.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Cards/Tournament.js" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Cards/Tournament.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Subscription.js" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Subscription.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -161,18 +164,8 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java</url>
-          <line>456</line>
+          <line>472</line>
           <option name="timeStamp" value="27" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java</url>
-          <line>435</line>
-          <option name="timeStamp" value="28" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java</url>
-          <line>420</line>
-          <option name="timeStamp" value="29" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/qotrt/src/main/java/app/Models/StoryCards/Tournament.java</url>
@@ -186,27 +179,22 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java</url>
-          <line>117</line>
+          <line>116</line>
           <option name="timeStamp" value="44" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/qotrt/src/main/java/app/Controllers/GameController.java</url>
-          <line>150</line>
-          <option name="timeStamp" value="45" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java</url>
-          <line>130</line>
-          <option name="timeStamp" value="46" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java</url>
           <line>129</line>
+          <option name="timeStamp" value="46" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java</url>
+          <line>128</line>
           <option name="timeStamp" value="47" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java</url>
-          <line>131</line>
+          <line>130</line>
           <option name="timeStamp" value="48" />
         </line-breakpoint>
         <breakpoint enabled="true" type="java-exception">

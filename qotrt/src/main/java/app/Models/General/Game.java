@@ -174,9 +174,18 @@ public class Game implements Mediator { // Main = Game
     }
   }
 
-  //TO DO: Fareha 
+   
   public void rewardSponsor(Integer playerId){
-    Integer numOfAdvCards;  
+    Integer numOfAdvCards=0;  
+    ArrayList<ArrayList<String>> stages = currentQuest.getStages();
+    for(int i = 0; i < stages.size()-1; i++){     // loop for the rows
+      for(int j = 0; j < stages.get(i).size()-1;j++){ //loop for the elements in each row
+        numOfAdvCards++;
+      }
+    }
+    Player p = this.getPlayerById(playerId);
+    p.drawCards(numOfAdvCards);
+  
   }
 
   // Helper function - Given a playerId, calculates and returns the battle pts for the allies in play

@@ -82,17 +82,17 @@ stompClient.send("/app/pickCard", {});
 }
 
 function joinGame() {
-if (playerName !== "") return
-playerName = document.getElementById("player-name").value.trim();
+  if (playerName !== "") return
+  playerName = document.getElementById("player-name").value.trim();
 
-if (!validInputString(playerName)) {
-  alert("Please enter a name.");
-  return;
-}
-subscriptions();
+  if (!validInputString(playerName)) {
+    alert("Please enter a name.");
+    return;
+  }
+  subscriptions();
 
-// send request to server to join
-stompClient.send("/app/playerJoining", {}, playerName);
+  // send request to server to join
+  stompClient.send("/app/playerJoining", {}, playerName);
 }
 
 
@@ -219,9 +219,9 @@ shields += numOfShields;
 
 //~~~~~~~~~~~~~~this dunction should be in quest.js~~~~~~~~~~~~~~~
 
-function placeCardsQuest() {
-  // players are allowed to choose no cards, so we don't disable the button
-  checked = getAllChecked();
+function placeCardsQuest(btn) {
+// players are allowed to choose no cards, so we don't disable the button
+checked = getAllChecked();
 
   // check if weapon cards unique
   if (!allWeaponCardsUnique(getActualCards(checked))) {
@@ -256,21 +256,19 @@ function placeCardsQuest() {
   //stageCards = checked;
   stageCards = getActualCards(checked);
 
-  // remove from the cards display
-  removeAllCheckedCards(checked);
-
-  let cardAtPlay = document.getElementById("stages");
-  let div = document.createElement("div");
-  div.setAttribute("class", "placeCardsDiv");
-  //div.id = "cardsDown";
-  div.setAttribute('id', 'cardsDown-' + playerId);
-  div.appendChild(document.createElement("br"));
-  div.appendChild(document.createTextNode("---------- Player " + playerId + " cards for stage " + currentStage + " ----------"));
-  // div.appendChild(document.createTextNode("P" + playerId));
-  div.appendChild(document.createElement("br"));
-  cardAtPlay.appendChild(div);
-  document.getElementById("cardsDown-" + playerId).addEventListener("click", turnCardsOver);
-  alert("Click complete turn if you're done setting your cards for stage " + currentStage);
+let cardAtPlay = document.getElementById("stages");
+let div = document.createElement("div");
+div.setAttribute("class", "placeCardsDiv");
+//div.id = "cardsDown";
+div.setAttribute('id', 'cardsDown-' + playerId);
+div.appendChild(document.createElement("br"));
+div.appendChild(document.createTextNode("---------- Player " + playerId + " cards for stage " + currentStage + " ----------"));
+// div.appendChild(document.createTextNode("P" + playerId));
+div.appendChild(document.createElement("br"));
+cardAtPlay.appendChild(div);
+document.getElementById("cardsDown-" + playerId).addEventListener("click", turnCardsOver);
+alert("Click complete turn if you're done setting your cards for stage " + currentStage);
+disableStageCardsAfterClick(btn);
 }
 
 

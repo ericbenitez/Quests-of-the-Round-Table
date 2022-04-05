@@ -385,11 +385,9 @@ public String testWinner(ArrayList<Integer> participantsId){
 
   @MessageMapping("/isSinglePlayerTournament")
   @SendToUser("/queue/isSinglePlayerTournament")
-  public boolean isSinglePlayerTournament(){
-    if (this.gameService.getNumPlayersTourn() == 1){
-      return true;
-    }
-    return false;
+  public int isSinglePlayerTournament(){
+      int singlePlayerId = this.gameService.getSinglePlayerIdTourn();
+      return singlePlayerId;
   }
 
   @MessageMapping("emptyTournament")
@@ -416,7 +414,12 @@ public String testWinner(ArrayList<Integer> participantsId){
   @MessageMapping("/getAllTournPlayerCards")
   @SendTo("/topic/getAllTournPlayerCards")
   public ArrayList<ArrayList<Card>> getAllTournPlayerCards(){
-    return this.gameService.getAllTournamentPlayerCards();
+      if (this.gameService.getNumPlayersTourn() > 1){
+        return this.gameService.getAllTournamentPlayerCards();
+      }
+      return new ArrayList<>();
+      
+    
   }
   
 
@@ -436,11 +439,18 @@ public String testWinner(ArrayList<Integer> participantsId){
     return this.gameService.awardTiedWinner(winnerId);
   }
 
-  @MessageMapping("/awardSingleGameWinner")
+  /*@MessageMapping("/awardSingleGameWinner")
   @SendToUser("/queue/awardSingleGameWinner")
   public int awardSingleGameWinner(@RequestBody Message message){
     int winnerId = Integer.parseInt(message.getMessage());
     return this.gameService.awardSingleGameWinner(winnerId);
+  }*/
+
+  @MessageMapping("/awardSingleGameWinner")
+  @SendToUser("/queue/awardSingleGameWinner")
+  public int awardSingleGameWinner(){
+   
+    return this.gameService.awardSingleGameWinnerAuto();
   }
   
 
@@ -452,6 +462,14 @@ public String testWinner(ArrayList<Integer> participantsId){
   @MessageMapping("/discardCardsAfterTie")
   public void discardCardsAfterTie(){
     this.gameService.discardCardsAfterTie();
+  }
+
+  @MessageMapping("/clearTournament")
+  @SendTo("/topic/clearTournament")
+  public int clearTournament(){
+    System.out.println("in here clear tourn constroler emdols");
+    return 0;
+      // empty for now. Just need to clear the tournament display for everyone
   }
 
 

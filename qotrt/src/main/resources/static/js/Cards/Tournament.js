@@ -96,10 +96,12 @@ function singlePlayerTournament(){
     stompClient.send("/app/isSinglePlayerTournament", {});
     const singlePLayerSub = stompClient.subscribe('/user/queue/isSinglePlayerTournament', function (response) {
         let data = JSON.parse(response.body);
-        alert(data);
-        if (data == true){
+        if (data != -1){
             // once we merge with the turns, we will obv have to check for the playerid before awarding
-            awardSingleTournament(playerId);
+            if (playerId == data){
+                awardSingleTournament(playerId);
+            }
+            
         }
         singlePLayerSub.unsubscribe();
     });
@@ -137,6 +139,33 @@ function containsMaxOneAmour(cards){
 }
 
 
+function isTestCard(cardName) {
+    let testCards = ["Test of the Questing Beast", "Test of Temptation", "Test of Valor", "Test of Morgan Le Fey"]
+    for (let i = 0; i < testCards.length; i++){
+        if (testCards[i] == cardName){
+            return true;
+        }
+    }
+    return false;
+}
+
+function hasTests(cardNames){
+    for (let i = 0; i < cardNames.length; i++){
+        if (isTestCard(cardNames[i])){
+            return true;
+        }
+    }
+    return false;
+}
+
+function containsFoeOrTest(checked){
+    if (hasFoes(checked) || hasTests(checked)){
+        return true;
+    }
+    return false;
+}
+
+
 
 function placeCardsTournament(){
     // get the checked cards
@@ -149,6 +178,12 @@ function placeCardsTournament(){
     }
     if (!containsMaxOneAmour(checked)){
         alert("Your may play a maximum of 1 Amour card.");
+        return;
+    }
+
+    if (containsFoeOrTest(checked)){
+        
+        alert("You may not play a foe or test in a tournament.");
         return;
     }
     tournamentCards = checkedObjs;
@@ -172,20 +207,10 @@ function displayAllCardsAtOnce(){
     
 }
 
-// will probably add more stuff to disable/enable
-function disableBidding(){
-    let bidButton = document.getElementById("bidReadyButton");
-    bidButton.disabled = true;
-    bidButton.className = "disabledButton";
-}
 
-function enableBidding(){
-    let bidButton = document.getElementById("bidReadyButton");
-    bidButton.disabled = false;
-    bidButton.className = "";
-}
 
 function hideTournamentDisplay(){
+    clearTournamentDataDisplay();
     document.getElementById("tournament").style.display = "none";
 }
 
@@ -249,13 +274,15 @@ function awardTiedWinner(winnerId){
 
 
 // if there is only one player who joined the tournament
-function awardSingleTournament(playerId){
-    stompClient.send("/app/awardSingleGameWinner", {}, JSON.stringify({"message": playerId}));
+function awardSingleTournament(){
+    stompClient.send("/app/awardSingleGameWinner", {}/*, JSON.stringify({"message": playerId})*/);
     const awardSub = stompClient.subscribe('/user/queue/awardSingleGameWinner', function (response) {
         let data = JSON.parse(response.body);
         alert("You were the only player to join the tournament. You get " + data + " shields!");
         shields = data;
         updateShieldDisplay();
+        // update the cards so they get the bidded cards back
+        getPlayerHand();
         awardSub.unsubscribe();
 
     });
@@ -270,4 +297,28 @@ function discardCardsAfterTie(){
     stompClient.send("/app/discardCardsAfterTie", {});
 }
 
-// Note: need to add ally stuff to tournaments
+
+// clears the tournament board data
+function clearTournamentDataDisplay(){
+    for (let i = 0; i < 4; i++) {
+        let id = i + 1;
+        let playerCardDiv = document.getElementById("player" + id + "Cards");
+        let playerTotal = document.getElementById("player" + id + "Total");
+        
+
+        while (playerCardDiv.firstChild) {
+            playerCardDiv.removeChild(playerCardDiv.firstChild);
+        }
+        while (playerTotal.firstChild) {
+            playerTotal.removeChild(playerTotal.firstChild);
+        } 
+    }
+    
+    let resultDiv = document.getElementById("tournResults");
+    
+    while (resultDiv.firstChild) {
+        resultDiv.removeChild(resultDiv.firstChild);
+    }
+}
+
+
