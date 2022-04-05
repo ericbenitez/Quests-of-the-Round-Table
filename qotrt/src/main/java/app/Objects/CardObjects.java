@@ -27,10 +27,8 @@ public class CardObjects {
       this.adventureCards.add(new Weapon("Sword", 10));
     }
     
-    // TODO: change to 6 frequency
-    // TODO: change to 5 battlepoints
-    for (int i = 0; i < 15; i++) {
-      this.adventureCards.add(new Weapon("Dagger", 50));
+    for (int i = 0; i < 6; i++) {
+      this.adventureCards.add(new Weapon("Dagger", 5));
     }
     for (int i = 0; i < 2; i++) {
       this.adventureCards.add(new Weapon("Excalibur", 30));
@@ -42,7 +40,7 @@ public class CardObjects {
       this.adventureCards.add(new Weapon("Battle-ax", 15));
     }
 
-    // TODO: change to 2 frequency
+    // TODO: change frequency to 2
     for (int i = 0; i < 15; i++) {
       this.adventureCards.add(new Test("Test of the Questing Beast"));
       this.adventureCards.add(new Test("Test of Temptation"));
@@ -65,7 +63,9 @@ public class CardObjects {
         this.adventureCards.add(new Foe("Mordred", 30));
         this.adventureCards.add(new Foe("Boar", 5, 15));
       }
-      if (i < 3) {
+      
+      // TODO: change to 3 frequency
+      if (i < 10) {
         this.adventureCards.add(new Foe("Black Knight", 25, 35));
       }
       if (i < 2) {
@@ -81,12 +81,12 @@ public class CardObjects {
 
     // this.storyCards.add(new EventCard(new KingsRecognition(), "King's Recognition",
     //     "The next player(s) to complete a Quest will receive 2 extra shields."));
-    for (int i = 0; i < 2; i++) {
+    // for (int i = 0; i < 2; i++) {
       // this.storyCards.add(new EventCard(new QueensFavor(), "Queens Favour",
       //     "The lowest ranked player(s) immediately receives 2 Adventure Cards."));
       // this.storyCards.add(new EventCard(new CourtCalledToCamelot(), "Court Called To Camelot",
       //     "All Allies in play must be discarded."));
-    }
+    // }
 
     // this.storyCards
     //     .add(new EventCard(new Pox(), "Pox", "All players except the player drawing this card lose 1 shield."));
@@ -107,8 +107,7 @@ public class CardObjects {
 
     // this.storyCards.add(new EventCard(new ChivalrousDeed(), "Chivalrous Deed",
     //     "Player(s) with both lowest rank and least amount of shields, receives 3 shields"));
-
-
+    
     // initialize quest cards
     // this.storyCards.add(new Quest("Defend the Queen's Honor", 4, "All"));
     // this.storyCards.add(new Quest("Slay the Dragon", 3, "Dragon"));
@@ -119,8 +118,8 @@ public class CardObjects {
 
     for (int i = 0; i < 2; ++i) {
       // this.storyCards.add(new Quest("Vanquish King Arthur's Enemies", 3, null));
-      this.storyCards.add(new Quest("Boar Hunt", 2, "Boar"));
-      this.storyCards.add(new Quest("Repel the Saxon Raiders", 2, "All"));
+      // this.storyCards.add(new Quest("Boar Hunt", 2, "Boar"));
+      // this.storyCards.add(new Quest("Repel the Saxon Raiders", 2, "All"));
     }
 
     // this.storyCards.add(new Tournament("some tournament", 1));
@@ -129,6 +128,17 @@ public class CardObjects {
     // this.storyCards.add(new Tournament("At Tintagel", 1));
     // this.storyCards.add(new Tournament("At York", 0));
 
+    for (int i = 0; i < 10; i++) {
+      this.storyCards.add(new EventCard(new Plague(), "Plague",
+      "Drawer loses 2 shields if possible."));
+
+      this.storyCards.add(new EventCard(new ChivalrousDeed(), "Chivalrous Deed",
+          "Player(s) with both lowest rank and least amount of shields, receives 3 shields"));
+      
+      this.storyCards
+      .add(new EventCard(new Pox(), "Pox", "All players except the player drawing this card lose 1 shield."));
+  
+    }
     Collections.shuffle(this.adventureCards);
     Collections.shuffle(this.storyCards);
   }

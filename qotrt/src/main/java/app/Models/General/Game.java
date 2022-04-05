@@ -342,7 +342,7 @@ public class Game implements Mediator { // Main = Game
     // return the winning player
     // Player winningPlayer;
     for (Player p : players) {
-      if (p.getNumShields() >= 7) {
+      if (p.getNumShields() >= 5) {
         return p; // it has enough shields to be a knight
       }
     }

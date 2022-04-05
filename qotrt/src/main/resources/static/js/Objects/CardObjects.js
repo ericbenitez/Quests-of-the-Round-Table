@@ -9,7 +9,6 @@ class Ally extends AdventureCard {
     super(name)
     this.battlePoints = battlePoints;
     this.bids = bids;
-    
     this.cardType = "Ally";
   }
 }
@@ -18,7 +17,6 @@ class Weapon extends AdventureCard {
   constructor(name, battlePoints) {
     super(name)
     this.battlePoints = battlePoints;
-    
     this.cardType = "Weapon";
   }
 }
@@ -28,7 +26,6 @@ class Foe extends AdventureCard {
     super(name)
     this.minBattlePoints = minBattlePoints;
     this.maxBattlePoints = maxBattlePoints;
-    
     this.cardType = "Foe";
   }
 }
@@ -38,8 +35,15 @@ class Amour extends AdventureCard {
     super("Amour")
     this.battlePoints = 10;
     this.bids = 1;
-    
     this.cardType = "Amour"
+  }
+}
+
+class Test extends AdventureCard {
+  constructor(name, minBid) {
+    super(name)
+    this.minBid = minBid
+    this.cardType = "Test"
   }
 }
 
@@ -71,8 +75,12 @@ const CardObjects = {
   "Black Knight": new Foe("Black Knight", 25, 35),
   "Giant": new Foe("Giant", 40),
   "Green Knight": new Foe("Green Knight", 25, 40),
-  "Dragon": new Weapon("Dragon", 50, 70),
+  "Dragon": new Foe("Dragon", 50, 70),
   
   "Amour": new Amour(),
+  
+  "Test of the Questing Beast": new Test("Test of the Questing Beast"),
+  "Test of Temptation": new Test("Test of Temptation"),
+  "Test of Valor": new Test("Test of Valor"),
+  "Test of Morgan Le Fey": new Test("Test of Morgan Le Fey", 3)
 }
-

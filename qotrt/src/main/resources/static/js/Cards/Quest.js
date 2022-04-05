@@ -40,6 +40,9 @@ function setStages(currentQuest, currentStages, foe) {
 
 }
 
+let globalAmountOfFoes = 0;
+let globalAmountOfTests = 0;
+
 participants = [];
 let maxBattlePoints = [];
 //only one foe per stage(foe can be supplied different weapons tho), only one test per stage & quest
@@ -65,29 +68,71 @@ function stageNumCards() {
     let amountOfBattlePoints = 0;
     let amountOfFoes = 0;
     let amountOfTests = 0;
+    
     console.log(playerHand)
+    const processedNames = [];
     
-    
+    // calculate battlepoints for stage (sponsor), and compare it to previous stage (only foes to account for)
     for (const cardName of checkedString) {
-        const index = checkedString.indexOf(cardName)
-        checkedString.splice(index, 1)
-        
-        if (checkedString.includes(cardName)) {
+        if (processedNames.includes(cardName)) {
             alert("No repeating cards")
             return
         }
         
+        processedNames.push(cardName)
+        
         const card = CardObjects[cardName];
         
         if (card) {
-            if (card.battlePoints) amountOfBattlePoints += card.battlePoints
-            if (card.minBattlePoints) amountOfBattlePoints += card.minBattlePoints
+            if (card.hasOwnProperty("battlePoints")) amountOfBattlePoints += card.battlePoints
+            
+            if (card.hasOwnProperty("minBattlePoints")) {
+                switch (currentQuest) {
+                    case "Journey Through the Enchanted Forest":
+                        amountOfBattlePoints += (card.name == "Evil Knight") ? card.maxBattlePoints: card.minBattlePoints
+                        break;
+                    
+                    case "Repel the Saxon Raiders":
+                        amountOfBattlePoints += (card.name == "Saxon Knight" || card.name == "Saxons") ? card.maxBattlePoints: card.minBattlePoints
+                        break;
+                        
+                    case "Boar Hunt":
+                        amountOfBattlePoints += (card.name == "Boar") ? card.maxBattlePoints: card.minBattlePoints
+                        break;
+                    
+                    case "Slay the Dragon":
+                        amountOfBattlePoints += (card.name == "Dragon") ? card.maxBattlePoints: card.minBattlePoints
+                        break;
+                    
+                    case "Rescue the Fair Maiden":
+                        amountOfBattlePoints += (card.name == "Black Knight") ? card.maxBattlePoints: card.minBattlePoints
+                        break;
+                        
+                    case "Test of the Green Knight":
+                        amountOfBattlePoints += (card.name == "Green Knight") ? card.maxBattlePoints: card.minBattlePoints
+                        break;
+                    
+                    default:
+                        break;
+                }
+            }
+            // if (card.hasOwnProperty("minBattlePoints")) amountOfBattlePoints += card.minBattlePoints
             if (card.cardType == "Foe") amountOfFoes++;
+            
+            if (card.cardType == "Test") {
+                if (globalAmountOfTests >= 1) {
+                    alert("You can only have 1 test when sponsoring the quest!")
+                    return;
+                } else {
+                    amountOfTests++;
+                }
+            }
         }
     }
     
-    if (amountOfBattlePoints <= battlePointsLimit) {
+    if (amountOfBattlePoints <= battlePointsLimit && amountOfTests == 0) {
         alert("Not enough battle points, enter more or transfer the quest!")
+        
         return
     }
     
@@ -100,6 +145,17 @@ function stageNumCards() {
         alert("You cannot have more than 1 foe per stage")
         return
     }
+    
+    globalAmountOfTests += amountOfTests;
+    globalAmountOfFoes += amountOfFoes;
+    
+    if (count + 1 > currentStages) {
+        if (globalAmountOfFoes == 0) {
+            alert("You need at least one foe in the quest!")
+            return
+        }
+    }
+    
     
     battlePointsLimit = amountOfBattlePoints;
     

@@ -220,46 +220,57 @@ shields += numOfShields;
 //~~~~~~~~~~~~~~this dunction should be in quest.js~~~~~~~~~~~~~~~
 
 function placeCardsQuest() {
-// players are allowed to choose no cards, so we don't disable the button
-checked = getAllChecked();
+  // players are allowed to choose no cards, so we don't disable the button
+  checked = getAllChecked();
 
-// check if weapon cards unique
-if (!allWeaponCardsUnique(getActualCards(checked))) {
-  alert("You may not play two Weapon cards of the same type.");
-  return;
-}
+  // check if weapon cards unique
+  if (!allWeaponCardsUnique(getActualCards(checked))) {
+    alert("You may not play two Weapon cards of the same type.");
+    return;
+  }
 
-if (hasFoes(checked)) {
-  alert("You cannot play foes for a quest")
-  return
-}
+  if (hasFoes(checked)) {
+    alert("You cannot play foes for a quest")
+    return
+  }
 
-stompClient.send("/app/setClientStage",{}, JSON.stringify({"playerId":playerId, "cards":checked}));
-alert("Click Finish Turn!");
+  for (const cardName of checked) {
+    const card = CardObjects[cardName]
+    
+    if (card) {
+      if (card.cardType == "Test") {
+        alert("Participants cannot select Test cards for a quest")
+        return
+      }
+    }
+  }
 
 
-// stores the cards for this stage
-// we need to change this so that stageCards contains the actual cards (so we have data)
-// but what about like, simple printing... nah, we need the actual cards
-//stageCards = checked;
-stageCards = getActualCards(checked);
+  stompClient.send("/app/setClientStage",{}, JSON.stringify({"playerId":playerId, "cards":checked}));
+  alert("Click Finish Turn!");
 
-// remove from the cards display
-removeAllCheckedCards(checked);
 
-let cardAtPlay = document.getElementById("stages");
-let div = document.createElement("div");
-div.setAttribute("class", "placeCardsDiv");
-//div.id = "cardsDown";
-div.setAttribute('id', 'cardsDown-' + playerId);
-div.appendChild(document.createElement("br"));
-div.appendChild(document.createTextNode("---------- Player " + playerId + " cards for stage " + currentStage + " ----------"));
-// div.appendChild(document.createTextNode("P" + playerId));
-div.appendChild(document.createElement("br"));
-cardAtPlay.appendChild(div);
-document.getElementById("cardsDown-" + playerId).addEventListener("click", turnCardsOver);
-alert("Click complete turn if you're done setting your cards for stage " + currentStage);
+  // stores the cards for this stage
+  // we need to change this so that stageCards contains the actual cards (so we have data)
+  // but what about like, simple printing... nah, we need the actual cards
+  //stageCards = checked;
+  stageCards = getActualCards(checked);
 
+  // remove from the cards display
+  removeAllCheckedCards(checked);
+
+  let cardAtPlay = document.getElementById("stages");
+  let div = document.createElement("div");
+  div.setAttribute("class", "placeCardsDiv");
+  //div.id = "cardsDown";
+  div.setAttribute('id', 'cardsDown-' + playerId);
+  div.appendChild(document.createElement("br"));
+  div.appendChild(document.createTextNode("---------- Player " + playerId + " cards for stage " + currentStage + " ----------"));
+  // div.appendChild(document.createTextNode("P" + playerId));
+  div.appendChild(document.createElement("br"));
+  cardAtPlay.appendChild(div);
+  document.getElementById("cardsDown-" + playerId).addEventListener("click", turnCardsOver);
+  alert("Click complete turn if you're done setting your cards for stage " + currentStage);
 }
 
 

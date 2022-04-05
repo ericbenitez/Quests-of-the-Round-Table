@@ -6,6 +6,19 @@ function subscriptions() {
     const eventMessage = document.getElementById("eventMessage")
     eventMessage.innerHTML = ""
     eventMessage.appendChild(document.createTextNode(`Event: ${data.message}`))
+    
+    for (const player of data.players) {
+      if (player.id === playerId) {
+        const shieldsDiv = document.getElementById("shields")
+        shieldsDiv.innerHTML = ""
+        shieldsDiv.append(document.createTextNode(`You have ${player.shields} shields.`))
+        
+        
+        
+        break;
+      }
+    }
+    
   })
 
   const transferQuestSubscription = stompClient.subscribe("/topic/transferQuest", (response) => {
