@@ -63,3 +63,21 @@ function finishTurn(btn) {
   disablePickStoryCard();
   
 }
+
+//adding message to the scrollDiv
+function scrollDiv(text){
+    let ele = document.getElementById('scrollDiv');
+    var txt = document.createTextNode(text);
+    const current = new Date();
+             // By default US English uses 12hr time with AM/PM
+    const time = current.toLocaleTimeString("en-US");
+    let dateNode = document.createTextNode(time);
+    var breakPt = document.createElement('br');
+    
+    ele.appendChild(breakPt);   
+    ele.appendChild(txt);
+    ele.appendChild(breakPt);   
+    ele.appendChild(dateNode);
+    ele.appendChild(breakPt);
+
+}

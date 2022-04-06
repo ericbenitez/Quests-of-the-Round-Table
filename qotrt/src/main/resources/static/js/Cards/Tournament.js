@@ -50,7 +50,7 @@ firstTournamentParticipantID = -1;
 
 // just an alert, probably wont need it once turn is incorporated
 function startTournament(sessionData) {
-    alert(sessionData);
+    scrollDiv(sessionData);
 }
 
 
@@ -73,7 +73,7 @@ function joinTournament(answer) {
         addParticipantTournament();
     }
     if (answer == "no") {
-        alert(" You have decided not to participate in the tournament :( click Finish Turn");
+        scrollDiv(" You have decided not to participate in the tournament :( click Finish Turn");
         disableBidding();
     }
 
@@ -88,7 +88,7 @@ function joinTournament(answer) {
 function addParticipantTournament() {
     stompClient.send("/app/addParticipantTournament", {}, JSON.stringify({ "message": playerId }));
     // we dont need to set participant to true cause it's in the session right?
-    alert("Choose cards for bidding in this tournament")
+    scrollDiv("Choose cards for bidding in this tournament")
 }
 
 
@@ -115,7 +115,7 @@ function emptyTournament() {
     stompClient.send("/app/emptyTournament", {});
     const emptyTournSub = stompClient.subscribe('/user/queue/emptyTournament', function (response) {
         let data = JSON.stringify(response);
-        alert(data);
+        scrollDiv(data);
         emptyTournSub.unsubscribe();
     });
 }
@@ -175,17 +175,17 @@ function placeCardsTournament() {
     let checkedObjs = getActualCards(checked);
 
     if (!allWeaponCardsUnique(checkedObjs)) {
-        alert("You may not play two Weapon cards of the same type.");
+        scrollDiv("You may not play two Weapon cards of the same type.");
         return;
     }
     if (!containsMaxOneAmour(checked)) {
-        alert("Your may play a maximum of 1 Amour card.");
+        scrollDiv("Your may play a maximum of 1 Amour card.");
         return;
     }
 
     if (containsFoeOrTest(checked)) {
 
-        alert("You may not play a foe or test in a tournament.");
+        scrollDiv("You may not play a foe or test in a tournament.");
         return;
     }
     tournamentCards = checkedObjs;
@@ -198,7 +198,7 @@ function placeCardsTournament() {
     stompClient.send("/app/addPlayerCardsTourn", {}, JSON.stringify({ "playerId": playerId, "cards": checked }));
 
     //alert them to click finish turn
-    alert("Thank you for placing your bid, click Finish Turn");
+    scrollDiv("Thank you for placing your bid, click Finish Turn");
 }
 
 
@@ -253,7 +253,7 @@ function awardSingleWinner(winnerId) {
     stompClient.send("/app/awardSingleWinner", {}, JSON.stringify({ "message": winnerId }));
     const awardSub = stompClient.subscribe('/user/queue/awardSingleWinner', function (response) {
         let data = JSON.parse(response.body);
-        alert("You now have: " + data + " shields");
+        scrollDiv("You now have: " + data + " shields");
         shields = data;
         updateShieldDisplay();
         awardSub.unsubscribe();
@@ -266,7 +266,7 @@ function awardTiedWinner(winnerId) {
     stompClient.send("/app/awardTiedWinner", {}, JSON.stringify({ "message": winnerId }));
     const awardSub = stompClient.subscribe('/user/queue/awardTiedWinner', function (response) {
         let data = JSON.parse(response.body);
-        alert("You (player " + winnerId + ") now have: " + data + " shields");
+        scrollDiv("You (player " + winnerId + ") now have: " + data + " shields");
         shields = data;
         updateShieldDisplay();
         awardSub.unsubscribe();
@@ -280,7 +280,7 @@ function awardSingleTournament() {
     stompClient.send("/app/awardSingleGameWinner", {}/*, JSON.stringify({"message": playerId})*/);
     const awardSub = stompClient.subscribe('/user/queue/awardSingleGameWinner', function (response) {
         let data = JSON.parse(response.body);
-        alert("You were the only player to join the tournament. You get " + data + " shields!");
+        scrollDiv("You were the only player to join the tournament. You get " + data + " shields!");
         shields = data;
         updateShieldDisplay();
         // update the cards so they get the bidded cards back
