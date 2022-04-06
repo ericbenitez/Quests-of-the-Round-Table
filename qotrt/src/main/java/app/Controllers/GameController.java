@@ -533,4 +533,11 @@ public String testWinner(ArrayList<Integer> participantsId){
     
     return data;
   }
+
+  @MessageMapping("/showStage")
+  @SendTo("/topic/showStage")
+  public int showStage(){
+      System.out.println("going to show the stage now");
+      return this.gameService.getCurrentGame().getCurrentQuest().getSponsor();
+  }
 }

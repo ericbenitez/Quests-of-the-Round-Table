@@ -27,6 +27,7 @@ let drawerTournament = 0;
 let tieBreakerPlayed = false;  // false when the tie breaker round has not yet been played
 let tieOccurred = false;
 
+
 /**
  * The current stage you are on
  */
@@ -274,19 +275,22 @@ function placeCardsQuest(btn) {
 
   // remove from the cards display
   removeAllCheckedCards(checked);
+  removeUsedCardsServer(checked);
+  let currentStageNumber = serverData.currentStoryCard.currentStageNumber;
+  
 
   let cardAtPlay = document.getElementById("stages");
   let div = document.createElement("div");
   div.setAttribute("class", "placeCardsDiv");
   //div.id = "cardsDown";
-  div.setAttribute('id', 'cardsDown-' + playerId);
+  div.setAttribute('id', 'cardsDown-' + playerId + currentStageNumber);
   div.appendChild(document.createElement("br"));
-  div.appendChild(document.createTextNode("---------- Player " + playerId + " cards for stage " + currentStage + " ----------"));
+  div.appendChild(document.createTextNode("---------- Player " + playerId + " cards for stage " + currentStageNumber + " ----------"));
   // div.appendChild(document.createTextNode("P" + playerId));
   div.appendChild(document.createElement("br"));
   cardAtPlay.appendChild(div);
-  document.getElementById("cardsDown-" + playerId).addEventListener("click", turnCardsOver);
-  alert("Click complete turn if you're done setting your cards for stage " + currentStage);
+  document.getElementById("cardsDown-" + playerId + currentStageNumber).addEventListener("click", turnCardsOver);
+  alert("Click complete turn if you're done setting your cards for stage " + currentStageNumber);
   disableStageCardsAfterClick(btn);
 }
 
