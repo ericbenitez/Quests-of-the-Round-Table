@@ -524,4 +524,11 @@ public String testWinner(ArrayList<Integer> participantsId){
     
     return data;
   }
+  
+  @MessageMapping("/getShields")
+  @SendTo("/topic/getShields")
+  public int getShields(int playerId) {
+    Player player = this.gameService.getCurrentGame().getPlayerById(playerId);
+    return player.getId();
+  }
 }

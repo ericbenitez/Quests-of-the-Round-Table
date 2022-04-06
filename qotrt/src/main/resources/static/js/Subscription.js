@@ -1,6 +1,14 @@
 
 function subscriptions() {
-
+  
+  stompClient.subscribe("/topic/getShields", function (response) {
+    const shields = JSON.parse(response.body);
+    
+    const shieldsDiv = document.getElementById("shields")
+    shieldsDiv.innerHTML = ""
+    shieldsDiv.append(document.createTextNode(`You have ${shields} shields.`))
+  }) 
+  
   stompClient.subscribe("/topic/clearTournament", function (response) {
     tieBreakerPlayed = false;
     tieOccurred = false;
@@ -19,13 +27,13 @@ function subscriptions() {
         const shieldsDiv = document.getElementById("shields")
         shieldsDiv.innerHTML = ""
         shieldsDiv.append(document.createTextNode(`You have ${player.shields} shields.`))
-
-
-
+        
+        // update cards
+        getPlayerHand()
+        
         break;
       }
     }
-
   })
 
   const transferQuestSubscription = stompClient.subscribe("/topic/transferQuest", (response) => {
@@ -123,7 +131,24 @@ function subscriptions() {
   // subscribe to calculate stage winners
   stompClient.subscribe("/topic/calculateStage", function (response) {
     let data = JSON.parse(response.body);
-
+    
+    // remove amour
+    let index = 0;
+    for (const cardName of playerHand) {
+      const card = CardObjects[cardName]
+      
+      if (card) {
+        if (card.cardType === "Amour") {
+          playerHand.remove(index)
+          removeUsedCardsServer([cardName])
+        }
+      }
+      
+      index++;
+    }
+    
+    stompClient.send("/app/getShields")
+    
     alert("Congratulations to: " + data);
   });
 
@@ -325,6 +350,10 @@ function subscriptions() {
 
               if (data.testInPlay) {
                 alert("This is a test");
+                
+                // draw adventure card before bidding
+                getAdventureCards();
+                
                 let placeBidButton = document.createElement("button");
                 var t = document.createTextNode("Place Bid (Test)");
                 placeBidButton.appendChild(t);

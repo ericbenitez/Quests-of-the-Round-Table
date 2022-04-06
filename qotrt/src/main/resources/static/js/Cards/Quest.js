@@ -44,6 +44,7 @@ function setStages(currentQuest, currentStages, foe) {
 
 let globalAmountOfFoes = 0;
 let globalAmountOfTests = 0;
+let globalAmountOfAmours = 0;
 
 participants = [];
 let maxBattlePoints = [];
@@ -51,6 +52,12 @@ let maxBattlePoints = [];
 let myStages = [];
 let testCards = ["Test of the Questing Beast", "Test of Temptation", "Test of Valor", "Test of Morgan Le Fey"];
 function stageNumCards() {
+    if (count === 1) {
+        globalAmountOfFoes = 0;
+        globalAmountOfTests = 0;
+        globalAmountOfAmours = 0;
+    }
+    
     let checkedString = getAllChecked(); //returns checked cards
     let checked = getActualCards(checkedString);
     console.log("This is checked!", checked);
@@ -70,7 +77,8 @@ function stageNumCards() {
     let amountOfBattlePoints = 0;
     let amountOfFoes = 0;
     let amountOfTests = 0;
-
+    let amountOfAmours = 0;
+    
     console.log(playerHand)
     const processedNames = [];
 
@@ -129,6 +137,15 @@ function stageNumCards() {
                     amountOfTests++;
                 }
             }
+            
+            if (card.cardType == "Amour") {
+                if (globalAmountOfAmours >= 1) {
+                    alert("You can only have 1 amour when sponsoring the quest!")
+                    return;
+                } else {
+                    amountOfAmours++;
+                }
+            }
         }
     }
 
@@ -150,6 +167,7 @@ function stageNumCards() {
 
     globalAmountOfTests += amountOfTests;
     globalAmountOfFoes += amountOfFoes;
+    globalAmountOfAmours += amountOfAmours;
 
     if (count + 1 > currentStages) {
         if (globalAmountOfFoes == 0) {
