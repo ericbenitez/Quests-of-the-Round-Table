@@ -417,6 +417,13 @@ function getPlayerHand() {
     playerHand = data;
     clearPlayerHandDisplay();
     displayAllCards(data);
+
+    if (playerHand.length > 12) {
+      let difference = playerHand.length - 12;
+      scrollDiv("You may only have a max of 12 cards. Please discard at least " + difference + " card(s).");
+      // disable all buttons until player has valid amount of cards
+      disableGameButtons();
+  }
   });
 }
 

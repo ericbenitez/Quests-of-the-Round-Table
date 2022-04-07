@@ -49,13 +49,13 @@ public class CardObjects {
       this.adventureCards.add(new Test("Test of Morgan Le Fey", 3));
     }
     for (int i = 0; i < 8; i++) {
-      this.adventureCards.add(new Foe("Thieves", 5));
-      this.adventureCards.add(new Foe("Saxon Knight", 15, 25));
+      // this.adventureCards.add(new Foe("Thieves", 5));
+      // this.adventureCards.add(new Foe("Saxon Knight", 15, 25));
       if (i < 7) {
-        this.adventureCards.add(new Foe("Robber Knight", 15));
+        // this.adventureCards.add(new Foe("Robber Knight", 15));
       }
       if (i < 6) {
-        this.adventureCards.add(new Foe("Evil Knight", 20, 30));
+        // this.adventureCards.add(new Foe("Evil Knight", 20, 30));
       }
       if (i < 5) {
         this.adventureCards.add(new Foe("Saxons", 10, 20));
@@ -64,7 +64,7 @@ public class CardObjects {
       // TODO: change to 4
       if (i < 15) {
         this.adventureCards.add(new Foe("Mordred", 30));
-        this.adventureCards.add(new Foe("Boar", 5, 15));
+        // this.adventureCards.add(new Foe("Boar", 5, 15));
       }
       
       // TODO: change to 3 frequency
@@ -73,17 +73,17 @@ public class CardObjects {
       }
       if (i < 2) {
         this.adventureCards.add(new Foe("Giant", 40));
-        this.adventureCards.add(new Foe("Green Knight", 25, 40));
+        // this.adventureCards.add(new Foe("Green Knight", 25, 40));
       }
     }
-    this.adventureCards.add(new Foe("Dragon", 50, 70));
+    // this.adventureCards.add(new Foe("Dragon", 50, 70));
 
     for (int i = 0; i < 8; i++) {
-      this.adventureCards.add(new Amour("Amour", "", 10, 1));
+      // this.adventureCards.add(new Amour("Amour", "", 10, 1));
     }
 
-    // this.storyCards.add(new EventCard(new KingsRecognition(), "King's Recognition",
-    //     "The next player(s) to complete a Quest will receive 2 extra shields."));
+    this.storyCards.add(new EventCard(new KingsRecognition(), "King's Recognition",
+        "The next player(s) to complete a Quest will receive 2 extra shields."));
     // for (int i = 0; i < 2; i++) {
       // this.storyCards.add(new EventCard(new QueensFavor(), "Queens Favour",
       //     "The lowest ranked player(s) immediately receives 2 Adventure Cards."));
@@ -122,7 +122,7 @@ public class CardObjects {
     for (int i = 0; i < 2; ++i) {
       // this.storyCards.add(new Quest("Vanquish King Arthur's Enemies", 3, null));
       this.storyCards.add(new Quest("Boar Hunt", 2, "Boar"));
-      this.storyCards.add(new Quest("Repel the Saxon Raiders", 2, "All"));
+      // this.storyCards.add(new Quest("Repel the Saxon Raiders", 2, "All"));
     }
 
     // this.storyCards.add(new Tournament("some tournament", 1));

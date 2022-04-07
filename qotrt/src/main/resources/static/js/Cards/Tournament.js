@@ -71,6 +71,7 @@ function joinTournament(answer) {
     if (answer === "yes") {
         enableBidding();
         addParticipantTournament();
+
     }
     if (answer == "no") {
         scrollDiv(" You have decided not to participate in the tournament :( click Finish Turn");
@@ -88,6 +89,8 @@ function joinTournament(answer) {
 function addParticipantTournament() {
     stompClient.send("/app/addParticipantTournament", {}, JSON.stringify({ "message": playerId }));
     // we dont need to set participant to true cause it's in the session right?
+    getAdventureCards()
+    scrollDiv("You received an adventure card!")
     scrollDiv("Choose cards for bidding in this tournament")
 }
 

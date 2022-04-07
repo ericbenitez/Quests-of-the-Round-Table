@@ -162,6 +162,8 @@ public class Game implements Mediator { // Main = Game
     if (this.kingsRecognitionActive != null) {
       this.kingsRecognitionActive.getEventBehaviour().playEvent(survivorPlayers, null);
       this.kingsRecognitionActive = null;
+      
+      System.out.println("Kings recognition was played");
     }
     
     return survivors; // the peeps who survived

@@ -305,6 +305,7 @@ function subscriptions() {
     }
 
     if (data.currentActivePlayer === playerId) {
+      displayTurnIndicator(true)
       //activate their buttons
 
       // this needs work vv
@@ -367,6 +368,7 @@ function subscriptions() {
               //ask them to join
               newQuestJoiners();
               scrollDiv("click join quest");
+              displayTurnIndicator(true)
             }
             if (currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber <= currentStoryCard.totalStages) {
               //pariticpiants of the quest
@@ -376,16 +378,13 @@ function subscriptions() {
               //pick cards for this stage
               //they've already joined the quset, they have to pick cards for the next stage or withdraw
               currentStageNumber = currentStoryCard.currentStageNumber;
-              alert("Pick cards for stage # ", currentStoryCard.currentStageNumber);
               displayTurnIndicator(true)
 
-              //showCurrentStage(currentStoryCard.currentStageNumber);  // should work after increment stage is fixed
               if (playerHand.length < 12) {
                 getAdventureCards()
               }
 
-              scrollDiv("Pick cards for stage # ", currentStoryCard.currentStageNumber);
-              //showCurrentStage(currentStoryCard.currentStageNumber);  // should work after increment stage is fixed
+              scrollDiv("Pick cards for stage # " + currentStoryCard.currentStageNumber);
 
               if (data.testInPlay) {
                 // draw adventure card before bidding

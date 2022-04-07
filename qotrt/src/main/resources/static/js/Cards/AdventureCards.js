@@ -97,22 +97,6 @@ function updateButtonDisplay() {
 }
 
 
-function enableCardButtons() {
-    document.getElementById("faceUpButton").disabled = false;
-    document.getElementById("faceUpButton").className = "enabledButton";
-    document.getElementById("faceDownButton").disabled = false;
-    document.getElementById("faceDownButton").className = "enabledButton";
-}
-
-
-function disableCardButtons() {
-    document.getElementById("faceUpButton").disabled = true;
-    document.getElementById("faceUpButton").className = "disabledButton";
-    document.getElementById("faceDownButton").disabled = true;
-    document.getElementById("faceDownButton").className = "disabledButton";
-}
-
-
 
 // loop through all the cards in the DOM, and get the cards that are checked
 function getAllChecked() {
@@ -189,7 +173,6 @@ function clearPlayerHandDisplay() {
 
 function placeCards(cardsPlaced) {
     let currentStageNumber = serverData.currentStoryCard.currentStageNumber;
-    alert(currentStageNumber);
     // this is in the blue area where the chosen cards are placed
     let playerStageCards = document.createElement("div");
     playerStageCards.setAttribute("class", "placeCardsDiv");
@@ -198,10 +181,10 @@ function placeCards(cardsPlaced) {
 
     for (let i = 0; i < cardsPlaced.length; i++) {
         if (i < cardsPlaced.length - 1) {
-            addACardDisplay(cardsPlaced[i].name + ",", "placeCardsDiv"+ currentStageNumber, false);
+            addACardDisplay(cardsPlaced[i].name + ",", "placeCardsDiv" + currentStageNumber, false);
         }
         else {
-            addACardDisplay(cardsPlaced[i].name, "placeCardsDiv"+ currentStageNumber, false);
+            addACardDisplay(cardsPlaced[i].name, "placeCardsDiv" + currentStageNumber, false);
         }
 
     }
@@ -276,14 +259,9 @@ function getAdventureCards() {
 
         // playerHand 12 cards - edit 2
         // adding to the hand even if > 12 to allow player to pick and choose
-        playerHand.push(data);
+        // playerHand.push(data); //uncomment for now
 
-        if (playerHand.length > 12) {
-            let difference = playerHand.length - 12;
-            scrollDiv("You may only have a max of 12 cards. Please discard at least " + difference + " card(s).");
-            // disable all buttons until player has valid amount of cards
-            disableGameButtons();
-        }
+
 
         advCardSubscription.unsubscribe();
     });
