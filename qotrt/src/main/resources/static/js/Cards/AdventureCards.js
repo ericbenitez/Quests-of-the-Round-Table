@@ -1,13 +1,6 @@
 let tempPlayerNum = 1;
 let currCardsFacedDown = []
 
-window.addEventListener("load", function () {
-    document.getElementById("faceUpButton").addEventListener("click", addFaceUp);
-});
-window.addEventListener("load", function () {
-    document.getElementById("faceDownButton").addEventListener("click", addFaceDown);
-});
-
 // automatically display cards to test the functionality
 // window.addEventListener("load", displayAllCards(theCards));
 

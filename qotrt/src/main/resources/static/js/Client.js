@@ -416,3 +416,6 @@ function updateShieldDisplay() {
 
 }
 
+function displayTurnIndicator() {
+  
+}

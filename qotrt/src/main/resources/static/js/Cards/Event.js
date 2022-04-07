@@ -22,6 +22,10 @@ function disableBidding() {
 }
 
 function enableBidding() {
+    if (playerHand.length < 12) {
+        getAdventureCards()
+    }
+    
     let bidButton = document.getElementById("bidReadyButton");
     bidButton.disabled = false;
     bidButton.className = "";

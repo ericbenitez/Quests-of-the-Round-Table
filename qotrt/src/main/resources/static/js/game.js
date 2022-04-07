@@ -56,6 +56,7 @@ function validInputString(input) {
 
 function finishTurn(btn) {
   //moves on to the next player..
+  displayTurnIndicator(false)
   stompClient.send("/app/finishTurn");
 
   //after one click the finish turn disables

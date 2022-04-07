@@ -347,7 +347,11 @@ function subscriptions() {
               //they've already joined the quset, they have to pick cards for the next stage or withdraw
               alert("Pick cards for stage # ", currentStoryCard.currentStageNumber);
               showCurrentStage(currentStoryCard.currentStageNumber);  // should work after increment stage is fixed
-
+              if (playerHand.length < 12) {
+                getAdventureCards()
+              }
+            
+              
               if (data.testInPlay) {
                 alert("This is a test");
                 
