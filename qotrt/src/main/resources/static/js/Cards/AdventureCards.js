@@ -89,11 +89,11 @@ function updateButtonDisplay() {
     // loop through all checkboxes and check if any are checked
     for (let i = 0; i < checkBoxDiv.length; i++) {
         if (checkBoxDiv[i].firstChild.checked) {
-            enableCardButtons();
+            // enableCardButtons();
             return;
         }
     }
-    disableCardButtons();
+    // disableCardButtons();
 }
 
 
@@ -279,7 +279,7 @@ function disableGameButtons() {
     document.getElementById("joinQuest").disabled = true;
     document.getElementById("withdrawQuest").disabled = true;
     document.getElementById("transferQuest").disabled = true;
-    document.getElementById("dealAdventureCard").disabled = true;
+    //document.getElementById("dealAdventureCard").disabled = true;
     document.getElementById("finishTurn").disabled = true;
     document.getElementById("placeCardsQuest").disabled = true;
 }
@@ -294,7 +294,7 @@ function enableGameButtons() {
     document.getElementById("joinQuest").disabled = false;
     document.getElementById("withdrawQuest").disabled = false;
     document.getElementById("transferQuest").disabled = false;
-    document.getElementById("dealAdventureCard").disabled = false;
+    //document.getElementById("dealAdventureCard").disabled = false;
     document.getElementById("finishTurn").disabled = false;
     document.getElementById("placeCardsQuest").disabled = false;
 }

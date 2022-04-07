@@ -143,7 +143,7 @@ public class CardObjects {
   
     // }
     Collections.shuffle(this.adventureCards);
-    Collections.shuffle(this.storyCards);
+   // Collections.shuffle(this.storyCards);
   }
   
   //getter

@@ -279,21 +279,9 @@ function subscriptions() {
     let data = JSON.parse(response.body); //the id of the next active player..
     console.log("Here is the data from the server", data);
     serverData = data;
-
     // clear event card display
     const eventMessage = document.getElementById("eventMessage");
     eventMessage.innerHTML = "";
-
-    /**
-     * {"currentActivePlayer":2,
-     * "currentStoryCard":{"name":"Slay the Dragon","drawer":null,"storyCardType":"Quest","totalStages":"3","foeName":"Dragon","sponsor":1,"stages":[["Evil Knight","Saxons"],["Horse","Thieves"],["Mordred","Horse"]],"participantsId":[]},
-     * "sponsorId":1,
-     * "participantsId":[],
-     * "questInPlay":false}
-     * 
-     * 
-     */
-
     // checks if there are any winners
     if (data.winners.length > 0) {
       scrollDiv("The game is over! Congratulations to the winner(s): " + data.winners);
@@ -327,10 +315,7 @@ function subscriptions() {
             // when a stage is over, the sponsor stage cards have to be visible to the participants
             currentStageNumber = currentStoryCard.currentStageNumber;
             showStage(currentStageNumber);
-
-
-
-            alreadyASponsor();
+            alreadyASponsor(); //button
             stompClient.send("/app/calculateStage"); //the response to this will be subscriptions so that everybody gets to see the dying player
             //after this nothing happens so we need the sponsor to click finish quest
             //the surviving player are rewarded with an extra adventure card
@@ -342,7 +327,6 @@ function subscriptions() {
               scrollDiv("click finish Turn");
             }
             scrollDiv("Hey Sponsor, click finish Turn!");
-
 
           }
           //they're the sponsor and this is the last and total stage
@@ -359,8 +343,6 @@ function subscriptions() {
             stompClient.send("/app/rewardSponsor");
 
             setTimeout(() => getPlayerHand(), 2000);
-
-
           }
           //another scenario is that the player is not the sponsor.
           if (currentStoryCard.sponsor != playerId) {
@@ -369,6 +351,17 @@ function subscriptions() {
               newQuestJoiners();
               scrollDiv("click join quest");
               displayTurnIndicator(true)
+              if (data.testInPlay) {
+                // draw adventure card before bidding
+                getAdventureCards();
+                scrollDiv("This is a test");
+                let placeBidButton = document.createElement("button");
+                var t = document.createTextNode("Place Bid (Test)");
+                placeBidButton.appendChild(t);
+                placeBidButton.setAttribute("onclick", "placeTestBid()");
+                placeBidButton.setAttribute("id", "placeTestBid")
+                document.getElementById("placeCardButtons").appendChild(placeBidButton);
+              }
             }
             if (currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber <= currentStoryCard.totalStages) {
               //pariticpiants of the quest
