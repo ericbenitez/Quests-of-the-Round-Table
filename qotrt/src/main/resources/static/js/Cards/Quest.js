@@ -5,6 +5,7 @@ let battlePointsLimit = 0;
 
 function sponsorQuest(btn) {
     //console.log("here");
+    displayTurnIndicator(true)
     sponsor = true;
     disableTransferQuestButton();
     stompClient.send("/app/sponsorQuest", {});

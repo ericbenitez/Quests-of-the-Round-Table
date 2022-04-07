@@ -436,9 +436,20 @@ function updateShieldDisplay() {
 
 }
 
-function displayTurnIndicator() {
+function displayTurnIndicator(isMyTurn) {
+  const turnIndicator = document.getElementById("turnIndicator")
   
+  if (isMyTurn) {
+    turnIndicator.style.background = "#547c2f"
+    turnIndicator.innerHTML = "It is your turn!"
+  } else {
+    
+    turnIndicator.style.background = "#8a382e"
+    turnIndicator.innerHTML = "Waiting..."
+  }
 }
+
+
 function updateRankToKnight(){
     document.getElementById("squire").style.display = "none";
     document.getElementById("knight").style.display = "block";

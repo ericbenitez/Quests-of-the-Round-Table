@@ -539,6 +539,7 @@ public String testWinner(ArrayList<Integer> participantsId){
   public int getShields(int playerId) {
     Player player = this.gameService.getCurrentGame().getPlayerById(playerId);
     return player.getId();
+  }
 
   @MessageMapping("/showStage")
   @SendTo("/topic/showStage")

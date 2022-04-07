@@ -119,6 +119,7 @@ function subscriptions() {
         if (playerId == firstTournamentParticipantID) {
           alert("Place cards for the sigh almighty tie breaker round!");
           tieBreakerPlayed = true;
+          displayTurnIndicator(true);
         }
       } else {
         for (let i = 0; i < allWinners.length; i++) {
@@ -253,6 +254,7 @@ function subscriptions() {
     console.log("This is after initilizing", response.body);
     if (response.body * 1 !== 0 && response.body * 1 === playerId) {
       alert("Pick a Story Card");
+      displayTurnIndicator(true)
     }
   })
 
@@ -376,6 +378,8 @@ function subscriptions() {
               //they've already joined the quset, they have to pick cards for the next stage or withdraw
               currentStageNumber = currentStoryCard.currentStageNumber;
               alert("Pick cards for stage # ", currentStoryCard.currentStageNumber);
+              displayTurnIndicator(true)
+              
               //showCurrentStage(currentStoryCard.currentStageNumber);  // should work after increment stage is fixed
               if (playerHand.length < 12) {
                 getAdventureCards()
@@ -402,6 +406,7 @@ function subscriptions() {
               disableButtons();
               alert("you decided not to Join the Quest! So we're skipping you're turn :P");
               finishTurn();
+              displayTurnIndicator(false)
             }
           }
         }
@@ -431,7 +436,7 @@ function subscriptions() {
               tournamentParticBtns();
               alert("Place cards for the almighty tie breaker round!");
               tieBreakerPlayed = true;
-
+              displayTurnIndicator(true)
             }
           }
         }
@@ -441,6 +446,7 @@ function subscriptions() {
         //if the story card type is numm it means they might be the first player
         newRound();
         alert("pick a story card");
+        displayTurnIndicator(true)
         stompClient.send("/app/clearTournament", {});
 
 
