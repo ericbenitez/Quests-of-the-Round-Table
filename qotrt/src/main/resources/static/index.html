@@ -51,6 +51,16 @@
     <div id="turnIndicator"> fasdfas </div>
     
     <div id="gameBoard">
+      <div id="rankAndInfo">
+        <img src="squire.png" alt="Squire Rank - 5 battle points" id="squire" class="rankCard">
+        <img src="knight.png" alt="Knight Rank - 10 battle points" id="knight" class="rankCard">
+        <div id="playerInfo">
+          <div id="playerInfoName"></div>
+          <div id="playerInfoNumber"></div>
+          <div id="playerInfoRank"></div>
+        </div>
+      </div>
+
       <div id="eventMessage">
         
       </div>
@@ -155,8 +165,7 @@
   </div>
 
 
-
-  
+  <button onclick="getPlayerHand()">getPlayerHand</button>
 
   <script src="./js/Cards/AdventureCards.js"></script>
   <script src="./js/Cards/Event.js"></script>

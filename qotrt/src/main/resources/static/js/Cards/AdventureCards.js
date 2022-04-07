@@ -1,6 +1,8 @@
 let tempPlayerNum = 1;
 let currCardsFacedDown = []
 
+
+
 // automatically display cards to test the functionality
 // window.addEventListener("load", displayAllCards(theCards));
 
@@ -186,18 +188,20 @@ function clearPlayerHandDisplay() {
 
 
 function placeCards(cardsPlaced) {
+    let currentStageNumber = serverData.currentStoryCard.currentStageNumber;
+    alert(currentStageNumber);
     // this is in the blue area where the chosen cards are placed
     let playerStageCards = document.createElement("div");
     playerStageCards.setAttribute("class", "placeCardsDiv");
-    playerStageCards.setAttribute("id", "placeCardsDiv");
+    playerStageCards.setAttribute("id", "placeCardsDiv" + currentStageNumber);
     document.getElementById("stages").appendChild(playerStageCards);
 
     for (let i = 0; i < cardsPlaced.length; i++) {
         if (i < cardsPlaced.length - 1) {
-            addACardDisplay(cardsPlaced[i].name + ",", "placeCardsDiv", false);
+            addACardDisplay(cardsPlaced[i].name + ",", "placeCardsDiv"+ currentStageNumber, false);
         }
         else {
-            addACardDisplay(cardsPlaced[i].name, "placeCardsDiv", false);
+            addACardDisplay(cardsPlaced[i].name, "placeCardsDiv"+ currentStageNumber, false);
         }
 
     }
@@ -217,10 +221,10 @@ function clearPlayerStageCards() {
 // when click on the face down cards, it reveals the cards
 function turnCardsOver() {
     let currCards = document.getElementById("stages");
-
+    let currentStageNumber = serverData.currentStoryCard.currentStageNumber - 1;
     // remove the square for the player cards (what's currently in that div)
-
-    const cardsDown = document.getElementById("cardsDown-" + playerId);
+    alert(currentStageNumber + " stage #");
+    const cardsDown = document.getElementById("cardsDown-" + playerId + currentStageNumber);
     cardsDown.remove();
 
     // display the cards

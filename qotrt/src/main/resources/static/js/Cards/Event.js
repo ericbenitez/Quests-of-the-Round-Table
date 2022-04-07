@@ -156,3 +156,12 @@ function alreadyASponsor() {
     disableSponsorQuest();
     enableAdvCard();
 }
+
+
+function hideJoinGame(){
+    document.getElementById("new-player-join").style.display = "none";
+}
+
+function showJoinGame(){
+    document.getElementById("new-player-join").style.display = "block";
+}

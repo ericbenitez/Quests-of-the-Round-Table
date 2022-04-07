@@ -298,3 +298,8 @@ function placeTestBid() {
 }
 
 
+function showStage(stageNum){
+    
+    stompClient.send("/app/showStage", {});
+}
+

@@ -27,6 +27,7 @@ let drawerTournament = 0;
 let tieBreakerPlayed = false;  // false when the tie breaker round has not yet been played
 let tieOccurred = false;
 
+
 /**
  * The current stage you are on
  */
@@ -98,6 +99,22 @@ function joinGame() {
 
 function setupWindow() {
   //window.addEventListener("load", displayAllCards(theCards));
+  
+  setTimeout(() => { checkGameForJoinDisplay() }, 600);
+}
+
+function checkGameForJoinDisplay() {
+    stompClient.send("/app/checkGameExist", {});
+    const checkGame = stompClient.subscribe("/user/queue/checkGameExist", function (response) {
+        let data = JSON.parse(response.body);
+        if (data == 1){
+          showJoinGame();
+          checkGame.unsubscribe();
+        }
+        
+        
+    });  
+  
 }
 
 
@@ -258,19 +275,22 @@ function placeCardsQuest(btn) {
 
   // remove from the cards display
   removeAllCheckedCards(checked);
+  removeUsedCardsServer(checked);
+  let currentStageNumber = serverData.currentStoryCard.currentStageNumber;
+  
 
   let cardAtPlay = document.getElementById("stages");
   let div = document.createElement("div");
   div.setAttribute("class", "placeCardsDiv");
   //div.id = "cardsDown";
-  div.setAttribute('id', 'cardsDown-' + playerId);
+  div.setAttribute('id', 'cardsDown-' + playerId + currentStageNumber);
   div.appendChild(document.createElement("br"));
-  div.appendChild(document.createTextNode("---------- Player " + playerId + " cards for stage " + currentStage + " ----------"));
+  div.appendChild(document.createTextNode("---------- Player " + playerId + " cards for stage " + currentStageNumber + " ----------"));
   // div.appendChild(document.createTextNode("P" + playerId));
   div.appendChild(document.createElement("br"));
   cardAtPlay.appendChild(div);
-  document.getElementById("cardsDown-" + playerId).addEventListener("click", turnCardsOver);
-  alert("Click complete turn if you're done setting your cards for stage " + currentStage);
+  document.getElementById("cardsDown-" + playerId + currentStageNumber).addEventListener("click", turnCardsOver);
+  alert("Click complete turn if you're done setting your cards for stage " + currentStageNumber);
   disableStageCardsAfterClick(btn);
 }
 
@@ -418,4 +438,19 @@ function updateShieldDisplay() {
 
 function displayTurnIndicator() {
   
+}
+function updateRankToKnight(){
+    document.getElementById("squire").style.display = "none";
+    document.getElementById("knight").style.display = "block";
+    let rankInfo = document.getElementById("playerInfoRank");
+    rankInfo.removeChild(rankInfo.firstChild);
+    rankInfo.appendChild(document.createTextNode("Rank: Knight = 10 Battle Points"));
+}
+
+function showPlayerInfoDisplay(){
+    let prettyName = playerName[0].toUpperCase();
+    prettyName += playerName.slice(1);
+    document.getElementById("playerInfoName").appendChild(document.createTextNode(prettyName));
+    document.getElementById("playerInfoNumber").appendChild(document.createTextNode("Player Number: " + playerId));
+    document.getElementById("playerInfoRank").appendChild(document.createTextNode("Rank: Squire = 5 Battle Points"));
 }

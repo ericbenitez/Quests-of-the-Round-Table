@@ -8,10 +8,10 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Controllers/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Controllers/GameController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Objects/CardObjects.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Objects/CardObjects.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/java/app/Service/GameService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Cards/Event.js" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Cards/Event.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Cards/Tournament.js" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Cards/Tournament.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Cards/AdventureCards.js" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Cards/AdventureCards.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Cards/Quest.js" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Cards/Quest.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Client.js" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Client.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Subscription.js" beforeDir="false" afterPath="$PROJECT_DIR$/qotrt/src/main/resources/static/js/Subscription.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

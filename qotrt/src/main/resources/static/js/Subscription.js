@@ -9,6 +9,17 @@ function subscriptions() {
     shieldsDiv.append(document.createTextNode(`You have ${shields} shields.`))
   }) 
   
+
+  stompClient.subscribe("/topic/showStage", function (response) { //response = currentActiveplayer 
+    let sponsorId = JSON.parse(response.body);
+    //showCurrentStage(stageNum);
+    // player cards face up
+    if (playerId != sponsorId){
+      turnCardsOver();
+      showCurrentStage(serverData.currentStoryCard.currentStageNumber -1);
+    }    
+  });
+ 
   stompClient.subscribe("/topic/clearTournament", function (response) {
     tieBreakerPlayed = false;
     tieOccurred = false;
@@ -197,7 +208,7 @@ function subscriptions() {
   const gameStartedSubscription = stompClient.subscribe('/topic/game/started', function (response) {
     let data = JSON.parse(response.body);
     if (response) game = response;
-
+    
     gameId = game.gameID
     //displayCreateGameResponse(data.body, playerName, parseInt(numOfPlayer));
 
@@ -211,6 +222,7 @@ function subscriptions() {
     const data = JSON.parse(response.body);
     playerId = data.body;
     showResponse(data, playerName);
+    showPlayerInfoDisplay();
 
     // setTimeout(() => { alert("Click on initialize cards to begin the game"); }, 2000);
     setTimeout(() => { stompClient.send("/app/ready", {}, ""); }, 2000);
@@ -233,6 +245,8 @@ function subscriptions() {
     // enable game area
     const gameArea = document.getElementById("gameArea")
     gameArea.style.display = "flex"
+    
+    
 
     // disable buttons
 
@@ -279,8 +293,12 @@ function subscriptions() {
      */
 
     // checks if there are any winners
-    if (data.winners.length > 0) {
+    if (data.winners.length > 0) { 
       alert("The game is over! Congratulations to the winner(s): " + data.winners);
+      for (let i = 0; i < winners.length; i++){
+        updateRankToKnight();
+      }
+      // update the rank display
       return;
     }
 
@@ -300,6 +318,15 @@ function subscriptions() {
             //checkWinner(currentStoryCard.clientStages, currentStoryCard.stages); //this function does the functionality of sending the appropriate reward
             //and moving the turn
             // request for winner
+
+            // when a stage is over, we have to have the player cards faced up (it's currently faced down)
+
+            // when a stage is over, the sponsor stage cards have to be visible to the participants
+            currentStageNumber = currentStoryCard.currentStageNumber;
+            showStage(currentStageNumber);
+
+            
+
             alreadyASponsor();
             stompClient.send("/app/calculateStage"); //the response to this will be subscriptions so that everybody gets to see the dying player
             //after this nothing happens so we need the sponsor to click finish quest
@@ -321,6 +348,8 @@ function subscriptions() {
             //for the sponsor, it should check how many total cards they used in all of the stages + total stages
             //for example, alert(pick 6 cards for sponsoring the quest);
             //send something to the server, stomp.client(/app/setStoryCardToNull );
+            currentStageNumber = currentStoryCard.currentStageNumber;
+            showStage(currentStageNumber);
             alreadyASponsor();
             alert("The Quest is complete! Giving you as the sponsor adventure cards!");
             //send some server things to clear the current quest
@@ -336,7 +365,7 @@ function subscriptions() {
               //ask them to join
               newQuestJoiners();
               alert("click join quest");
-              showCurrentStage(currentStoryCard.currentStageNumber); // needs testing
+              //showCurrentStage(currentStoryCard.currentStageNumber); // needs testing
             }
             if (currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber <= currentStoryCard.totalStages) {
               //pariticpiants of the quest
@@ -345,12 +374,12 @@ function subscriptions() {
 
               //pick cards for this stage
               //they've already joined the quset, they have to pick cards for the next stage or withdraw
+              currentStageNumber = currentStoryCard.currentStageNumber;
               alert("Pick cards for stage # ", currentStoryCard.currentStageNumber);
-              showCurrentStage(currentStoryCard.currentStageNumber);  // should work after increment stage is fixed
+              //showCurrentStage(currentStoryCard.currentStageNumber);  // should work after increment stage is fixed
               if (playerHand.length < 12) {
                 getAdventureCards()
               }
-            
               
               if (data.testInPlay) {
                 alert("This is a test");
