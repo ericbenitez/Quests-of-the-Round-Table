@@ -54,13 +54,13 @@ function createGame() {
 
   // doesn't allow to create more than one game (for now)
   if (game != null) {
-    alert("There is already a game in progress.")
+    scrollDiv("There is already a game in progress.")
     return;
   }
 
   // ensures a valid input for num of players
   if (numOfPlayer < 2 || numOfPlayer > 4) {
-    alert("Please enter a valid number of players.");
+    scrollDiv("Please enter a valid number of players.");
     return;
   }
 
@@ -87,7 +87,7 @@ function joinGame() {
   playerName = document.getElementById("player-name").value.trim();
 
   if (!validInputString(playerName)) {
-    alert("Please enter a name.");
+    scrollDiv("Please enter a name.");
     return;
   }
   subscriptions();
@@ -242,12 +242,12 @@ function placeCardsQuest(btn) {
 
   // check if weapon cards unique
   if (!allWeaponCardsUnique(getActualCards(checked))) {
-    alert("You may not play two Weapon cards of the same type.");
+    scrollDiv("You may not play two Weapon cards of the same type.");
     return;
   }
 
   if (hasFoes(checked)) {
-    alert("You cannot play foes for a quest")
+    scrollDiv("You cannot play foes for a quest")
     return
   }
 
@@ -256,7 +256,7 @@ function placeCardsQuest(btn) {
 
     if (card) {
       if (card.cardType == "Test") {
-        alert("Participants cannot select Test cards for a quest")
+        scrollDiv("Participants cannot select Test cards for a quest")
         return
       }
     }
@@ -264,7 +264,7 @@ function placeCardsQuest(btn) {
 
 
   stompClient.send("/app/setClientStage", {}, JSON.stringify({ "playerId": playerId, "cards": checked }));
-  alert("Click Finish Turn!");
+  scrollDiv("Click Finish Turn!");
 
 
   // stores the cards for this stage
@@ -289,8 +289,8 @@ function placeCardsQuest(btn) {
   // div.appendChild(document.createTextNode("P" + playerId));
   div.appendChild(document.createElement("br"));
   cardAtPlay.appendChild(div);
-  document.getElementById("cardsDown-" + playerId + currentStageNumber).addEventListener("click", turnCardsOver);
-  alert("Click complete turn if you're done setting your cards for stage " + currentStageNumber);
+  document.getElementById("cardsDown-" + playerId).addEventListener("click", turnCardsOver);
+  scrollDiv("Click complete turn if you're done setting your cards for stage " + currentStage);
   disableStageCardsAfterClick(btn);
 }
 
@@ -367,7 +367,7 @@ function removeUsedCardsServer(cards) {
 function removeSelectedCards() {
   let checked = getAllChecked();
   removeCardsFromHand(checked);
-  alert(playerHand.length);
+  scrollDiv(playerHand.length);
   if (playerHand.length <= 12) {
     enableGameButtons();
   }

@@ -1,25 +1,25 @@
 
 function subscriptions() {
-  
+
   stompClient.subscribe("/topic/getShields", function (response) {
     const shields = JSON.parse(response.body);
-    
+
     const shieldsDiv = document.getElementById("shields")
     shieldsDiv.innerHTML = ""
     shieldsDiv.append(document.createTextNode(`You have ${shields} shields.`))
-  }) 
-  
+  })
+
 
   stompClient.subscribe("/topic/showStage", function (response) { //response = currentActiveplayer 
     let sponsorId = JSON.parse(response.body);
     //showCurrentStage(stageNum);
     // player cards face up
-    if (playerId != sponsorId){
+    if (playerId != sponsorId) {
       turnCardsOver();
-      showCurrentStage(serverData.currentStoryCard.currentStageNumber -1);
-    }    
+      showCurrentStage(serverData.currentStoryCard.currentStageNumber - 1);
+    }
   });
- 
+
   stompClient.subscribe("/topic/clearTournament", function (response) {
     tieBreakerPlayed = false;
     tieOccurred = false;
@@ -38,10 +38,10 @@ function subscriptions() {
         const shieldsDiv = document.getElementById("shields")
         shieldsDiv.innerHTML = ""
         shieldsDiv.append(document.createTextNode(`You have ${player.shields} shields.`))
-        
+
         // update cards
         getPlayerHand()
-        
+
         break;
       }
     }
@@ -60,10 +60,10 @@ function subscriptions() {
     if (playerId === serverData.currentActivePlayer) {
       const isSponsoring = confirm("Do you want to sponsor?");
       if (isSponsoring) {
-        alert("Cool, you can press on the button Sponsor Quest button!")
+        scrollDiv("Cool, you can press on the button Sponsor Quest button!")
       }
       if (!isSponsoring) {
-        alert("I see that you don't want to sponsor, press the Transfer Quest button")
+        scrollDiv("I see that you don't want to sponsor, press the Transfer Quest button")
       }
     }
   })
@@ -71,7 +71,7 @@ function subscriptions() {
 
   stompClient.subscribe("/topic/testWinner", function (response) {
     let data = JSON.parse(response.body);
-    alert("The test was won by " + data);
+    scrollDiv("The test was won by " + data);
   })
 
 
@@ -105,19 +105,19 @@ function subscriptions() {
     // calc winner(s) or result (tie)
     let allWinners = calcTournamentResult(playerPts);
 
-    alert("allWinners: " + allWinners);
+    scrollDiv("allWinners: " + allWinners);
     if (allWinners.length == 1) {
       //alert("winner length = 1");
       if (playerId == allWinners[0]) {
         awardSingleWinner(allWinners[0]);
-        alert("YOU WON SOME SHIELDS BRUH");
+        scrollDiv("YOU WON SOME SHIELDS BRUH");
       }
     } else {
       if (!tieBreakerPlayed) {
         //alert("There's a tie -- play the tie breaker round!");
         tieOccurred = true;
         if (playerId == firstTournamentParticipantID) {
-          alert("Place cards for the sigh almighty tie breaker round!");
+          scrollDiv("Place cards for the sigh almighty tie breaker round!");
           tieBreakerPlayed = true;
           displayTurnIndicator(true);
         }
@@ -136,32 +136,32 @@ function subscriptions() {
   // tournament award/winner alert for single participant
   const autoAwardSingleSub = stompClient.subscribe('/topic/autoAwardSingleTourn', function (response) {
     let data = JSON.stringify(response);
-    alert(data);
+    scrollDiv(data);
   });
 
 
   // subscribe to calculate stage winners
   stompClient.subscribe("/topic/calculateStage", function (response) {
     let data = JSON.parse(response.body);
-    
+
     // remove amour
     let index = 0;
     for (const cardName of playerHand) {
       const card = CardObjects[cardName]
-      
+
       if (card) {
         if (card.cardType === "Amour") {
           playerHand.remove(index)
           removeUsedCardsServer([cardName])
         }
       }
-      
+
       index++;
     }
-    
+
     stompClient.send("/app/getShields")
-    
-    alert("Congratulations to: " + data);
+
+    scrollDiv("Congratulations to: " + data);
   });
 
   //the response after setting the sponsor stages.
@@ -209,7 +209,7 @@ function subscriptions() {
   const gameStartedSubscription = stompClient.subscribe('/topic/game/started', function (response) {
     let data = JSON.parse(response.body);
     if (response) game = response;
-    
+
     gameId = game.gameID
     //displayCreateGameResponse(data.body, playerName, parseInt(numOfPlayer));
 
@@ -246,15 +246,15 @@ function subscriptions() {
     // enable game area
     const gameArea = document.getElementById("gameArea")
     gameArea.style.display = "flex"
-    
-    
+
+
 
     // disable buttons
 
     console.log("This is after initilizing", response.body);
     if (response.body * 1 !== 0 && response.body * 1 === playerId) {
-      alert("Pick a Story Card");
       displayTurnIndicator(true)
+      scrollDiv("Pick a Story Card");
     }
   })
 
@@ -295,9 +295,9 @@ function subscriptions() {
      */
 
     // checks if there are any winners
-    if (data.winners.length > 0) { 
-      alert("The game is over! Congratulations to the winner(s): " + data.winners);
-      for (let i = 0; i < winners.length; i++){
+    if (data.winners.length > 0) {
+      scrollDiv("The game is over! Congratulations to the winner(s): " + data.winners);
+      for (let i = 0; i < winners.length; i++) {
         updateRankToKnight();
       }
       // update the rank display
@@ -327,7 +327,7 @@ function subscriptions() {
             currentStageNumber = currentStoryCard.currentStageNumber;
             showStage(currentStageNumber);
 
-            
+
 
             alreadyASponsor();
             stompClient.send("/app/calculateStage"); //the response to this will be subscriptions so that everybody gets to see the dying player
@@ -335,12 +335,12 @@ function subscriptions() {
             //the surviving player are rewarded with an extra adventure card
             // clearPlayerStageCards();
             if (data.testInPlay) {
-              alert("The upcoming stage is a test");
+              scrollDiv("The upcoming stage is a test");
               //send to server and broadcast it to all players
               stompClient.send("/app/nextStageIsTest");
-              alert("click finish Turn");
+              scrollDiv("click finish Turn");
             }
-            alert("Hey Sponsor, click finish Turn!");
+            scrollDiv("Hey Sponsor, click finish Turn!");
 
 
           }
@@ -353,7 +353,7 @@ function subscriptions() {
             currentStageNumber = currentStoryCard.currentStageNumber;
             showStage(currentStageNumber);
             alreadyASponsor();
-            alert("The Quest is complete! Giving you as the sponsor adventure cards!");
+            scrollDiv("The Quest is complete! Giving you as the sponsor adventure cards!");
             //send some server things to clear the current quest
             stompClient.send("/app/rewardSponsor");
 
@@ -366,8 +366,7 @@ function subscriptions() {
             if (!currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber === 1) {
               //ask them to join
               newQuestJoiners();
-              alert("click join quest");
-              //showCurrentStage(currentStoryCard.currentStageNumber); // needs testing
+              scrollDiv("click join quest");
             }
             if (currentStoryCard.participantsId.includes(playerId) && currentStoryCard.currentStageNumber <= currentStoryCard.totalStages) {
               //pariticpiants of the quest
@@ -379,18 +378,19 @@ function subscriptions() {
               currentStageNumber = currentStoryCard.currentStageNumber;
               alert("Pick cards for stage # ", currentStoryCard.currentStageNumber);
               displayTurnIndicator(true)
-              
+
               //showCurrentStage(currentStoryCard.currentStageNumber);  // should work after increment stage is fixed
               if (playerHand.length < 12) {
                 getAdventureCards()
               }
-              
+
+              scrollDiv("Pick cards for stage # ", currentStoryCard.currentStageNumber);
+              //showCurrentStage(currentStoryCard.currentStageNumber);  // should work after increment stage is fixed
+
               if (data.testInPlay) {
-                alert("This is a test");
-                
                 // draw adventure card before bidding
                 getAdventureCards();
-                
+                scrollDiv("This is a test");
                 let placeBidButton = document.createElement("button");
                 var t = document.createTextNode("Place Bid (Test)");
                 placeBidButton.appendChild(t);
@@ -404,7 +404,7 @@ function subscriptions() {
               //this player refused to join the quest;
               //finishTurn();//increment the currentActivePlayer and move to the next player
               disableButtons();
-              alert("you decided not to Join the Quest! So we're skipping you're turn :P");
+              scrollDiv("you decided not to Join the Quest! So we're skipping you're turn :P");
               finishTurn();
               displayTurnIndicator(false)
             }
@@ -434,7 +434,7 @@ function subscriptions() {
           } else if (currentStoryCard.participants.includes(playerId)) {
             if (tieOccurred && !tieBreakerPlayed) {
               tournamentParticBtns();
-              alert("Place cards for the almighty tie breaker round!");
+              scrollDiv("Place cards for the almighty tie breaker round!");
               tieBreakerPlayed = true;
               displayTurnIndicator(true)
             }
@@ -445,8 +445,8 @@ function subscriptions() {
       if (!data.questInPlay && !data.tournamentInPlay && !data.eventInPlay) {
         //if the story card type is numm it means they might be the first player
         newRound();
-        alert("pick a story card");
         displayTurnIndicator(true)
+        scrollDiv("pick a story card");
         stompClient.send("/app/clearTournament", {});
 
 

@@ -46,10 +46,10 @@ function displayStoryCard(data) {
     if (playerId === data.currentActivePlayer) {
       const isSponsoring = confirm("Do you want to sponsor?");
       if (isSponsoring) {
-          alert("Cool, you can press on the button Sponsor Quest button!")
+          scrollDiv("Cool, you can press on the button Sponsor Quest button!")
       }
       if (!isSponsoring) {
-          alert("I see that you don't want to sponsor, press the Transfer Quest button")
+        scrollDiv("I see that you don't want to sponsor, press the Transfer Quest button")
       }
   }
   

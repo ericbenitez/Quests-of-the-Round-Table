@@ -27,7 +27,7 @@ let selectedCards = 0;
 let totalAdventureCardsWon = (count - 1) + selectedCards;
 function setStages(currentQuest, currentStages, foe) {
     if (count <= currentStages) {
-        alert("pick cards for your " + count + "/" + currentStages + " stages");
+        scrollDiv("pick cards for your " + count + "/" + currentStages + " stages");
         let dynamicButton = document.createElement("button");
         var t = document.createTextNode("Create Stage " + count);
         dynamicButton.appendChild(t);
@@ -37,7 +37,7 @@ function setStages(currentQuest, currentStages, foe) {
 
     }
     else {
-        alert("you have no more stages to set, click Complete Turn! ");
+        scrollDiv("you have no more stages to set, click Complete Turn! ");
         stompClient.send("/app/setStages", {}, JSON.stringify({ 'cards': myStages })); //sends the stages cards name to server
     }
 
@@ -71,7 +71,7 @@ function stageNumCards() {
         (checkedString.includes(testCards[2]) && checkedString.length > 1) ||
         (checkedString.includes(testCards[3]) && checkedString.length > 1)) {
         //there is a test card but the stage has more than one card
-        alert("There should only be one test card!");
+        scrollDiv("There should only be one test card!");
         return;
     }
 
@@ -86,7 +86,7 @@ function stageNumCards() {
     // calculate battlepoints for stage (sponsor), and compare it to previous stage (only foes to account for)
     for (const cardName of checkedString) {
         if (processedNames.includes(cardName)) {
-            alert("No repeating cards")
+            scrollDiv("No repeating cards")
             return
         }
 
@@ -132,7 +132,7 @@ function stageNumCards() {
 
             if (card.cardType == "Test") {
                 if (globalAmountOfTests >= 1) {
-                    alert("You can only have 1 test when sponsoring the quest!")
+                    scrollDiv("You can only have 1 test when sponsoring the quest!")
                     return;
                 } else {
                     amountOfTests++;
@@ -151,18 +151,18 @@ function stageNumCards() {
     }
 
     if (amountOfBattlePoints <= battlePointsLimit && amountOfTests == 0) {
-        alert("Not enough battle points, enter more or transfer the quest!")
+        scrollDiv("Not enough battle points, enter more or transfer the quest!")
 
         return
     }
 
     if (amountOfFoes == 0 && amountOfTests == 0) {
-        alert("You need at least 1 foe or 1 test in this stage!")
+        scrollDiv("You need at least 1 foe or 1 test in this stage!")
         return
     }
 
     if (amountOfFoes > 1) {
-        alert("You cannot have more than 1 foe per stage")
+        scrollDiv("You cannot have more than 1 foe per stage")
         return
     }
 
@@ -172,7 +172,7 @@ function stageNumCards() {
 
     if (count + 1 > currentStages) {
         if (globalAmountOfFoes == 0) {
-            alert("You need at least one foe in the quest!")
+            scrollDiv("You need at least one foe in the quest!")
             return
         }
     }
@@ -202,7 +202,7 @@ function stageNumCards() {
 
 
 function advCardsForSponsor() {
-    alert("pick this many adventure cards" + selectedCards);
+    scrollDiv("pick this many adventure cards" + selectedCards);
 }
 
 
@@ -224,7 +224,7 @@ function joinQuest() {
 
     stompClient.subscribe("/user/queue/joinQuest", function (response) {
         let data = response.body;
-        alert(data);
+        scrollDiv(data);
         // participantSetsStages();//dynamic button type thing for sponsor
     })
 }
@@ -255,7 +255,7 @@ function transferQuest() {
 // test function
 // shows whether current player is in the quest or not
 function inQuest() {
-    alert("player " + playerId + " quest: " + participant);
+    scrollDiv("player " + playerId + " quest: " + participant);
 }
 
 
@@ -278,7 +278,7 @@ function placeTestBid() {
             buttonTestBid.parentNode.removeChild(buttonTestBid);
         }
         else {
-            alert("Your bid is less than the min bid! Try again or withdraw quest!");
+            scrollDiv("Your bid is less than the min bid! Try again or withdraw quest!");
         }
     }
     else if (testCard.bids.length > 0) {
@@ -291,7 +291,7 @@ function placeTestBid() {
         }
 
         else {
-            alert("The last bid was " + lastBid + " you need to increase your bid! If you can't, click withdraw quest!");
+            scrollDiv("The last bid was " + lastBid + " you need to increase your bid! If you can't, click withdraw quest!");
         }
 
     }

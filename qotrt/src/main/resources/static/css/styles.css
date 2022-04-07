@@ -1,6 +1,6 @@
 html {
     font-size: 10px;
-    color: #212560; /*font color*/
+    color: #000000; /*font color*/
 }
 
 /*https://dev.to/ayushmanbthakur/how-to-make-tic-tac-toe-in-browser-with-html-css-and-js-28ed */
@@ -221,3 +221,16 @@ button {
     justify-content: space-evenly;
     align-items: center;
 }
+div.scroll {
+    background-color: #3aa1dd;
+    width: 500px;
+    height: 75px;
+    overflow: auto;
+    text-align: justify;
+    padding: 5px;
+    font-family: sans-serif;
+    font-size: medium;
+    color: aliceblue;
+    display: flex; 
+    flex-direction: column-reverse;
+  }
