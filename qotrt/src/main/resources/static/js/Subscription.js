@@ -352,8 +352,9 @@ function subscriptions() {
             scrollDiv("The Quest is complete! Giving you as the sponsor adventure cards!");
             //send some server things to clear the current quest
             stompClient.send("/app/rewardSponsor");
+            stopmClient.send("/app/setQuestInPlayFalse");
 
-            setTimeout(() => getPlayerHand(), 2000);
+            getPlayerHand();
           }
           //another scenario is that the player is not the sponsor.
           if (currentStoryCard.sponsor != playerId) {
@@ -384,7 +385,7 @@ function subscriptions() {
               currentStageNumber = currentStoryCard.currentStageNumber;
               displayTurnIndicator(true)
 
-              if (playerHand.length < 12) {
+              if (playerHand.length < 12 && data.testInPlay) {
                 getAdventureCards()
               }
 
@@ -407,7 +408,7 @@ function subscriptions() {
               //this player refused to join the quest;
               //finishTurn();//increment the currentActivePlayer and move to the next player
               disableButtons();
-              scrollDiv("You decided not to Join the Quest! So we're skipping you're turn :P");
+              scrollDiv("You decided not to Join the Quest Or you lost previous round! So we're skipping your turn :P");
               finishTurn();
               displayTurnIndicator(false)
             }

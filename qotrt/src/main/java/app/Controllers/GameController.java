@@ -114,7 +114,11 @@ public class GameController {
     gameService.setQuestInPlay(true);
     return gameService.getCurrentGame().getCurrentQuest();
   }
-  
+
+  @MessageMapping("/setQuestInPlayFalse")
+  public void setQuestToFalse(){
+    this.gameService.setQuestInPlay(false);
+  }
 
 
   //We will also be returning the session here because we need to ask the currentActive player if they wanna sponsor quest, bid etc.
@@ -189,10 +193,12 @@ public class GameController {
     //if we round back to the sponsor, the stage goes up
     if(gameService.getQuestInPlay() && gameService.getCurrentActivePlayer()==gameService.getCurrentGame().getCurrentQuest().getSponsor()){
       if(!currSession.testInPlay){
+        System.out.println("Rounding back to the sponsor!");
         gameService.getCurrentGame().getCurrentQuest().incrementCurrentStage();
       } 
       //withdraw from the quest
       if(currSession.testInPlay && gameService.getCurrentGame().getCurrentQuest().getParticipantsId().size()==0) {//everyone dropped out with no bids
+        System.out.println("Everyone has dropped out of the test!");
         gameService.getCurrentGame().getCurrentQuest().incrementCurrentStage();
         currSession.testInPlay = false;
       }
@@ -201,18 +207,21 @@ public class GameController {
       if(currSession.testInPlay && gameService.getCurrentGame().getCurrentQuest().getParticipantsId().size()==1) { //the winner
         //some function to announce the winner and then takes cards of the test winner (last bid in test.bids is the number of cards we remove from the winner)
         testWinner(gameService.getCurrentGame().getCurrentQuest().getParticipantsId());
+        System.out.println("There is a test winner!");
         gameService.getCurrentGame().getCurrentQuest().incrementCurrentStage(); 
         currSession.testInPlay = false;
 
       }
       if(currSession.testInPlay && gameService.getCurrentGame().getCurrentQuest().getParticipantsId().size()>1) { //test keeps going
         currSession.currentActivePlayer = gameService.startNextPlayer(); //skip the sponsor
+        System.out.println("There are still more than 1 players in the quest!");
       } 
     }
     
     if (gameService.getQuestInPlay()) {
       currSession.testInPlay = (gameService.getCurrentGame().getCurrentQuest().getQuestIncludesTest() && (gameService.getCurrentGame().getCurrentQuest().getTestInStage() == gameService.getCurrentGame().getCurrentQuest().getCurrentStageNumber()));
       currSession.testCard= (currSession.testInPlay) ?  gameService.getCurrentGame().getCurrentQuest().getTestCard() : null;
+      System.out.println("Setting the test and test card");
     }
     // currSession.sponsorId = gameService.getCurrentGame().getCurrentQuest().getSponsor(); //id of the sponsor
     // currSession.participantsId = gameService.getCurrentGame().getCurrentQuest().getParticipantsId();//id of the sponsor
