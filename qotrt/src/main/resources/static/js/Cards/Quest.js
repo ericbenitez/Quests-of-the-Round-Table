@@ -275,7 +275,7 @@ function placeTestBid() {
             stompClient.send("/app/placeTestBid", {}, JSON.stringify({
                 'bids': checkedString
             }));
-            removeCardsFromHand(checkedString); //remove them from hand (server) + UI
+            //removeCardsFromHand(checkedString); //remove them from hand (server) + UI
             var buttonTestBid = document.getElementById("placeTestBid");
             buttonTestBid.parentNode.removeChild(buttonTestBid);
         }
@@ -290,8 +290,8 @@ function placeTestBid() {
             var buttonTestBid = document.getElementById("placeTestBid");
             buttonTestBid.parentNode.removeChild(buttonTestBid);
             stompClient.send("/app/placeTestBid", {}, JSON.stringify({ 'bids': checkedString }))
-            removeCardsFromHand(checkedString); //remove them from hand (server) + UI
-
+            //removeCardsFromHand(checkedString); //remove them from hand (server) + UI
+           
         }
 
         else {

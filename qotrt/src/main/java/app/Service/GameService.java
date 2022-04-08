@@ -235,11 +235,11 @@ public class GameService {
         this.questInPlay=x;
     }
     public boolean getQuestInPlay(){
-        if(questInPlay){
-            if(currentGame.getCurrentQuest().getCurrentStageNumber() > Integer.parseInt(currentGame.getCurrentQuest().getTotalStages())){
-                setQuestInPlay(false);
-            }
-        }
+        // if(questInPlay){
+        //     if(currentGame.getCurrentQuest().getCurrentStageNumber() > Integer.parseInt(currentGame.getCurrentQuest().getTotalStages())){
+        //         setQuestInPlay(false);
+        //     }
+        // }
         return questInPlay;
     }
     public boolean getTournamentInPlay(){
