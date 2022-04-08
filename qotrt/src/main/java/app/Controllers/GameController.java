@@ -294,17 +294,20 @@ public class GameController {
     return currSession;
   }
 
-@SendTo("/topic/testWinner")
-public String testWinner(ArrayList<Integer> participantsId){
-  String name = "";
-  if(participantsId.size() == 1){
-    int id  = participantsId.get(participantsId.size()-1);
-    Player player = gameService.getCurrentGame().getPlayerById(id);
-    gameService.discardCards(Integer.toString(id), gameService.getCurrentGame().getCurrentQuest().getTestCard().getBids());
-    name = player.getName();
+  
+  // @SendTo("/topic/testWinner")
+  public void testWinner(ArrayList<Integer> participantsId){
+    String name = "";
+    if(participantsId.size() == 1){
+      int id  = participantsId.get(participantsId.size()-1);
+      Player player = gameService.getCurrentGame().getPlayerById(id);
+      gameService.discardCards(Integer.toString(id), gameService.getCurrentGame().getCurrentQuest().getTestCard().getBids());
+      name = player.getName();
+    }
+    // return name;
+    
+    this.simpMessage.convertAndSend("/topic/testWinner", name);
   }
-  return name;
-}
 
   @MessageMapping("/nextStageIsTest")
   @SendTo("/topic/nextStageIsTest")
