@@ -27,7 +27,7 @@ let selectedCards = 0;
 let totalAdventureCardsWon = (count - 1) + selectedCards;
 function setStages(currentQuest, currentStages, foe) {
     if (count <= currentStages) {
-        scrollDiv("pick cards for your " + count + "/" + currentStages + " stages");
+        scrollDiv("Pick cards for your " + count + "/" + currentStages + " stages");
         let dynamicButton = document.createElement("button");
         var t = document.createTextNode("Create Stage " + count);
         dynamicButton.appendChild(t);
@@ -37,7 +37,7 @@ function setStages(currentQuest, currentStages, foe) {
 
     }
     else {
-        scrollDiv("you have no more stages to set, click Complete Turn! ");
+        scrollDiv("You have no more stages to set, click 'Finish Turn'! ");
         stompClient.send("/app/setStages", {}, JSON.stringify({ 'cards': myStages })); //sends the stages cards name to server
     }
 
@@ -202,7 +202,7 @@ function stageNumCards() {
 
 
 function advCardsForSponsor() {
-    scrollDiv("pick this many adventure cards" + selectedCards);
+    scrollDiv("Pick this many adventure cards" + selectedCards);
 }
 
 
@@ -247,6 +247,7 @@ function withdrawQuest() {
 
 function transferQuest() {
     if (serverData.currentActivePlayer === playerId) {
+        displayTurnIndicator(false)
         stompClient.send("/app/transferQuest", {}, playerId)
     }
 }

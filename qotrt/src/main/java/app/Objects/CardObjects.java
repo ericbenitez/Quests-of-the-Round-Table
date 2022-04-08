@@ -10,47 +10,47 @@ public class CardObjects {
   ArrayList<StoryCard> storyCards = new ArrayList<StoryCard>();
   
   public CardObjects() {
-    this.adventureCards.add(new Ally("Sir Gawain", 10, -1));
-    this.adventureCards.add(new Ally("King Pellinore", 10, -1));
-    this.adventureCards.add(new Ally("Sir Percival", 5, -1));
-    this.adventureCards.add(new Ally("Sir Tristan", 10, -1));
-    this.adventureCards.add(new Ally("King Arthur", 10, 2));
-    this.adventureCards.add(new Ally("Queen Guinevere", -1, 3));
-    this.adventureCards.add(new Ally("Queen Iseult", -1, 2));
-    this.adventureCards.add(new Ally("Sir Lancelot", 15, -1));
-    this.adventureCards.add(new Ally("Sir Galahad", 15, -1));
+    // this.adventureCards.add(new Ally("Sir Gawain", 10, -1));
+    // this.adventureCards.add(new Ally("King Pellinore", 10, -1));
+    // this.adventureCards.add(new Ally("Sir Percival", 5, -1));
+    // this.adventureCards.add(new Ally("Sir Tristan", 10, -1));
+    // this.adventureCards.add(new Ally("King Arthur", 10, 2));
+    // this.adventureCards.add(new Ally("Queen Guinevere", -1, 3));
+    // this.adventureCards.add(new Ally("Queen Iseult", -1, 2));
+    // this.adventureCards.add(new Ally("Sir Lancelot", 15, -1));
+    // this.adventureCards.add(new Ally("Sir Galahad", 15, -1));
 
-    for (int i = 0; i < 11; i++) {
-      this.adventureCards.add(new Weapon("Horse", 10));
-    }
-    for (int i = 0; i < 16; i++) {
-      this.adventureCards.add(new Weapon("Sword", 10));
-    }
+    // for (int i = 0; i < 11; i++) {
+    //   this.adventureCards.add(new Weapon("Horse", 30));
+    // }
+    // for (int i = 0; i < 16; i++) {
+    //   this.adventureCards.add(new Weapon("Sword", 30));
+    // }
     
-    // TODO: 6, 5
+    // // TODO: 6, 5
+    // for (int i = 0; i < 15; i++) {
+    //   this.adventureCards.add(new Weapon("Dagger", 50));
+    // }
+    // for (int i = 0; i < 2; i++) {
+    //   this.adventureCards.add(new Weapon("Excalibur", 30));
+    // }
+    // for (int i = 0; i < 6; i++) {
+    //   this.adventureCards.add(new Weapon("Lance", 20));
+    // }
     for (int i = 0; i < 15; i++) {
-      this.adventureCards.add(new Weapon("Dagger", 50));
-    }
-    for (int i = 0; i < 2; i++) {
-      this.adventureCards.add(new Weapon("Excalibur", 30));
-    }
-    for (int i = 0; i < 6; i++) {
-      this.adventureCards.add(new Weapon("Lance", 20));
-    }
-    for (int i = 0; i < 8; i++) {
-      this.adventureCards.add(new Weapon("Battle-ax", 15));
+      this.adventureCards.add(new Weapon("Battle-ax", 30));
     }
 
     // TODO: change frequency to 2
     for (int i = 0; i < 15; i++) {
-      this.adventureCards.add(new Test("Test of the Questing Beast"));
-      this.adventureCards.add(new Test("Test of Temptation"));
-      this.adventureCards.add(new Test("Test of Valor"));
-      this.adventureCards.add(new Test("Test of Morgan Le Fey", 3));
+      // this.adventureCards.add(new Test("Test of the Questing Beast"));
+      // this.adventureCards.add(new Test("Test of Temptation"));
+      // this.adventureCards.add(new Test("Test of Valor"));
+      // this.adventureCards.add(new Test("Test of Morgan Le Fey", 3));
     }
-    for (int i = 0; i < 8; i++) {
-      // this.adventureCards.add(new Foe("Thieves", 5));
-      // this.adventureCards.add(new Foe("Saxon Knight", 15, 25));
+    for (int i = 0; i < 15; i++) {
+      this.adventureCards.add(new Foe("Thieves", 5));
+      this.adventureCards.add(new Foe("Saxon Knight", 15, 25));
       if (i < 7) {
         // this.adventureCards.add(new Foe("Robber Knight", 15));
       }
@@ -58,21 +58,21 @@ public class CardObjects {
         // this.adventureCards.add(new Foe("Evil Knight", 20, 30));
       }
       if (i < 5) {
-        this.adventureCards.add(new Foe("Saxons", 10, 20));
+        // this.adventureCards.add(new Foe("Saxons", 10, 20));
       }
       
       // TODO: change to 4
       if (i < 15) {
-        this.adventureCards.add(new Foe("Mordred", 30));
+        // this.adventureCards.add(new Foe("Mordred", 30));
         // this.adventureCards.add(new Foe("Boar", 5, 15));
       }
       
       // TODO: change to 3 frequency
       if (i < 10) {
-        this.adventureCards.add(new Foe("Black Knight", 25, 35));
+        // this.adventureCards.add(new Foe("Black Knight", 25, 35));
       }
       if (i < 2) {
-        this.adventureCards.add(new Foe("Giant", 40));
+        // this.adventureCards.add(new Foe("Giant", 40));
         // this.adventureCards.add(new Foe("Green Knight", 25, 40));
       }
     }
@@ -82,8 +82,6 @@ public class CardObjects {
       // this.adventureCards.add(new Amour("Amour", "", 10, 1));
     }
 
-    this.storyCards.add(new EventCard(new KingsRecognition(), "King's Recognition",
-        "The next player(s) to complete a Quest will receive 2 extra shields."));
     // for (int i = 0; i < 2; i++) {
       // this.storyCards.add(new EventCard(new QueensFavor(), "Queens Favour",
       //     "The lowest ranked player(s) immediately receives 2 Adventure Cards."));
@@ -142,8 +140,12 @@ public class CardObjects {
     //   .add(new EventCard(new Pox(), "Pox", "All players except the player drawing this card lose 1 shield."));
   
     // }
+    
+    this.storyCards.add(new EventCard(new KingsRecognition(), "King's Recognition",
+    "The next player(s) to complete a Quest will receive 2 extra shields."));
+
     Collections.shuffle(this.adventureCards);
-    Collections.shuffle(this.storyCards);
+    // Collections.shuffle(this.storyCards);
   }
   
   //getter

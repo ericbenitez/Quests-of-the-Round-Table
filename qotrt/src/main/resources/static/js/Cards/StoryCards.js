@@ -20,7 +20,7 @@ let activeStoryCardType;
 function displayStoryCard(data) {
   console.log("this is the data under Display card",data);
   const storyCardDiv = document.getElementById("activeStoryCard")
-  storyCardDiv.style.display = "block";
+  storyCardDiv.style.display = "flex";
   storyCardDiv.innerText = "";
   
   const name = data.currentStoryCard.name;
@@ -30,9 +30,10 @@ function displayStoryCard(data) {
   activeStoryCard = data.currentStoryCard.name;; //setting the global variable to info from the pickCard
   activeStoryCardType = data.currentStoryCard.storyCardType;
   
-  storyCardDiv.appendChild(document.createTextNode(name));
+  
+  storyCardDiv.appendChild(document.createTextNode(storyCardType + ":"));
   storyCardDiv.appendChild(document.createElement("br"));
-  storyCardDiv.appendChild(document.createTextNode(storyCardType));
+  storyCardDiv.appendChild(document.createTextNode(name));
 
   if(storyCardType==="Quest"){
     //Enable the Sponsor Quest Button 

@@ -536,9 +536,14 @@ public String testWinner(ArrayList<Integer> participantsId){
   
   @MessageMapping("/getShields")
   @SendTo("/topic/getShields")
-  public int getShields(int playerId) {
-    Player player = this.gameService.getCurrentGame().getPlayerById(playerId);
-    return player.getId();
+  public ArrayList<FilteredPlayer> getShields() {
+    ArrayList<FilteredPlayer> players = new ArrayList<>();
+    
+    for (Player player: this.gameService.getCurrentGame().getPlayers()) {
+      players.add(new FilteredPlayer(player.getName(), player.getId(), null, player.getNumShields()));
+    }
+    
+    return players;
   }
 
   @MessageMapping("/showStage")

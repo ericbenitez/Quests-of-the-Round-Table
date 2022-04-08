@@ -74,7 +74,7 @@ function joinTournament(answer) {
 
     }
     if (answer == "no") {
-        scrollDiv(" You have decided not to participate in the tournament :( click Finish Turn");
+        scrollDiv("You have decided not to participate in the tournament :( click Finish Turn");
         disableBidding();
     }
 

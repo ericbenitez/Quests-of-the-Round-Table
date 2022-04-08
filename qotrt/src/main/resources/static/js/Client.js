@@ -290,7 +290,7 @@ function placeCardsQuest(btn) {
   div.appendChild(document.createElement("br"));
   cardAtPlay.appendChild(div);
   document.getElementById("cardsDown-" + playerId).addEventListener("click", turnCardsOver);
-  scrollDiv("Click complete turn if you're done setting your cards for stage " + currentStage);
+  scrollDiv("Click 'Finish turn' if you're done setting your cards for stage " + currentStage);
   disableStageCardsAfterClick(btn);
 }
 
@@ -367,7 +367,6 @@ function removeUsedCardsServer(cards) {
 function removeSelectedCards() {
   let checked = getAllChecked();
   removeCardsFromHand(checked);
-  scrollDiv(playerHand.length);
   if (playerHand.length <= 12) {
     enableGameButtons();
   }

@@ -206,7 +206,6 @@ function turnCardsOver() {
     let currCards = document.getElementById("stages");
     let currentStageNumber = serverData.currentStoryCard.currentStageNumber - 1;
     // remove the square for the player cards (what's currently in that div)
-    alert(currentStageNumber + " stage #");
     const cardsDown = document.getElementById("cardsDown-" + playerId + currentStageNumber);
     cardsDown.remove();
 

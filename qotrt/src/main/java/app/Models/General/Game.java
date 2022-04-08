@@ -28,7 +28,7 @@ public class Game implements Mediator { // Main = Game
   EventCard currentEvent;
 
   CardObjects cardObjects;
-  private EventCard kingsRecognitionActive = null;   
+  private EventCard kingsRecognitionActive = null;
 
   @Autowired
   public Game() {
@@ -63,62 +63,67 @@ public class Game implements Mediator { // Main = Game
 
     ArrayList<ArrayList<String>> stages = currentQuest.getStages(); // the sponsors stage
     HashMap<Integer, ArrayList<String>> clientStage = currentQuest.getClientStage();
-    int index = currentQuest.getCurrentStageNumber() - 1;
-    // need some calcs and return id or player name
-    ArrayList<String> currentSponsorStage = stages.get(index);
+
+    int index;
+    if (currentQuest.getCurrentStageNumber() > Integer.parseInt(currentQuest.getTotalStages())) {
+      index = currentQuest.getCurrentStageNumber() - 2;
+    } else {
+      index = currentQuest.getCurrentStageNumber() - 1;
+    }
+
+    ArrayList<String> currentSponsorStage = stages.get(index - 1);
 
     // calculate sponsor battlepoints for stage
     for (String nameOfCard : currentSponsorStage) {
-      //Special Cards with Max Battle Points:
-      if(currentQuest.getName().equals("Journey Through the Enchanted Forest")){
-        if(nameOfCard.equals("Evil Knight")){
+      // Special Cards with Max Battle Points:
+      if (currentQuest.getName().equals("Journey Through the Enchanted Forest")) {
+        if (nameOfCard.equals("Evil Knight")) {
           AdventureCard advCard = this.cardObjects.getCardByName(nameOfCard);
           Foe foeCard = (Foe) advCard;
           int battlePoints = foeCard.getMaxBattlePoints();
           sponsorBattlePoints += battlePoints;
         }
       }
-      if(currentQuest.getName().equals("Slay the Dragon")){
-        if(nameOfCard.equals("Dragon")){
+      if (currentQuest.getName().equals("Slay the Dragon")) {
+        if (nameOfCard.equals("Dragon")) {
           AdventureCard advCard = this.cardObjects.getCardByName(nameOfCard);
           Foe foeCard = (Foe) advCard;
           int battlePoints = foeCard.getMaxBattlePoints();
           sponsorBattlePoints += battlePoints;
         }
       }
-      if(currentQuest.getName().equals("Repel the Saxon Raiders")){
-        if(nameOfCard.equals("Saxon Knight")||nameOfCard.equals("Saxons")){
+      if (currentQuest.getName().equals("Repel the Saxon Raiders")) {
+        if (nameOfCard.equals("Saxon Knight") || nameOfCard.equals("Saxons")) {
           AdventureCard advCard = this.cardObjects.getCardByName(nameOfCard);
           Foe foeCard = (Foe) advCard;
           int battlePoints = foeCard.getMaxBattlePoints();
           sponsorBattlePoints += battlePoints;
         }
       }
-      if(currentQuest.getName().equals("Boar Hunt")){
-        if(nameOfCard.equals("Boar")){
+      if (currentQuest.getName().equals("Boar Hunt")) {
+        if (nameOfCard.equals("Boar")) {
           AdventureCard advCard = this.cardObjects.getCardByName(nameOfCard);
           Foe foeCard = (Foe) advCard;
           int battlePoints = foeCard.getMaxBattlePoints();
           sponsorBattlePoints += battlePoints;
         }
       }
-      if(currentQuest.getName().equals("Rescue the Fair Maiden")){
-        if(nameOfCard.equals("Black Knight")){
+      if (currentQuest.getName().equals("Rescue the Fair Maiden")) {
+        if (nameOfCard.equals("Black Knight")) {
           AdventureCard advCard = this.cardObjects.getCardByName(nameOfCard);
           Foe foeCard = (Foe) advCard;
           int battlePoints = foeCard.getMaxBattlePoints();
           sponsorBattlePoints += battlePoints;
         }
       }
-       if(currentQuest.getName().equals("Test of the Green Knight")){
-        if(nameOfCard.equals("Green Knight")){
+      if (currentQuest.getName().equals("Test of the Green Knight")) {
+        if (nameOfCard.equals("Green Knight")) {
           AdventureCard advCard = this.cardObjects.getCardByName(nameOfCard);
           Foe foeCard = (Foe) advCard;
           int battlePoints = foeCard.getMaxBattlePoints();
           sponsorBattlePoints += battlePoints;
         }
-      }
-      else{
+      } else {
         AdventureCard advCard = this.cardObjects.getCardByName(nameOfCard);
         int battlePoints = advCard.getBattlePoints();
         sponsorBattlePoints += battlePoints;
@@ -132,18 +137,18 @@ public class Game implements Mediator { // Main = Game
       // higher than sponsor
       for (String cardName : cards) {
         AdventureCard card = this.cardObjects.getCardByName(cardName);
-        if (!(card instanceof Ally)){
-            playerBattlePoints += card.getBattlePoints();
+        if (!(card instanceof Ally)) {
+          playerBattlePoints += card.getBattlePoints();
         }
       }
 
       Player currentPlayer = this.getPlayerById(playerId);
       playerBattlePoints += currentPlayer.getRankPts();
       playerBattlePoints += calcAllyPtsForPlayer(playerId);
-      if (currentPlayer.getAmour() != null){
+      if (currentPlayer.getAmour() != null) {
         playerBattlePoints += currentPlayer.getAmour().getBattlePoints();
       }
-      
+
       if (playerBattlePoints < sponsorBattlePoints) {
         this.currentQuest.getParticipantsId().remove(playerId);
       }
@@ -152,57 +157,58 @@ public class Game implements Mediator { // Main = Game
     ArrayList<String> survivors = new ArrayList<>();
     ArrayList<Player> survivorPlayers = new ArrayList<>();
 
-    rewardSurvivors(currentQuest.getParticipantsId()); //if they made it out alive of a stage
-    for (Integer playerId : currentQuest.getParticipantsId()){
+    rewardSurvivors(currentQuest.getParticipantsId()); // if they made it out alive of a stage
+    for (Integer playerId : currentQuest.getParticipantsId()) {
       String playerName = this.getPlayerById(playerId).getName();
       survivorPlayers.add(this.getPlayerById(playerId));
       survivors.add(playerName);
     }
-    
-    if (this.kingsRecognitionActive != null) {
-      this.kingsRecognitionActive.getEventBehaviour().playEvent(survivorPlayers, null);
-      this.kingsRecognitionActive = null;
-      
-      System.out.println("Kings recognition was played");
+
+    if (currentQuest.getCurrentStageNumber() > Integer.parseInt(currentQuest.getTotalStages())) {
+      if (this.kingsRecognitionActive != null) {
+        this.kingsRecognitionActive.getEventBehaviour().playEvent(survivorPlayers, null);
+        this.kingsRecognitionActive = null;
+
+        System.out.println("Kings recognition was played");
+      }
     }
-    
+
     return survivors; // the peeps who survived
   }
 
-  public void rewardSurvivors(ArrayList<Integer> survivors){
-    for(int id : survivors){
+  public void rewardSurvivors(ArrayList<Integer> survivors) {
+    for (int id : survivors) {
       Player p = this.getPlayerById(id);
       p.drawCards(1);
     }
   }
 
-   
-  public void rewardSponsor(Integer playerId){
-    Integer numOfAdvCards=0;  
+  public void rewardSponsor(Integer playerId) {
+    Integer numOfAdvCards = 0;
     ArrayList<ArrayList<String>> stages = currentQuest.getStages();
-    for(int i = 0; i < stages.size()-1; i++){     // loop for the rows
-      for(int j = 0; j < stages.get(i).size()-1;j++){ //loop for the elements in each row
+    for (int i = 0; i < stages.size(); i++) { // loop for the rows
+      for (int j = 0; j < stages.get(i).size(); j++) { // loop for the elements in each row
         numOfAdvCards++;
       }
     }
     Player p = this.getPlayerById(playerId);
     p.drawCards(numOfAdvCards);
-  
+
   }
 
-  // Helper function - Given a playerId, calculates and returns the battle pts for the allies in play
-  private int calcAllyPtsForPlayer(int playerId){
+  // Helper function - Given a playerId, calculates and returns the battle pts for
+  // the allies in play
+  private int calcAllyPtsForPlayer(int playerId) {
     Player player = this.getPlayerById(playerId);
     int totalPts = 0;
-    
-    ArrayList<Ally> activeAllies = new ArrayList<>(); /*player.getActiveAllies();*/ // change once we have the actual arraylist
-    for (Ally ally: activeAllies){
+
+    ArrayList<Ally> activeAllies = new ArrayList<>(); /* player.getActiveAllies(); */ // change once we have the actual
+                                                                                      // arraylist
+    for (Ally ally : activeAllies) {
       totalPts += ally.getBattlePoints(this.getCurrentQuest().getName(), activeAllies);
     }
     return totalPts;
   }
-
-
 
   // removes a player
   public Player removePlayer(Player player) {
@@ -257,11 +263,10 @@ public class Game implements Mediator { // Main = Game
       // this.currentQuest.draw(this.getPlayerById(playerId));
     } else if (card instanceof Tournament) {
       this.setCurrentTournament((Tournament) card);
-    }
-    else if(card instanceof EventCard){
+    } else if (card instanceof EventCard) {
       this.setCurrentEvent((EventCard) card);
     }
-    
+
     this.storyCardsDeck.remove(storyCardsDeck.size() - 1);
     return card;
   }
@@ -370,28 +375,26 @@ public class Game implements Mediator { // Main = Game
   }
 
   // calculates total battle points given a list of cards
-  public int calcBattlePtsOfCards(ArrayList<String> cards){
+  public int calcBattlePtsOfCards(ArrayList<String> cards) {
     int total = 0;
-    for (String cardName: cards){
+    for (String cardName : cards) {
       total += cardObjects.getBattlePtsByName(cardName);
     }
     return total;
   }
 
-
-
-  public ArrayList<Integer> calcWinnersTournament(){
+  public ArrayList<Integer> calcWinnersTournament() {
     int max = 0;
 
     ArrayList<Integer> winners = new ArrayList<>();
-    for (int i : this.currentTournament.getParticipants()){
+    for (int i : this.currentTournament.getParticipants()) {
       int currPts = calcBattlePtsOfCards(currentTournament.getPlayerCards(i));
       currPts += this.getPlayerById(i).getRankPts();
-      if (currPts > max){
+      if (currPts > max) {
         max = currPts;
         winners.clear();
         winners.add(i);
-      }else if (currPts == max){
+      } else if (currPts == max) {
         winners.add(i);
       }
     }
@@ -399,10 +402,11 @@ public class Game implements Mediator { // Main = Game
     return winners;
   }
 
-  public CardObjects getCardObjects(){
+  public CardObjects getCardObjects() {
     return cardObjects;
   }
-  //~~~~~~~~~~~~~~~EventCard~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  // ~~~~~~~~~~~~~~~EventCard~~~~~~~~~~~~~~~~~~~~~~~~~
   public void setCurrentEvent(EventCard event) {
     currentEvent = event;
   }
@@ -416,7 +420,7 @@ public class Game implements Mediator { // Main = Game
   }
 
   public void setKingsRecognition(EventCard kingsRecognition) {
-      this.kingsRecognitionActive = kingsRecognition;
+    this.kingsRecognitionActive = kingsRecognition;
   }
 
 }

@@ -2,11 +2,15 @@
 function subscriptions() {
 
   stompClient.subscribe("/topic/getShields", function (response) {
-    const shields = JSON.parse(response.body);
-
-    const shieldsDiv = document.getElementById("shields")
-    shieldsDiv.innerHTML = ""
-    shieldsDiv.append(document.createTextNode(`You have ${shields} shields.`))
+    const players = JSON.parse(response.body)
+    
+    for (const player of players) {
+      if (player.id == playerId) {
+        const shieldsDiv = document.getElementById("shields")
+        shieldsDiv.innerHTML = ""
+        shieldsDiv.append(document.createTextNode(`You have ${player.shields} shields.`))
+      }
+    }
   })
 
 
@@ -45,6 +49,10 @@ function subscriptions() {
         break;
       }
     }
+    
+    if (serverData.currentActivePlayer === playerId) {
+      scrollDiv("An event has been played, select 'Finish Turn'!")
+    }
   })
 
   const transferQuestSubscription = stompClient.subscribe("/topic/transferQuest", (response) => {
@@ -58,6 +66,8 @@ function subscriptions() {
 
     // if its us...
     if (playerId === serverData.currentActivePlayer) {
+      displayTurnIndicator(true)
+      
       const isSponsoring = confirm("Do you want to sponsor?");
       if (isSponsoring) {
         scrollDiv("Cool, you can press on the button Sponsor Quest button!")
@@ -352,6 +362,7 @@ function subscriptions() {
             //for example, alert(pick 6 cards for sponsoring the quest);
             //send something to the server, stomp.client(/app/setStoryCardToNull );
             currentStageNumber = currentStoryCard.currentStageNumber;
+            stompClient.send("/app/calculateStage"); //the response to this will be subscriptions so that everybody gets to see the dying player
             showStage(currentStageNumber);
             alreadyASponsor();
             scrollDiv("The Quest is complete! Giving you as the sponsor adventure cards!");
@@ -403,7 +414,7 @@ function subscriptions() {
               //this player refused to join the quest;
               //finishTurn();//increment the currentActivePlayer and move to the next player
               disableButtons();
-              scrollDiv("you decided not to Join the Quest! So we're skipping you're turn :P");
+              scrollDiv("You decided not to Join the Quest! So we're skipping you're turn :P");
               finishTurn();
               displayTurnIndicator(false)
             }
@@ -445,7 +456,7 @@ function subscriptions() {
         //if the story card type is numm it means they might be the first player
         newRound();
         displayTurnIndicator(true)
-        scrollDiv("pick a story card");
+        scrollDiv("Pick a story card");
         stompClient.send("/app/clearTournament", {});
 
 

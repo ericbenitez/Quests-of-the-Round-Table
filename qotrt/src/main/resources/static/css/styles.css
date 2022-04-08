@@ -11,7 +11,7 @@ html {
   align-items: center;
   justify-content: center;
   background: #eee;
-  
+  text-align: center;
 }
 button {
     outline: none;
@@ -56,9 +56,15 @@ button {
 }
 #storyCards{
     height: 100px;
-    width: 50px;
-    background-color: yellowgreen;
+    width: 69px;
+    background-color: brown;
     margin: 5rem;
+    font-size: initial;
+    align-content: center;
+    text-align: center;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .disableStoryCard{
@@ -71,18 +77,29 @@ button {
 
 #adventureCards{
     height: 100px;
-    width:50px;
-    background-color: blueviolet;
+    width: 69px;
+    background-color: cadetblue;
     margin: 5rem;
-
+    font-size: initial;
+    align-content: center;
+    text-align: center;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 #activeStoryCard {
     height: 100px;
-    width: 50px;
-    background-color: blue;
+    width: 69px;
+    background-color: mediumpurple;
     margin: 5rem;
+    font-size: initial;
+    align-content: center;
+    text-align: center;
     display: none;
+    justify-content: flex-start;
+    align-items: center;
+    word-break: break-all;
 }
 
 #everythingQuest{

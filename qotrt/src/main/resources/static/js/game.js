@@ -72,13 +72,13 @@ function scrollDiv(text){
     const current = new Date();
              // By default US English uses 12hr time with AM/PM
     const time = current.toLocaleTimeString("en-US");
-    let dateNode = document.createTextNode(" " + time);
+    let dateNode = document.createTextNode("[" + time + "] ");
     var breakPt = document.createElement('br');
     
     ele.appendChild(breakPt);   
-    ele.appendChild(txt);
-    ele.appendChild(breakPt);   
     ele.appendChild(dateNode);
+    ele.appendChild(breakPt);   
+    ele.appendChild(txt);
     ele.appendChild(breakPt);
 
 }
