@@ -122,7 +122,7 @@ public class CardObjects {
 
     for (int i = 0; i < 2; ++i) {
     //this.storyCards.add(new Quest("Vanquish King Arthur's Enemies", 3, null));
-      this.storyCards.add(new Quest("Boar Hunt", 2, "Boar"));
+      // this.storyCards.add(new Quest("Boar Hunt", 2, "Boar"));
      //this.storyCards.add(new Quest("Repel the Saxon Raiders", 2, "All"));
     }
 
@@ -132,7 +132,11 @@ public class CardObjects {
     // this.storyCards.add(new Tournament("At Tintagel", 1));
     // this.storyCards.add(new Tournament("At York", 0));
 
+    this.storyCards.add(new Quest("Boar Hunt", 2, "Boar"));
+    this.storyCards
+        .add(new EventCard(new Pox(), "Pox", "All players except the player drawing this card lose 1 shield."));
 
+    
     
     Collections.shuffle(this.adventureCards);
     // Collections.shuffle(this.storyCards);

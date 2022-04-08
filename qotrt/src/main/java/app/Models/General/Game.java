@@ -52,14 +52,7 @@ public class Game implements Mediator { // Main = Game
     player.setMediator(this);
     this.players.add(player); // add to array
 
-    // TODO: remove this too ok
-    // player.updateShields(2);
     
-    if (count == 0) {
-      // TODO: REMOVE THIS
-      player.updateShields(1);
-      count++;
-    }
     // player.drawCards(12); in the game controller now
     return player;
   }
@@ -164,6 +157,7 @@ public class Game implements Mediator { // Main = Game
         this.currentQuest.getParticipantsId().remove(playerId);
       }
 
+      // on last stage
       if (currentQuest.getCurrentStageNumber() > Integer.parseInt(currentQuest.getTotalStages())) {
         currentPlayer.setAmour(null);
       }
