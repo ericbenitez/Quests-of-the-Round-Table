@@ -133,24 +133,28 @@ public class Game implements Mediator { // Main = Game
     for (Map.Entry<Integer, ArrayList<String>> entry : clientStage.entrySet()) {
       Integer playerId = entry.getKey();
       ArrayList<String> cards = entry.getValue();
+      Player currentPlayer = this.getPlayerById(playerId);
       // remove the loserfrom the participants id if they dont have battlepoints
       // higher than sponsor
       for (String cardName : cards) {
         AdventureCard card = this.cardObjects.getCardByName(cardName);
-        if (!(card instanceof Ally)) {
+        if (!(card instanceof Ally) && !(card instanceof Amour)) {
           playerBattlePoints += card.getBattlePoints();
-        }
+        } 
       }
 
-      Player currentPlayer = this.getPlayerById(playerId);
       playerBattlePoints += currentPlayer.getRankPts();
       playerBattlePoints += calcAllyPtsForPlayer(playerId);
       if (currentPlayer.getAmour() != null) {
         playerBattlePoints += currentPlayer.getAmour().getBattlePoints();
-      }
+      } 
 
       if (playerBattlePoints < sponsorBattlePoints) {
         this.currentQuest.getParticipantsId().remove(playerId);
+      }
+      
+      if (currentQuest.getCurrentStageNumber() > Integer.parseInt(currentQuest.getTotalStages())) {
+        currentPlayer.setAmour(null);
       }
     }
 
@@ -192,8 +196,7 @@ public class Game implements Mediator { // Main = Game
       }
     }
     Player p = this.getPlayerById(playerId);
-    p.drawCards(numOfAdvCards);
-
+    p.drawCards(numOfAdvCards + stages.size());
   }
 
   // Helper function - Given a playerId, calculates and returns the battle pts for

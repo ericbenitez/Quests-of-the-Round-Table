@@ -3,7 +3,7 @@ function subscriptions() {
 
   stompClient.subscribe("/topic/getShields", function (response) {
     const players = JSON.parse(response.body)
-    
+
     for (const player of players) {
       if (player.id == playerId) {
         const shieldsDiv = document.getElementById("shields")
@@ -11,6 +11,7 @@ function subscriptions() {
         shieldsDiv.append(document.createTextNode(`You have ${player.shields} shields.`))
       }
     }
+    clearStageCards();
   })
 
 
@@ -49,7 +50,7 @@ function subscriptions() {
         break;
       }
     }
-    
+
     if (serverData.currentActivePlayer === playerId) {
       scrollDiv("An event has been played, select 'Finish Turn'!")
     }
@@ -67,7 +68,7 @@ function subscriptions() {
     // if its us...
     if (playerId === serverData.currentActivePlayer) {
       displayTurnIndicator(true)
-      
+
       const isSponsoring = confirm("Do you want to sponsor?");
       if (isSponsoring) {
         scrollDiv("Cool, you can press on the button Sponsor Quest button!")
@@ -382,10 +383,10 @@ function subscriptions() {
               //pick cards for this stage
               //they've already joined the quset, they have to pick cards for the next stage or withdraw
               currentStageNumber = currentStoryCard.currentStageNumber;
-              displayTurnIndicator(true)
+              displayTurnIndicator(true);
 
               if (playerHand.length < 12) {
-                getAdventureCards()
+                getAdventureCards();
               }
 
               scrollDiv("Pick cards for stage # " + currentStoryCard.currentStageNumber);
@@ -451,6 +452,7 @@ function subscriptions() {
         displayTurnIndicator(true)
         scrollDiv("Pick a story card");
         stompClient.send("/app/clearTournament", {});
+
 
 
       }

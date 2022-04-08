@@ -9,7 +9,7 @@ public class KingsRecognition implements EventBehaviour {
   @Override
   public String playEvent(ArrayList<Player> players, Player drawer) {
     for (Player player: players) {
-      player.updateShields(2);
+      player.updateShields(1);
     }
     
     return "The next player(s) to complete a Quest will receive 2 extra shields";

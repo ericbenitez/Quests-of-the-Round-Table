@@ -21,6 +21,7 @@ import app.Controllers.dto.DoubleArrayMessage;
 import app.Controllers.dto.Message;
 import app.Controllers.dto.ShieldMessage;
 import app.Models.AdventureCards.AdventureCard;
+import app.Models.AdventureCards.Amour;
 import app.Models.AdventureCards.Test;
 import app.Models.General.Card;
 import app.Models.General.FilteredPlayer;
@@ -500,7 +501,17 @@ public String testWinner(ArrayList<Integer> participantsId){
     
     Quest quest = this.gameService.getCurrentGame().getCurrentQuest();
     quest.setClientStage(playerId, cards);
-
+    
+    // set amour cards
+    Player player = this.gameService.getCurrentGame().getPlayerById(playerId);
+    for (String cardName: cards) {
+      AdventureCard card = this.gameService.getCardByName(cardName);
+      
+      if (card instanceof Amour && player.getAmour() == null) {
+          player.setAmour((Amour) card);
+      }
+    }
+  
     //setting the active ally for the player
     this.gameService.setActiveAlliesFromQuestStage(playerId,cards);
     

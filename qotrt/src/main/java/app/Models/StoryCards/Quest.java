@@ -115,7 +115,6 @@ public class Quest extends StoryCard {
   
     public void setClientStage(int playerId, ArrayList<String> cards) {
         clientStage.put(playerId, cards);
-
     }
 
 

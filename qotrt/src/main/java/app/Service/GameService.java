@@ -567,5 +567,8 @@ public class GameService {
         return this.currentGame.getCurrentTournament().incrementRound();
     }
 
+    public AdventureCard getCardByName(String cardName) {
+        return this.cards.getCardByName(cardName);
+    }
 }
 

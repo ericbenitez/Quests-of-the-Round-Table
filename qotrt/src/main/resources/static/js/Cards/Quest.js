@@ -58,7 +58,7 @@ function stageNumCards() {
         globalAmountOfTests = 0;
         globalAmountOfAmours = 0;
     }
-    
+
     let checkedString = getAllChecked(); //returns checked cards
     let checked = getActualCards(checkedString);
     console.log("This is checked!", checked);
@@ -79,7 +79,7 @@ function stageNumCards() {
     let amountOfFoes = 0;
     let amountOfTests = 0;
     let amountOfAmours = 0;
-    
+
     console.log(playerHand)
     const processedNames = [];
 
@@ -138,7 +138,7 @@ function stageNumCards() {
                     amountOfTests++;
                 }
             }
-            
+
             if (card.cardType == "Amour") {
                 if (globalAmountOfAmours >= 1) {
                     alert("You can only have 1 amour when sponsoring the quest!")
@@ -291,7 +291,7 @@ function placeTestBid() {
             buttonTestBid.parentNode.removeChild(buttonTestBid);
             stompClient.send("/app/placeTestBid", {}, JSON.stringify({ 'bids': checkedString }))
             removeCardsFromHand(checkedString); //remove them from hand (server) + UI
-           
+
         }
 
         else {
@@ -303,8 +303,18 @@ function placeTestBid() {
 }
 
 
-function showStage(stageNum){
-    
+function showStage(stageNum) {
+
     stompClient.send("/app/showStage", {});
+}
+
+
+
+function clearStageCards() {
+    let playerCardsDiv = document.getElementById("stages");
+    while (playerCardsDiv.firstChild) {
+        playerCardsDiv.removeChild(playerCardsDiv.firstChild);
+    }
+
 }
 

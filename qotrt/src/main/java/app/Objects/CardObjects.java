@@ -49,8 +49,9 @@ public class CardObjects {
       // this.adventureCards.add(new Test("Test of Morgan Le Fey", 3));
     }
     for (int i = 0; i < 15; i++) {
-      this.adventureCards.add(new Foe("Thieves", 5));
-      this.adventureCards.add(new Foe("Saxon Knight", 15, 25));
+      this.adventureCards.add(new Foe("Thieves", 1));
+      this.adventureCards.add(new Foe("Saxon Knight", 2, 25));
+      
       if (i < 7) {
         // this.adventureCards.add(new Foe("Robber Knight", 15));
       }
@@ -79,7 +80,7 @@ public class CardObjects {
     // this.adventureCards.add(new Foe("Dragon", 50, 70));
 
     for (int i = 0; i < 8; i++) {
-      // this.adventureCards.add(new Amour("Amour", "", 10, 1));
+      this.adventureCards.add(new Amour("Amour", "", 10, 1));
     }
 
     // for (int i = 0; i < 2; i++) {
