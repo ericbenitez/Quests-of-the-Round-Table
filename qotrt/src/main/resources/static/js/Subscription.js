@@ -366,7 +366,6 @@ function subscriptions() {
               displayTurnIndicator(true)
               if (data.testInPlay) {
                 // draw adventure card before bidding
-                getAdventureCards();
                 scrollDiv("This is a test");
                 let placeBidButton = document.createElement("button");
                 var t = document.createTextNode("Place Bid (Test)");
@@ -386,7 +385,7 @@ function subscriptions() {
               currentStageNumber = currentStoryCard.currentStageNumber;
               displayTurnIndicator(true);
 
-              if (playerHand.length < 12 && data.testInPlay) {
+              if (playerHand.length < 12 ) {
                 getAdventureCards()
               }
 
@@ -394,7 +393,6 @@ function subscriptions() {
 
               if (data.testInPlay) {
                 // draw adventure card before bidding
-                getAdventureCards();
                 scrollDiv("This is a test");
                 let placeBidButton = document.createElement("button");
                 var t = document.createTextNode("Place Bid (Test)");

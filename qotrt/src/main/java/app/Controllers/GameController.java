@@ -192,6 +192,7 @@ public class GameController {
     currSession.tournamentInPlay=gameService.getTournamentInPlay(); //bool
     
     //if we round back to the sponsor, the stage goes up
+    currSession.testInPlay = (gameService.getCurrentGame().getCurrentQuest().getQuestIncludesTest() && (gameService.getCurrentGame().getCurrentQuest().getTestInStage() == gameService.getCurrentGame().getCurrentQuest().getCurrentStageNumber()));
     if(gameService.getQuestInPlay() && gameService.getCurrentActivePlayer()==gameService.getCurrentGame().getCurrentQuest().getSponsor()){
       if(!currSession.testInPlay){
         System.out.println("Rounding back to the sponsor!");
@@ -287,9 +288,6 @@ public class GameController {
             //alert the player to click finish turn,ok
         }
     }
-
-    
-    
 
     currSession.winners = gameService.getWinners();
    

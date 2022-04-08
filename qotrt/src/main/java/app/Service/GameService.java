@@ -157,9 +157,7 @@ public class GameService {
 
     public void withdrawQuest(String id) {
         int playerId = Integer.parseInt(id);
-        if (playerId > this.currentGame.getPlayers().size() || playerId - 1 < 0) {
-            return;
-        }
+      
         this.currentGame.getCurrentQuest().withdrawParticipant(playerId);
     }
 
