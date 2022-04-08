@@ -369,6 +369,7 @@ function subscriptions() {
               scrollDiv("click join quest");
               displayTurnIndicator(true)
               if (data.testInPlay) {
+                // draw adventure card before bidding
                 scrollDiv("This is a test");
                 let placeBidButton = document.createElement("button");
                 var t = document.createTextNode("Place Bid (Test)");
