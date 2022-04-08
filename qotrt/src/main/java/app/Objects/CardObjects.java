@@ -15,8 +15,8 @@ public class CardObjects {
     this.adventureCards.add(new Ally("Sir Percival", 5, -1));
     this.adventureCards.add(new Ally("Sir Tristan", 10, -1));
     this.adventureCards.add(new Ally("King Arthur", 10, 2));
-    this.adventureCards.add(new Ally("Queen Guinevere", -1, 3));
-    this.adventureCards.add(new Ally("Queen Iseult", -1, 2));
+    // this.adventureCards.add(new Ally("Queen Guinevere", 0, 3));
+    // this.adventureCards.add(new Ally("Queen Iseult", 0, 2));
     this.adventureCards.add(new Ally("Sir Lancelot", 15, -1));
     this.adventureCards.add(new Ally("Sir Galahad", 15, -1));
 
@@ -41,46 +41,46 @@ public class CardObjects {
 
     //TODO: should be 2
     for (int i = 0; i < 8; i++) {
-      this.adventureCards.add(new Test("Test of the Questing Beast"));
-      this.adventureCards.add(new Test("Test of Temptation"));
-      this.adventureCards.add(new Test("Test of Valor"));
-      this.adventureCards.add(new Test("Test of Morgan Le Fey", 3));
+      // this.adventureCards.add(new Test("Test of the Questing Beast"));
+      // this.adventureCards.add(new Test("Test of Temptation"));
+      // this.adventureCards.add(new Test("Test of Valor"));
+      // this.adventureCards.add(new Test("Test of Morgan Le Fey", 3));
     }
     for (int i = 0; i < 8; i++) {
-      this.adventureCards.add(new Foe("Thieves", 5));
-      this.adventureCards.add(new Foe("Saxon Knight", 15, 25));
-      if (i < 7) {
-        this.adventureCards.add(new Foe("Robber Knight", 15));
-      }
-      if (i < 6) {
-        this.adventureCards.add(new Foe("Evil Knight", 20, 30));
-      }
-      if (i < 5) {
-        this.adventureCards.add(new Foe("Saxons", 10, 20));
-      }
-      if (i < 4) {
-        this.adventureCards.add(new Foe("Mordred", 30));
-        this.adventureCards.add(new Foe("Boar", 5, 15));
-      }
-      if (i < 3) {
-        this.adventureCards.add(new Foe("Black Knight", 25, 35));
-      }
-      if (i < 2) {
-        this.adventureCards.add(new Foe("Giant", 40));
-        this.adventureCards.add(new Foe("Green Knight", 25, 40));
-      }
+      this.adventureCards.add(new Foe("Thieves", 1));
+      this.adventureCards.add(new Foe("Saxon Knight", 2, 25));
+      // if (i < 7) {
+      //   this.adventureCards.add(new Foe("Robber Knight", 15));
+      // }
+      // if (i < 6) {
+      //   this.adventureCards.add(new Foe("Evil Knight", 20, 30));
+      // }
+      // if (i < 5) {
+      //   this.adventureCards.add(new Foe("Saxons", 10, 20));
+      // }
+      // if (i < 4) {
+      //   this.adventureCards.add(new Foe("Mordred", 30));
+      //   this.adventureCards.add(new Foe("Boar", 5, 15));
+      // }
+      // if (i < 3) {
+      //   this.adventureCards.add(new Foe("Black Knight", 25, 35));
+      // }
+      // if (i < 2) {
+      //   this.adventureCards.add(new Foe("Giant", 40));
+      //   this.adventureCards.add(new Foe("Green Knight", 25, 40));
+      // }
     }
-    this.adventureCards.add(new Foe("Dragon", 50, 70));
+    // this.adventureCards.add(new Foe("Dragon", 50, 70));
 
     for (int i = 0; i < 8; i++) {
-      this.adventureCards.add(new Amour("Amour", "", 10, 1));
+      // this.adventureCards.add(new Amour("Amour", "", 10, 1));
     }
 
     // this.storyCards.add(new EventCard(new KingsRecognition(), "King's Recognition",
     //     "The next player(s) to complete a Quest will receive 2 extra shields."));
     // for (int i = 0; i < 2; i++) {
-    //   this.storyCards.add(new EventCard(new QueensFavor(), "Queens Favour",
-    //       "The lowest ranked player(s) immediately receives 2 Adventure Cards."));
+      // this.storyCards.add(new EventCard(new QueensFavor(), "Queens Favour",
+      //     "The lowest ranked player(s) immediately receives 2 Adventure Cards."));
     //   this.storyCards.add(new EventCard(new CourtCalledToCamelot(), "Court Called To Camelot",
     //       "All Allies in play must be discarded."));
     // }
@@ -122,7 +122,7 @@ public class CardObjects {
 
    for (int i = 0; i < 2; ++i) {
     //this.storyCards.add(new Quest("Vanquish King Arthur's Enemies", 3, null));
-     this.storyCards.add(new Quest("Boar Hunt", 2, "Boar"));
+    //  this.storyCards.add(new Quest("Boar Hunt", 2, "Boar"));
      //this.storyCards.add(new Quest("Repel the Saxon Raiders", 2, "All"));
     }
 
@@ -132,8 +132,16 @@ public class CardObjects {
     // this.storyCards.add(new Tournament("At Tintagel", 1));
     // this.storyCards.add(new Tournament("At York", 0));
 
+    
+    // rigging
+    // this.storyCards.add(new Quest("Boar Hunt", 1, "Boar")); // set allies
+    this.storyCards.add(new EventCard(new KingsCallToArms(), "King's Call To Arms","The highest ranked player(s) must place 1 weapon in the discard pile. If unable to do so, 2 Foe Cards must be discarded."));
+    this.storyCards.add(new Quest("Boar Hunt", 1, "Boar")); // see if allies were removed
+
+
+    
     Collections.shuffle(this.adventureCards);
-    Collections.shuffle(this.storyCards);
+    // Collections.shuffle(this.storyCards);
   }
   
   //getter

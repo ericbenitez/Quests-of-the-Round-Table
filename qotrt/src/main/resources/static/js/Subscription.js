@@ -11,8 +11,9 @@ function subscriptions() {
         shieldsDiv.append(document.createTextNode(`You have ${player.shields} shields.`))
       }
     }
-    clearStageCards();
-  })
+
+
+  });
 
 
   stompClient.subscribe("/topic/showStage", function (response) { //response = currentActiveplayer 
@@ -158,19 +159,20 @@ function subscriptions() {
     // remove amour
     let index = 0;
     for (const cardName of playerHand) {
-      const card = CardObjects[cardName]
+      const card = CardObjects[cardName];
 
       if (card) {
         if (card.cardType === "Amour") {
-          playerHand.remove(index)
-          removeUsedCardsServer([cardName])
+          playerHand.remove(index);
+          removeUsedCardsServer([cardName]);
         }
       }
 
       index++;
     }
 
-    stompClient.send("/app/getShields")
+    stompClient.send("/app/getShields");
+    clearStageCards();
 
     scrollDiv("Congratulations to: " + data);
   });
@@ -246,6 +248,8 @@ function subscriptions() {
   // subscribe to "wait for server to tell client to start"
   stompClient.subscribe("/topic/startTurn", (response) => { // does not get called
     serverData.currentActivePlayer = response.body * 1;
+
+    stompClient.send("/app/getShields")
 
     // hide new game container
     const newGameContainer = document.getElementById("new-game-container")
@@ -353,7 +357,7 @@ function subscriptions() {
             scrollDiv("The Quest is complete! Giving you as the sponsor adventure cards!");
             //send some server things to clear the current quest
             stompClient.send("/app/rewardSponsor");
-            stopmClient.send("/app/setQuestInPlayFalse");
+            stompClient.send("/app/setQuestInPlayFalse");
 
             getPlayerHand();
           }
@@ -365,8 +369,6 @@ function subscriptions() {
               scrollDiv("click join quest");
               displayTurnIndicator(true)
               if (data.testInPlay) {
-                // draw adventure card before bidding
-                getAdventureCards();
                 scrollDiv("This is a test");
                 let placeBidButton = document.createElement("button");
                 var t = document.createTextNode("Place Bid (Test)");
@@ -386,7 +388,7 @@ function subscriptions() {
               currentStageNumber = currentStoryCard.currentStageNumber;
               displayTurnIndicator(true);
 
-              if (playerHand.length < 12 && data.testInPlay) {
+              if (playerHand.length < 12) {
                 getAdventureCards()
               }
 
@@ -394,7 +396,6 @@ function subscriptions() {
 
               if (data.testInPlay) {
                 // draw adventure card before bidding
-                getAdventureCards();
                 scrollDiv("This is a test");
                 let placeBidButton = document.createElement("button");
                 var t = document.createTextNode("Place Bid (Test)");
@@ -468,4 +469,4 @@ function subscriptions() {
   });
 
 }
-  //~~~~~~~~~~~~~Subscription ends here~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//~~~~~~~~~~~~~Subscription ends here~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

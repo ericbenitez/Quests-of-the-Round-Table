@@ -43,12 +43,23 @@ public class Game implements Mediator { // Main = Game
     return numOfPlayers;
   }
 
+  public static int count = 0;
+
   public Player registerPlayer(Player player) {
     if (players.size() >= numOfPlayers) {
       return null; // we should throw an exception instead...
     }
     player.setMediator(this);
     this.players.add(player); // add to array
+
+    // TODO: remove this too ok
+    // player.updateShields(2);
+    
+    if (count == 0) {
+      // TODO: REMOVE THIS
+      player.updateShields(1);
+      count++;
+    }
     // player.drawCards(12); in the game controller now
     return player;
   }
@@ -71,7 +82,7 @@ public class Game implements Mediator { // Main = Game
       index = currentQuest.getCurrentStageNumber() - 1;
     }
 
-    ArrayList<String> currentSponsorStage = stages.get(index - 1);
+    ArrayList<String> currentSponsorStage = stages.get(index);
 
     // calculate sponsor battlepoints for stage
     for (String nameOfCard : currentSponsorStage) {
@@ -140,19 +151,19 @@ public class Game implements Mediator { // Main = Game
         AdventureCard card = this.cardObjects.getCardByName(cardName);
         if (!(card instanceof Ally) && !(card instanceof Amour)) {
           playerBattlePoints += card.getBattlePoints();
-        } 
+        }
       }
 
       playerBattlePoints += currentPlayer.getRankPts();
       playerBattlePoints += calcAllyPtsForPlayer(playerId);
       if (currentPlayer.getAmour() != null) {
         playerBattlePoints += currentPlayer.getAmour().getBattlePoints();
-      } 
+      }
 
       if (playerBattlePoints < sponsorBattlePoints) {
         this.currentQuest.getParticipantsId().remove(playerId);
       }
-      
+
       if (currentQuest.getCurrentStageNumber() > Integer.parseInt(currentQuest.getTotalStages())) {
         currentPlayer.setAmour(null);
       }
@@ -205,8 +216,8 @@ public class Game implements Mediator { // Main = Game
     Player player = this.getPlayerById(playerId);
     int totalPts = 0;
 
-    ArrayList<Ally> activeAllies = new ArrayList<>(); /* player.getActiveAllies(); */ // change once we have the actual
-                                                                                      // arraylist
+    ArrayList<Ally> activeAllies = player.getActiveAllies();
+
     for (Ally ally : activeAllies) {
       totalPts += ally.getBattlePoints(this.getCurrentQuest().getName(), activeAllies);
     }

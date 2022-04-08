@@ -30,7 +30,7 @@
     <button id="create-game-button" onclick="createGame()">Create Game</button>
   </div>
 
-  
+
 
   <div id="new-player-join">
     <br>
@@ -48,9 +48,9 @@
   </div>
 
   <div id="gameArea">
-    <div id="turnIndicator" >Waiting...</div>
+    <div id="turnIndicator">Waiting...</div>
     <br>
-    
+
     <div id="gameBoard">
       <div id="rankAndInfo">
         <img src="squire.png" alt="Squire Rank - 5 battle points" id="squire" class="rankCard">
@@ -61,12 +61,12 @@
           <div id="playerInfoRank"></div>
         </div>
       </div>
-      
+
       <br>
 
       <div id="eventMessage"></div>
       <br>
-      
+
       <div id="scrollDiv" class="scroll"></div>
 
       <div id="cardContainer">
@@ -79,7 +79,7 @@
         <div id="quest">Placeholder for sponsor</div>
         <div id="stages">Stages </div> <!-- we will have to use js to display/hide whenever needed-->
       </div>
-      <!-- Pop up to display tournament cards, as well as winner(s)/result --> 
+      <!-- Pop up to display tournament cards, as well as winner(s)/result -->
       <div id="tournament">
         <h1>Tournament</h1>
         <div id="playerCardsTourn">
@@ -95,7 +95,7 @@
               <div id="player2Total" class="playerTotal">Total:</div>
             </div>
           </div>
-          <div class="tournRow" >
+          <div class="tournRow">
             <div id="Player3Tourn" class="playerTourn">
               <p>Player 3</p>
               <div id="player3Cards" class="allCardsT">
@@ -111,7 +111,7 @@
         </div>
         <h1>Winner</h1>
         <div id="tournResults">
-          
+
         </div>
       </div>
       <!--current player-->
@@ -142,7 +142,7 @@
       <div id="placeCardButtons">
         <button id="discardCardButton" onclick="removeSelectedCards()">Discard Cards</button>
         <button id="bidReadyButton" onclick="placeCardsTournament()">Bid</button>
-        
+
       </div>
     </div>
   </div>
@@ -150,10 +150,10 @@
 
   <!-- Just for testing -->
   <div id="battlePoints"></div> <!-- To display the total battle points for a player in a stage -->
- 
-  
+
+
   <!-- TODO will be called automatically -->
-  <!-- <button onclick="clearPlayerStageCards()">Clears player stage cards</button> --> 
+  <!-- <button onclick="clearPlayerStageCards()">Clears player stage cards</button> -->
   <!-- <button onclick="showCurrentStage()">Show current stage</button> -->
 
   <!-- Pop up To ask Player if they want to join tournament -->
@@ -164,11 +164,11 @@
       <button onclick="joinTournament('yes')">Yes</button>
       <button onclick="joinTournament('no')">No</button>
     </div>
-    
+
   </div>
 
 
-  <!-- <button onclick="getPlayerHand()">getPlayerHand</button> -->
+  <button onclick="getPlayerHand()">getPlayerHand</button>
 
   <script src="./js/Cards/AdventureCards.js"></script>
   <script src="./js/Cards/Event.js"></script>

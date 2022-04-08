@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import app.Models.General.*;
 
 public class Pox implements EventBehaviour {
-   
-   
     public String playEvent(ArrayList<Player> players, Player drawer) {
 
         for(int i = 0; i < players.size(); i++){

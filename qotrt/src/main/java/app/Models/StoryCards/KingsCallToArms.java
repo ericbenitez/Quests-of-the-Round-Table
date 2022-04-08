@@ -27,6 +27,7 @@ public class KingsCallToArms implements EventBehaviour {
         for (AdventureCard card: player.getCards()) {
           if (card.getAdventureCardType() == AdventureCardType.Weapon) {
             weapon = (Weapon) card;
+            player.discardCard(weapon.getName());
             break;
           }
         }
