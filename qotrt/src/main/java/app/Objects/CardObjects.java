@@ -10,41 +10,41 @@ public class CardObjects {
   ArrayList<StoryCard> storyCards = new ArrayList<StoryCard>();
   
   public CardObjects() {
-    this.adventureCards.add(new Ally("Sir Gawain", 10, -1));
-    this.adventureCards.add(new Ally("King Pellinore", 10, -1));
-    this.adventureCards.add(new Ally("Sir Percival", 5, -1));
-    this.adventureCards.add(new Ally("Sir Tristan", 10, -1));
-    this.adventureCards.add(new Ally("King Arthur", 10, 2));
-    // this.adventureCards.add(new Ally("Queen Guinevere", 0, 3));
-    // this.adventureCards.add(new Ally("Queen Iseult", 0, 2));
-    this.adventureCards.add(new Ally("Sir Lancelot", 15, -1));
-    this.adventureCards.add(new Ally("Sir Galahad", 15, -1));
+    // this.adventureCards.add(new Ally("Sir Gawain", 10, -1));
+    // this.adventureCards.add(new Ally("King Pellinore", 10, -1));
+    // this.adventureCards.add(new Ally("Sir Percival", 5, -1));
+    // this.adventureCards.add(new Ally("Sir Tristan", 10, -1));
+    // this.adventureCards.add(new Ally("King Arthur", 10, 2));
+    // // this.adventureCards.add(new Ally("Queen Guinevere", 0, 3));
+    // // this.adventureCards.add(new Ally("Queen Iseult", 0, 2));
+    // this.adventureCards.add(new Ally("Sir Lancelot", 15, -1));
+    // this.adventureCards.add(new Ally("Sir Galahad", 15, -1));
 
-    for (int i = 0; i < 11; i++) {
-      this.adventureCards.add(new Weapon("Horse", 10));
+    // for (int i = 0; i < 11; i++) {
+    //   this.adventureCards.add(new Weapon("Horse", 10));
+    // }
+    // for (int i = 0; i < 16; i++) {
+    //   this.adventureCards.add(new Weapon("Sword", 10));
+    // }
+    for (int i = 0; i < 15; i++) {
+      this.adventureCards.add(new Weapon("Dagger", 50));
     }
-    for (int i = 0; i < 16; i++) {
-      this.adventureCards.add(new Weapon("Sword", 10));
-    }
-    for (int i = 0; i < 6; i++) {
-      this.adventureCards.add(new Weapon("Dagger", 5));
-    }
-    for (int i = 0; i < 2; i++) {
-      this.adventureCards.add(new Weapon("Excalibur", 30));
-    }
-    for (int i = 0; i < 6; i++) {
-      this.adventureCards.add(new Weapon("Lance", 20));
-    }
-    for (int i = 0; i < 8; i++) {
-      this.adventureCards.add(new Weapon("Battle-ax", 15));
-    }
+    // for (int i = 0; i < 2; i++) {
+    //   this.adventureCards.add(new Weapon("Excalibur", 30));
+    // }
+    // for (int i = 0; i < 6; i++) {
+    //   this.adventureCards.add(new Weapon("Lance", 20));
+    // }
+    // for (int i = 0; i < 8; i++) {
+    //   this.adventureCards.add(new Weapon("Battle-ax", 15));
+    // }
 
     //TODO: should be 2
     for (int i = 0; i < 8; i++) {
-      // this.adventureCards.add(new Test("Test of the Questing Beast"));
-      // this.adventureCards.add(new Test("Test of Temptation"));
-      // this.adventureCards.add(new Test("Test of Valor"));
-      // this.adventureCards.add(new Test("Test of Morgan Le Fey", 3));
+      this.adventureCards.add(new Test("Test of the Questing Beast"));
+      this.adventureCards.add(new Test("Test of Temptation"));
+      this.adventureCards.add(new Test("Test of Valor"));
+      this.adventureCards.add(new Test("Test of Morgan Le Fey", 3));
     }
     for (int i = 0; i < 8; i++) {
       this.adventureCards.add(new Foe("Thieves", 1));
@@ -120,9 +120,9 @@ public class CardObjects {
     // this.storyCards.add(new Quest("Test of the Green Knight", 4, "Green Knight"));
     // this.storyCards.add(new Quest("Journey Through the Enchanted Forest",3,"Evil Knight"));
 
-   for (int i = 0; i < 2; ++i) {
+    for (int i = 0; i < 2; ++i) {
     //this.storyCards.add(new Quest("Vanquish King Arthur's Enemies", 3, null));
-    //  this.storyCards.add(new Quest("Boar Hunt", 2, "Boar"));
+      this.storyCards.add(new Quest("Boar Hunt", 2, "Boar"));
      //this.storyCards.add(new Quest("Repel the Saxon Raiders", 2, "All"));
     }
 
@@ -131,12 +131,6 @@ public class CardObjects {
     // this.storyCards.add(new Tournament("At Orkney", 2));
     // this.storyCards.add(new Tournament("At Tintagel", 1));
     // this.storyCards.add(new Tournament("At York", 0));
-
-    
-    // rigging
-    // this.storyCards.add(new Quest("Boar Hunt", 1, "Boar")); // set allies
-    this.storyCards.add(new EventCard(new KingsCallToArms(), "King's Call To Arms","The highest ranked player(s) must place 1 weapon in the discard pile. If unable to do so, 2 Foe Cards must be discarded."));
-    this.storyCards.add(new Quest("Boar Hunt", 1, "Boar")); // see if allies were removed
 
 
     

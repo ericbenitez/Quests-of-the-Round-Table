@@ -82,8 +82,8 @@ function subscriptions() {
 
 
   stompClient.subscribe("/topic/testWinner", function (response) {
-    let data = JSON.parse(response.body);
-    scrollDiv("The test was won by " + data);
+    let playerName = response.body;
+    scrollDiv("The test was won by " + playerName);
   })
 
 

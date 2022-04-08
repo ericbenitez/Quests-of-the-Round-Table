@@ -171,7 +171,7 @@ public class GameController {
   @MessageMapping("withdrawQuest")
   public void withdrawQuest(@RequestBody Message playerId) {
     gameService.withdrawQuest(playerId.getMessage());
-    finishTurn();//move on to the next player
+    finishTurnServer();//move on to the next player
   }
 
   @MessageMapping("/finishTurn")
@@ -293,9 +293,125 @@ public class GameController {
    
     return currSession;
   }
-
   
-  // @SendTo("/topic/testWinner")
+  public void finishTurnServer() {
+    if (gameService.getCurrentGame().getCurrentQuest() != null) {
+      if (gameService.getCurrentGame().getCurrentQuest().getSponsorAttempts() >= gameService.getCurrentGame().getPlayers().size()) {
+        gameService.setCurrentStoryCard(null);
+      }
+    }
+    
+    
+    Session currSession = new Session();
+
+    currSession.currentActivePlayer = gameService.startNextPlayer(); ///increments the player
+    currSession.currentStoryCard = gameService.getCurrentStoryCard(); //returns all the elments of that storyCard
+    currSession.questInPlay = gameService.getQuestInPlay(); //bool, changes this to false when you complete all stages.
+    currSession.tournamentInPlay=gameService.getTournamentInPlay(); //bool
+    
+    //if we round back to the sponsor, the stage goes up
+    currSession.testInPlay = (gameService.getCurrentGame().getCurrentQuest().getQuestIncludesTest() && (gameService.getCurrentGame().getCurrentQuest().getTestInStage() == gameService.getCurrentGame().getCurrentQuest().getCurrentStageNumber()));
+    if(gameService.getQuestInPlay() && gameService.getCurrentActivePlayer()==gameService.getCurrentGame().getCurrentQuest().getSponsor()){
+      if(!currSession.testInPlay){
+        System.out.println("Rounding back to the sponsor!");
+        gameService.getCurrentGame().getCurrentQuest().incrementCurrentStage();
+      } 
+      //withdraw from the quest
+      if(currSession.testInPlay && gameService.getCurrentGame().getCurrentQuest().getParticipantsId().size()==0) {//everyone dropped out with no bids
+        System.out.println("Everyone has dropped out of the test!");
+        gameService.getCurrentGame().getCurrentQuest().incrementCurrentStage();
+        currSession.testInPlay = false;
+      }
+      // withdraw from quest if you dont want to keep bidding in the test
+      //
+      if(currSession.testInPlay && gameService.getCurrentGame().getCurrentQuest().getParticipantsId().size()==1) { //the winner
+        //some function to announce the winner and then takes cards of the test winner (last bid in test.bids is the number of cards we remove from the winner)
+        testWinner(gameService.getCurrentGame().getCurrentQuest().getParticipantsId());
+        System.out.println("There is a test winner!");
+        gameService.getCurrentGame().getCurrentQuest().incrementCurrentStage(); 
+        currSession.testInPlay = false;
+
+      }
+      if(currSession.testInPlay && gameService.getCurrentGame().getCurrentQuest().getParticipantsId().size()>1) { //test keeps going
+        currSession.currentActivePlayer = gameService.startNextPlayer(); //skip the sponsor
+        System.out.println("There are still more than 1 players in the quest!");
+      } 
+    }
+    
+    if (gameService.getQuestInPlay()) {
+      currSession.testInPlay = (gameService.getCurrentGame().getCurrentQuest().getQuestIncludesTest() && (gameService.getCurrentGame().getCurrentQuest().getTestInStage() == gameService.getCurrentGame().getCurrentQuest().getCurrentStageNumber()));
+      currSession.testCard= (currSession.testInPlay) ?  gameService.getCurrentGame().getCurrentQuest().getTestCard() : null;
+      System.out.println("Setting the test and test card");
+    }
+    // currSession.sponsorId = gameService.getCurrentGame().getCurrentQuest().getSponsor(); //id of the sponsor
+    // currSession.participantsId = gameService.getCurrentGame().getCurrentQuest().getParticipantsId();//id of the sponsor
+
+
+
+    //For Tournaments: 
+    
+    // last participant
+    //if (gameService.getTournamentInPlay() && gameService.getCurrentActivePlayer() == gameService.getCurrentGame().getCurrentTournament().getLastParticipantId()){
+
+    //}
+    if (gameService.getTournamentInPlay()){
+        Tournament currentTournament = gameService.getCurrentGame().getCurrentTournament();
+
+        //so when we loop back to the first participant
+        if(gameService.getTournamentInPlay() && gameService.getCurrentActivePlayer()==currentTournament.getFirstParticipantId()){
+            //getAllTournPlayerCards(); //right now this is triggered from the client in Tournament.js
+            System.out.println("The tournament has come to an end!");
+            //probably should set the tournament in play to false
+            int currentRound = gameService.incrementRound();
+
+
+            // first round played, and no tie => end of tournament
+            if (currentRound == 1 && !currentTournament.getTieOccured()){
+                System.out.println("gee: " + currentTournament.getTieOccured());
+                gameService.setTournamentInPlay(false);
+                currSession.tieBreakerPlayed = true;
+                gameService.setCurrentStoryCard(null);
+
+            }
+            
+            // first round played and tie occurred (so tie breaker round not yet played)
+            else if (currentRound == 1 && currentTournament.getTieOccured() && !currentTournament.getTieBreakerPlayed()){
+                currentTournament.setTieOccurred(false);
+                currSession.tieBreakerPlayed = true;
+            }
+
+            // tie breaker round played
+            // end tournamnet here
+            else if (currentRound == 2){
+                gameService.setTournamentInPlay(false);
+                currSession.tieBreakerPlayed = false;
+                currentTournament.setTieOccurred(false);
+                currentTournament.setTieBreakerPlayed(false);
+                gameService.setCurrentStoryCard(null);
+            }
+
+
+
+            // If there's a tie, but the tie breaker round has not been played yet
+           /* if (this.gameService.getCurrentGame().getCurrentTournament().getTieOccured() && !(this.gameService.getCurrentGame().getCurrentTournament().getTieBreakerPlayed())){
+            currSession.tieBreakerPlayed = true;
+            System.out.println("hello, im right here buf"); 
+            // this.gameService.getCurrentGame().getCurrentTournament().playingTieBreaker(); // sets tiebreakerplayed = true
+            }
+            if (this.gameService.getCurrentGame().getCurrentTournament().getTieBreakerPlayed() || this.gameService.getCurrentGame().getCurrentTournament().getTieOccured() == false){
+            gameService.setTournamentInPlay(false);
+            }*/
+            
+            
+            //alert the player to click finish turn,ok
+        }
+    }
+
+    currSession.winners = gameService.getWinners();
+    this.simpMessage.convertAndSend("/topic/finishTurn", currSession);
+  }
+
+
   public void testWinner(ArrayList<Integer> participantsId){
     String name = "";
     if(participantsId.size() == 1){
@@ -304,7 +420,6 @@ public class GameController {
       gameService.discardCards(Integer.toString(id), gameService.getCurrentGame().getCurrentQuest().getTestCard().getBids());
       name = player.getName();
     }
-    // return name;
     
     this.simpMessage.convertAndSend("/topic/testWinner", name);
   }
@@ -314,9 +429,6 @@ public class GameController {
   public Test nextStageIsTest() {
     return gameService.getCurrentGame().getCurrentQuest().getTestCard();
   }
-  
-
-  
 
   @MessageMapping("/placeTestBid")
   @SendTo("/topic/finishTurn") // {"message": "3"}
