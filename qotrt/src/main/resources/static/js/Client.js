@@ -289,8 +289,8 @@ function placeCardsQuest(btn) {
   // div.appendChild(document.createTextNode("P" + playerId));
   div.appendChild(document.createElement("br"));
   cardAtPlay.appendChild(div);
-  document.getElementById("cardsDown-" + playerId).addEventListener("click", turnCardsOver);
-  scrollDiv("Click 'Finish turn' if you're done setting your cards for stage " + currentStage);
+  //document.getElementById("cardsDown-" + playerId).addEventListener("click", turnCardsOver);
+  scrollDiv("Click complete turn if you're done setting your cards for stage " + currentStage);
   disableStageCardsAfterClick(btn);
 }
 
