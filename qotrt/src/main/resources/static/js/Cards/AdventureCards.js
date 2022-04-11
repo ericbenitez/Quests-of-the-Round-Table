@@ -43,7 +43,7 @@ function displayAllCards(cards) {
     //alert("cards total: " + theCards.length);
     for (let i = 0; i < cards.length; i++) {
         console.log("adding card to display: " + cards[i].name);
-        addACardDisplay(cards[i].name, "playerHand", true);
+        addACardDisplay(cards[i].name, cards[i].battlePoints, "playerHand", true);
     }
 }
 
@@ -51,7 +51,7 @@ function displayAllCards(cards) {
 
 // create and add a checkbox "card"
 // should take in a card name or something
-function addACardDisplay(cardName, divName, haveCheckBox) {
+function addACardDisplay(cardName, cardPts, divName, haveCheckBox) {
     let cards = document.getElementById(divName);
 
     // create div to contain checkbox and label
@@ -70,12 +70,18 @@ function addACardDisplay(cardName, divName, haveCheckBox) {
     let text = document.createTextNode(cardName);
     label.appendChild(text);
 
+    let ptsLabel = document.createElement("LABEL");
+    ptsLabel.setAttribute("for", cardName);
+    let ptsText = document.createTextNode(cardPts);
+    ptsLabel.appendChild(ptsText);
+
     // update div and add it
 
     if (haveCheckBox) {
         div.appendChild(checkBox);
     }
     div.appendChild(label);
+    if (haveCheckBox) { div.appendChild(ptsLabel); }
     if (!haveCheckBox) { div.appendChild(document.createElement("br")); }
     cards.appendChild(div);
 
@@ -181,10 +187,10 @@ function placeCards(cardsPlaced) {
 
     for (let i = 0; i < cardsPlaced.length; i++) {
         if (i < cardsPlaced.length - 1) {
-            addACardDisplay(cardsPlaced[i].name + ",", "placeCardsDiv" + currentStageNumber, false);
+            addACardDisplay(cardsPlaced[i].name + ",", cardsPlaced[i].battlePoints, "placeCardsDiv" + currentStageNumber, false);
         }
         else {
-            addACardDisplay(cardsPlaced[i].name, "placeCardsDiv" + currentStageNumber, false);
+            addACardDisplay(cardsPlaced[i].name, cardsPlaced[i].battlePoints, "placeCardsDiv" + currentStageNumber, false);
         }
 
     }
@@ -207,6 +213,7 @@ function turnCardsOver() {
     let currentStageNumber = serverData.currentStoryCard.currentStageNumber - 1;
     // remove the square for the player cards (what's currently in that div)
     const cardsDown = document.getElementById("cardsDown-" + playerId + currentStageNumber);
+    if (cardsDown == null) { return; }
     cardsDown.remove();
 
     // display the cards

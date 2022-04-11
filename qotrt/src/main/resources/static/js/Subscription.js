@@ -30,6 +30,7 @@ function subscriptions() {
     tieBreakerPlayed = false;
     tieOccurred = false;
     hideTournamentDisplay();
+    clearStageCards();
   });
 
   const playEventSubscription = stompClient.subscribe("/topic/playEvent", (response) => {
@@ -59,7 +60,7 @@ function subscriptions() {
 
   const transferQuestSubscription = stompClient.subscribe("/topic/transferQuest", (response) => {
     if (response.body * 1 === -1 && playerId === serverData.currentActivePlayer) {
-      finishTurn()
+      finishTurn(document.getElementById("finishTurn"))
       return
     }
 
@@ -172,7 +173,7 @@ function subscriptions() {
     }
 
     stompClient.send("/app/getShields");
-    clearStageCards();
+
 
     scrollDiv("Congratulations to: " + data);
   });
@@ -268,8 +269,8 @@ function subscriptions() {
 
     console.log("This is after initilizing", response.body);
     if (response.body * 1 !== 0 && response.body * 1 === playerId) {
-      displayTurnIndicator(true)
-      scrollDiv("Pick a Story Card");
+      displayTurnIndicator(true);
+      scrollDiv("Pick a Story Card"); // player 3
     }
   })
 
@@ -308,7 +309,7 @@ function subscriptions() {
     }
 
     if (data.currentActivePlayer === playerId) {
-      displayTurnIndicator(true)
+      displayTurnIndicator(true);
       //activate their buttons
 
       // this needs work vv
@@ -355,6 +356,7 @@ function subscriptions() {
             showStage(currentStageNumber);
             alreadyASponsor();
             scrollDiv("The Quest is complete! Giving you as the sponsor adventure cards!");
+            scrollDiv("Click on Finish turn");
             //send some server things to clear the current quest
             stompClient.send("/app/rewardSponsor");
             stompClient.send("/app/setQuestInPlayFalse");
@@ -367,15 +369,18 @@ function subscriptions() {
               //ask them to join
               newQuestJoiners();
               scrollDiv("click join quest");
-              displayTurnIndicator(true)
+
               if (data.testInPlay) {
                 // draw adventure card before bidding
+                if (data.currentActivePlayer === playerId) {
+                  displayTurnIndicator(true)
+                }
                 scrollDiv("This is a test");
                 let placeBidButton = document.createElement("button");
                 var t = document.createTextNode("Place Bid (Test)");
                 placeBidButton.appendChild(t);
                 placeBidButton.setAttribute("onclick", "placeTestBid()");
-                placeBidButton.setAttribute("id", "placeTestBid")
+                placeBidButton.setAttribute("id", "placeTestBid");
                 document.getElementById("placeCardButtons").appendChild(placeBidButton);
               }
             }
@@ -390,7 +395,7 @@ function subscriptions() {
               displayTurnIndicator(true);
 
               if (playerHand.length < 12) {
-                getAdventureCards()
+                getAdventureCards();
               }
 
               scrollDiv("Pick cards for stage # " + currentStoryCard.currentStageNumber);
@@ -402,8 +407,16 @@ function subscriptions() {
                 var t = document.createTextNode("Place Bid (Test)");
                 placeBidButton.appendChild(t);
                 placeBidButton.setAttribute("onclick", "placeTestBid()");
-                placeBidButton.setAttribute("id", "placeTestBid")
+                placeBidButton.setAttribute("id", "placeTestBid");
                 document.getElementById("placeCardButtons").appendChild(placeBidButton);
+
+                if(currentStoryCard.participantsId.length ==1){
+                  scrollDiv("All players have dropped out of the test! Click Finish Turn!");
+                   var buttonTestBid = document.getElementById("placeTestBid");
+                  buttonTestBid.parentNode.removeChild(buttonTestBid);
+                  return;
+                }
+          
               }
               //place bid function through a button which takes in the server Data;
             }
@@ -412,8 +425,8 @@ function subscriptions() {
               //finishTurn();//increment the currentActivePlayer and move to the next player
               disableButtons();
               scrollDiv("You decided not to Join the Quest Or you lost previous round! So we're skipping your turn :P");
-              finishTurn();
-              displayTurnIndicator(false)
+              finishTurn(document.getElementById("finishTurn"));
+              displayTurnIndicator(false);
             }
           }
         }
@@ -452,20 +465,24 @@ function subscriptions() {
       if (!data.questInPlay && !data.tournamentInPlay && !data.eventInPlay) {
         //if the story card type is numm it means they might be the first player
         newRound();
-        displayTurnIndicator(true)
-        scrollDiv("Pick a story card");
+        console.log("The current Active player -->", data.currentActivePlayer);
+        if (data.currentActivePlayer === playerId) {
+          displayTurnIndicator(true)
+          scrollDiv("Pick a story card"); // player 2
+        }
         stompClient.send("/app/clearTournament", {});
-
-
-
+        // disableButtons()
       }
 
       //the tournament
-
-      else if (data.currentActivePlayer != playerId) {
-        //disable their buttons!
-        disableButtons();
-      }
+    } //the cuurent active player's stuff ends here
+    
+    // if not current active player...
+    else {
+      //disable their buttons!
+      
+      disableButtons();
+      displayTurnIndicator(false);
     }
   });
 

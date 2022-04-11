@@ -119,6 +119,9 @@ public class GameController {
   @MessageMapping("/setQuestInPlayFalse")
   public void setQuestToFalse(){
     this.gameService.setQuestInPlay(false);
+    //clearing up the quest!
+    this.gameService.getCurrentGame().setCurrentQuest(null);
+    this.gameService.setCurrentStoryCard(null);
   }
 
 
@@ -180,19 +183,21 @@ public class GameController {
     if (gameService.getCurrentGame().getCurrentQuest() != null) {
       if (gameService.getCurrentGame().getCurrentQuest().getSponsorAttempts() >= gameService.getCurrentGame().getPlayers().size()) {
         gameService.setCurrentStoryCard(null);
+        gameService.setQuestInPlay(false);
       }
     }
     
-    
     Session currSession = new Session();
-
-    currSession.currentActivePlayer = gameService.startNextPlayer(); ///increments the player
+    
+    currSession.currentActivePlayer =  gameService.startNextPlayer(); ///increments the player
     currSession.currentStoryCard = gameService.getCurrentStoryCard(); //returns all the elments of that storyCard
     currSession.questInPlay = gameService.getQuestInPlay(); //bool, changes this to false when you complete all stages.
     currSession.tournamentInPlay=gameService.getTournamentInPlay(); //bool
     
     //if we round back to the sponsor, the stage goes up
-    if (gameService.getCurrentGame().getCurrentQuest() != null) {
+    Quest quest = gameService.getCurrentGame().getCurrentQuest();
+    
+    if (quest != null) {
       currSession.testInPlay = (gameService.getCurrentGame().getCurrentQuest().getQuestIncludesTest() && (gameService.getCurrentGame().getCurrentQuest().getTestInStage() == gameService.getCurrentGame().getCurrentQuest().getCurrentStageNumber()));
       if(gameService.getQuestInPlay() && gameService.getCurrentActivePlayer()==gameService.getCurrentGame().getCurrentQuest().getSponsor()){
         if(!currSession.testInPlay){
@@ -306,8 +311,8 @@ public class GameController {
     
     
     Session currSession = new Session();
-
     currSession.currentActivePlayer = gameService.startNextPlayer(); ///increments the player
+
     currSession.currentStoryCard = gameService.getCurrentStoryCard(); //returns all the elments of that storyCard
     currSession.questInPlay = gameService.getQuestInPlay(); //bool, changes this to false when you complete all stages.
     currSession.tournamentInPlay=gameService.getTournamentInPlay(); //bool
@@ -338,7 +343,7 @@ public class GameController {
       if(currSession.testInPlay && gameService.getCurrentGame().getCurrentQuest().getParticipantsId().size()>1) { //test keeps going
         currSession.currentActivePlayer = gameService.startNextPlayer(); //skip the sponsor
         System.out.println("There are still more than 1 players in the quest!");
-      } 
+      }
     }
     
     if (gameService.getQuestInPlay()) {
@@ -477,22 +482,19 @@ public class GameController {
   @MessageMapping("/transferQuest")
   @SendTo("/topic/transferQuest")
   public int transferQuest(int playerId) {
-    int currentActivePlayerIndex = this.gameService.getCurrentActivePlayer() - 1;
-    // Player currentActivePlayer = this.gameService.getCurrentGame().getPlayers().get(currentActivePlayerIndex - 1);
-    // if (currentActivePlayer.getId() != playerId) return -1;
     
-    // if people still left to ask, get next player
     Quest quest = this.gameService.getCurrentGame().getCurrentQuest();
-    int amountOfPlayers = this.gameService.getCurrentGame().getPlayers().size();
+    quest.incrementSponsorAttempts();
+    
     int sponsorAttempts = quest.getSponsorAttempts();
+    int amountOfPlayers = this.gameService.getCurrentGame().getPlayers().size();
+    
+    // if allowed to transfer
     if (sponsorAttempts < amountOfPlayers) {
-      int indexPlusAttempts = currentActivePlayerIndex + sponsorAttempts;
-      int nextPlayerIndex = indexPlusAttempts >= amountOfPlayers ? indexPlusAttempts - amountOfPlayers: indexPlusAttempts;
-      quest.incrementSponsorAttempts();
-      return this.gameService.getCurrentGame().getPlayers().get(nextPlayerIndex).getId(); // next person
+      return gameService.startNextPlayer();
     }
     
-    // else finish turn
+    // if max transfer
     else {
       return -1;
     }

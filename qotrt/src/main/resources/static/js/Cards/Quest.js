@@ -5,7 +5,10 @@ let battlePointsLimit = 0;
 
 function sponsorQuest(btn) {
     //console.log("here");
-    displayTurnIndicator(true)
+    
+    if (serverData.currentActivePlayer === playerId) {
+        displayTurnIndicator(true)
+    }
     sponsor = true;
     disableTransferQuestButton();
     stompClient.send("/app/sponsorQuest", {});
@@ -236,7 +239,8 @@ function withdrawQuest() {
     document.getElementById("withdrawQuest").style.display = "none";
     // should I disable the joinQuest button until the quest is over?
     disableJoinQuest();
-
+    enableFinishTurn();
+    displayTurnIndicator(false)
     stageCards = [];
 
     // withdraw on server side
@@ -248,6 +252,7 @@ function withdrawQuest() {
 function transferQuest() {
     if (serverData.currentActivePlayer === playerId) {
         displayTurnIndicator(false)
+        disableButtons()
         stompClient.send("/app/transferQuest", {}, playerId)
     }
 }
@@ -267,6 +272,10 @@ function disableJoinQuest() {
 
 
 function placeTestBid() {
+    displayTurnIndicator(false)
+    //let currentStoryCard = serverData.currentStoryCard;
+    
+    
     let testCard = serverData.testCard;
     let checkedString = getAllChecked(); //returns checked cards
     if (testCard.lastBid == 0) { //meaning this player is about to make the first bid so it should be greater than min Bid

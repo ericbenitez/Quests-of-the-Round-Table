@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import app.Models.AdventureCards.AdventureCard;
 import app.Models.AdventureCards.Ally;
 import app.Models.AdventureCards.Test;
+import app.Models.Enums.AdventureCardType;
 import app.Models.AdventureCards.Amour;
 import app.Models.General.Card;
 import app.Models.General.Game;
@@ -532,7 +533,7 @@ public class GameService {
             {
                 String nameOfCard = stages.get(i).get(j);
                 AdventureCard advCard = cards.getCardByName(nameOfCard);
-                if(advCard instanceof Test){
+                if(advCard.getAdventureCardType() == AdventureCardType.Test){
                 
                     testCard = (Test) advCard;
                     //System.out.println(testCard.getName());

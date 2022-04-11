@@ -1,57 +1,7 @@
-/* 
-Thinking/Planning:
 
-Winner = person with the most BATTLE POINTS
-
-1) Tournament card is drawn
-2) Each player decides whether to join the tournament (start at the drawer, then go left)
-3) 1 person only = auto awarded one shield + bonus shields (on the card)
-
-4) Each participant draws one card from adventure deck
-5) Each participant chooses their cards: 
-    5a) May choose: Ally, Weapon, Amour cards
-        - can't play more than one weapon card of same type, max 1 amour card
-        - they can choose no cards (only calc the rank+ally pts)
-
-6) IN UNISON, all participants place cards FACE UP
-7) Player with the most battle points (rank + ally + weapon + amour) wins tournament
-
-8) End tournament: discard weapon and amour cards discarded
-    (ally cards remain)
-
-Winner prize = # of participants + bonus shields      (prize is basically shields)
-
-
----------------------------------------------------------------------------
-
-
-TIE: 
-(participants are now the players that were tied)
-
-1) participants discard all weapon cards that were in play
-    (ally, amour cards can stay)
-
-2) Play again like in the first round (choose cards, calc winner, blah blah blah) (basically steps 4-7)
-3) if TIE AGAIN: WINNER PRIZE = # of participants in the original tournament (shields)
-
-
-*/
-
-
-/*
-Variables:
-let tourParticipant = false;
-let drawerTournament = 0;
-*/
-// array of actual cards (name, battlepts) that player placed
 let tournamentCards = [];
 firstTournamentParticipantID = -1;
 
-
-// just an alert, probably wont need it once turn is incorporated
-function startTournament(sessionData) {
-    scrollDiv(sessionData);
-}
 
 
 // have pop up appear to get player's answer for joining tournament
@@ -78,8 +28,7 @@ function joinTournament(answer) {
         disableBidding();
     }
 
-    // move to next player
-    // finishTurn();
+
     hidePopUp();
 }
 
@@ -88,7 +37,6 @@ function joinTournament(answer) {
 
 function addParticipantTournament() {
     stompClient.send("/app/addParticipantTournament", {}, JSON.stringify({ "message": playerId }));
-    // we dont need to set participant to true cause it's in the session right?
     getAdventureCards()
     scrollDiv("You received an adventure card!")
     scrollDiv("Choose cards for bidding in this tournament")
@@ -102,7 +50,6 @@ function singlePlayerTournament() {
     const singlePLayerSub = stompClient.subscribe('/user/queue/isSinglePlayerTournament', function (response) {
         let data = JSON.parse(response.body);
         if (data != -1) {
-            // once we merge with the turns, we will obv have to check for the playerid before awarding
             if (playerId == data) {
                 awardSingleTournament(playerId);
             }

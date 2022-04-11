@@ -20,13 +20,14 @@ public class Quest extends StoryCard {
     // {key:value,key:value} playerId : stage cards
     protected ArrayList<Integer> participants; // for quests
     private int currentStage = 1;
-    protected int sponsorAttempts = 1; // the amount of times a player was asked to sponsor
+    protected int sponsorAttempts = 0; // the amount of times a player was asked to sponsor
     protected boolean questIncludesTest;  //we figure this out from the stages the sponsor sets
     protected int testInStage;
     protected Test testCard;
     //CardObjects cardObjects;
     ArrayList<String> testNames;
     protected boolean isActive = true;
+    protected Integer currentActivePlayer;
 
 
     // if all the foes pass 'all' to foeName
@@ -108,6 +109,15 @@ public class Quest extends StoryCard {
         
      
     }
+    
+    public void setCurrentActivePlayer(Integer currentActivePlayer) {
+        this.currentActivePlayer = currentActivePlayer;
+    }
+    
+    public Integer getCurrentActivePlayer() {
+        return this.currentActivePlayer;
+    }
+    
     //from the game service...
     public void setTestCard(Test tc){
         this.testCard = tc;
